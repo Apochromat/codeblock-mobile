@@ -48,6 +48,11 @@ open class Block {
     fun getAllBlocks(): MutableList<Block> { return allBlocks }
     fun accessHeap(): Heap {return heap}
 
+    fun setNextBlock(block: Block) { nextBlock = block }
+    fun getNextBlock(): Block? { return nextBlock }
+    fun setPrevBlock(block: Block) { prevBlock = block }
+    fun getPrevBlock(): Block? { return prevBlock }
+
     open fun work() {}
 }
 
@@ -76,6 +81,24 @@ class UndefinedVariable: Block() {
     }
     fun setBlockData(names: List<String>) {
         accessHeap().createDefaultVariables(names)
+    }
+}
+
+class Assignment: Block() {
+    private var value: Int = 0
+    private var name: String = "none"
+    init {
+        setBlockType("Assignment")
+    }
+    fun setBlockData( _name: String, _value: String) {
+        if (_value != "") {
+            try {
+                value = _value.toInt()
+                setBlockStatus("OK")
+            } catch (e: NumberFormatException) { setBlockStatus("ERROR: Incorrect Number") }
+        }
+        name = _name
+        accessHeap().setVariableValue(name, value)
     }
 }
 
