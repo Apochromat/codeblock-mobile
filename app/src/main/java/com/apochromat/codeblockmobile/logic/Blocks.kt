@@ -60,7 +60,7 @@ open class Block {
 
     open fun run() {
         setBlockData()
-        nextBlock?.run()
+        getNextBlock()?.run()
     }
 }
 
@@ -133,6 +133,47 @@ class Assignment: Block() {
 class EntryPoint: Block() {
     init {
         setBlockType("EntryPoint")
+    }
+}
+
+class Condition: Block() {
+
+}
+
+class ConsoleOutput: Block() {
+    private var message: String = ""
+    init {
+        setBlockType("ConsoleOutput")
+    }
+    fun setBlockInput( _message: String = "") {
+        message = _message
+    }
+    override fun setBlockData() {
+        println(accessHeap().getVariableValue(message).toString())
+    }
+}
+
+class ConsoleInputOne: Block() {
+    private var message: String = ""
+    private var name: String = ""
+    private var value: Int = 0
+    init {
+        setBlockType("ConsoleOutput")
+    }
+    fun setBlockInput( _name: String, _message: String = "") {
+        name = _name
+        message = _message
+    }
+    override fun setBlockData() {
+        print(message)
+        val inputValue: String = readln()
+        if (inputValue != ""){
+            try {
+                value = inputValue.toInt()
+                setBlockStatus("OK")
+            } catch (e: NumberFormatException) { setBlockStatus("ERROR: Incorrect Number") }
+        }
+        accessHeap().setVariableValue(name, value)
     }
 }
 

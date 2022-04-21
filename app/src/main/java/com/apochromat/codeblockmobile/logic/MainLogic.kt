@@ -6,15 +6,21 @@ fun main() {
     var block2 = DefinedVariable()
     var block3 = UndefinedVariable()
     var block4 = Assignment()
+    var block5 = ConsoleInputOne()
+    var block6 = ConsoleOutput()
 
     block2.setBlockInput("tempVar", "-10")
     block3.setBlockInput(listOf("Tom", "Sam", "Kate", "Bob", "Alice"))
     block4.setBlockInput("Alice", "12345")
+    block5.setBlockInput("consoleVar", "Write new var ")
+    block6.setBlockInput("consoleVar")
 
     connectBlocks(ep, block1)
     connectBlocks(block1, block2)
     connectBlocks(block2, block3)
     connectBlocks(block3, block4)
+    connectBlocks(block4, block5)
+    connectBlocks(block5, block6)
     //disconnectBlocks(brack, brock)
     ep.run()
 
