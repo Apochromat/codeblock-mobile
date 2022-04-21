@@ -1,22 +1,25 @@
 package com.apochromat.codeblockmobile.logic
-import blocks.*
 
 fun main() {
-    var block = Block()
-    var brick = DefinedVariable()
-    var brack = UndefinedVariable()
-    var brock = Assignment()
+    var ep = EntryPoint()
+    var block1 = Block()
+    var block2 = DefinedVariable()
+    var block3 = UndefinedVariable()
+    var block4 = Assignment()
 
-    brick.setBlockData("tempVar", "-10")
-    brack.setBlockData(listOf("Tom", "Sam", "Kate", "Bob", "Alice"))
+    block2.setBlockInput("tempVar", "-10")
+    block3.setBlockInput(listOf("Tom", "Sam", "Kate", "Bob", "Alice"))
+    block4.setBlockInput("Alice", "12345")
 
-    brock.setBlockData("Alice", "12345")
+    connectBlocks(ep, block1)
+    connectBlocks(block1, block2)
+    connectBlocks(block2, block3)
+    connectBlocks(block3, block4)
+    //disconnectBlocks(brack, brock)
+    ep.run()
 
-    println("ID:${block.getBlockId()} Type:${block.getBlockType()}")
-    println("ID:${brick.getBlockId()} Type:${brick.getBlockType()} Value:${brick.getBlockValue()}" +
-            " Status:${brick.getBlockStatus()}")
-    println(block.getAllBlocks()[1].getBlockType())
-    println(block.accessHeap().getVariablesList())
-    println(Block().accessHeap().isVariableExist("Tomas"))
+    println("ID:${block1.getBlockId()} Type:${block1.getBlockType()}")
+    println(block1.getBlockById(2)?.getBlockType())
+    println(block1.accessHeap().getVariablesList())
     println(Block().accessHeap().getVariableValue("Alice"))
 }
