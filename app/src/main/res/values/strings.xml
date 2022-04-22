@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">Codeblock mobile</string>
+    <string name="app_name">CODEBLOCK</string>
+
+    <string name="mainMenu_newProject">Начать проект</string>
+    <string name="mainMenu_about">Авторы</string>
+    <string name="mainMenu_exit">Выход</string>
+
+    <string name="label_team">Авторы - TEAM 17</string>
+    <string name="label_backend">BACKEND</string>
+    <string name="label_nikita">Абрамов Никита</string>
+    <string name="label_stepan">Устименко Степан</string>
+    <string name="label_designe">UI-UX</string>
+    <string name="label_alexander">Юраев Александр</string>
+
+    <string name="menu_run">Запустить проект</string>
+    <string name="menu_save">Сохранить проект</string>
+    <string name="menu_console">Открыть консоль</string>
+
+    <string name="blockMenu_var">var</string>
+    <string name="blockMenu_addValue">add value</string>
+    <string name="blockMenu_if">if</string>
+    <string name="blockMenu_for">for</string>
+    <string name="blockMenu_while">while</string>
 </resources>

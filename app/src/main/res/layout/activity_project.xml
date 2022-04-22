@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProjectActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonVar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_var" />
+
+                <Button
+                    android:id="@+id/buttonAddValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="2.5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_addValue" />
+
+                <Button
+                    android:id="@+id/buttonIf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="2.5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_if" />
+
+                <Button
+                    android:id="@+id/buttonFor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="2.5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_for" />
+
+                <Button
+                    android:id="@+id/buttonWhile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="2.5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_while" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
