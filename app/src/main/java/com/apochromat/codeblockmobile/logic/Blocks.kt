@@ -30,7 +30,6 @@ class Heap {
     fun deleteVariable(name: String) {
         heap.remove(name)
     }
-
 }
 
 open class Block {
@@ -252,19 +251,20 @@ fun RPNToAnswer(rpn: String): Int {
     var operand: String = String();
     var stack: Stack<Int> = Stack<Int>();
     var i: Int = 0;
-    while (i != rpn.length) {
+    while (i < rpn.length) {
         if (rpn[i] == ' ') {
             i++;
             continue;
         }
         if (GetPriority(rpn[i]) == 0) {
-            while (rpn[i] != ' ' && (GetPriority(rpn[i]) == 0)) {
+            while (rpn[i] !=' ' && (GetPriority(rpn[i]) == 0)) {
                 operand += rpn[i++];
                 if (i == rpn.length) break;
-                stack.push(operand.toInt());
-                operand = String();
             }
+            stack.push(operand.toInt());
+            operand = String();
         }
+        if (i == rpn.length) break;
         if (GetPriority(rpn[i]) > 1) {
             var a: Int = stack.pop();
             var b: Int = stack.pop();
