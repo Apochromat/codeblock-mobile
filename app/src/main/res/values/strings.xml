@@ -6,10 +6,8 @@
     <string name="mainMenu_exit">Выход</string>
 
     <string name="label_team">Авторы - TEAM 17</string>
-    <string name="label_backend">BACKEND</string>
     <string name="label_nikita">Абрамов Никита</string>
     <string name="label_stepan">Устименко Степан</string>
-    <string name="label_designe">UI-UX</string>
     <string name="label_alexander">Юраев Александр</string>
 
     <string name="menu_run">Запустить проект</string>
