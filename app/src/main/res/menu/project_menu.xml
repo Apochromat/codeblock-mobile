@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/menu_run"
+        android:id="@+id/menuRun"
+        android:icon="@drawable/ic_menu_run"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        />
+    <item
+        android:title="@string/menu_save"
+        android:id="@+id/menuSave"
+        android:icon="@drawable/ic_menu_save"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        />
+    <item
+        android:title="@string/menu_console"
+        android:id="@+id/menuConsole"
+        android:icon="@drawable/ic_menu_console"
+        app:showAsAction="always"
+        android:orderInCategory="3"
+        />
+</menu>
