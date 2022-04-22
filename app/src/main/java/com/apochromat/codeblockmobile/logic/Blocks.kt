@@ -69,7 +69,7 @@ open class Block {
 
     open fun run() {
         setBlockData()
-        getNextBlock()?.run()
+        if (getBlockStatus() == "OK") getNextBlock()?.run()
     }
 }
 
@@ -86,16 +86,13 @@ class DefinedVariable : Block() {
         inputValue = _value
     }
     override fun setBlockData() {
-        if (inputValue != ""){
-            try {
-                value = inputValue.toInt()
-                setBlockStatus("OK")
-            } catch (e: NumberFormatException) {
-                setBlockStatus("ERROR: Incorrect Number")
-            }
-        }
+        var calculated = arithmetics(accessHeap(), inputValue)
+        setBlockStatus(calculated.first)
         name = inputName
-        accessHeap().setVariableValue(name, value)
+        if (calculated.first == "OK") {
+            value = calculated.second
+            accessHeap().setVariableValue(name, value)
+        }
     }
 
 }
@@ -127,14 +124,13 @@ class Assignment : Block() {
     }
     override fun setBlockData() {
         if (accessHeap().isVariableExist(inputName)) {
-            if (inputValue != "") {
-                try {
-                    value = inputValue.toInt()
-                    setBlockStatus("OK")
-                } catch (e: NumberFormatException) { setBlockStatus("ERROR: Incorrect Number") }
-            }
+            var calculated = arithmetics(accessHeap(), inputValue)
+            setBlockStatus(calculated.first)
             name = inputName
-            accessHeap().setVariableValue(name, value)
+            if (calculated.first == "OK") {
+                value = calculated.second
+                accessHeap().setVariableValue(name, value)
+            }
         }
         else {
             setBlockStatus("ERROR: Undefined Variable: $inputName")
@@ -179,15 +175,12 @@ class ConsoleInputOne: Block() {
     override fun setBlockData() {
         print(message)
         val inputValue: String = readln()
-        if (inputValue != ""){
-            try {
-                value = inputValue.toInt()
-                setBlockStatus("OK")
-            } catch (e: NumberFormatException) {
-                setBlockStatus("ERROR: Incorrect Number")
-            }
+        var calculated = arithmetics(accessHeap(), inputValue)
+        setBlockStatus(calculated.first)
+        if (calculated.first == "OK") {
+            value = calculated.second
+            accessHeap().setVariableValue(name, value)
         }
-        accessHeap().setVariableValue(name, value)
     }
 }
 
@@ -204,7 +197,7 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
 }
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
-    return Pair("Status", RPNToAnswer(ExpressionToRPN(heap,expression)))
+    return Pair("OK", RPNToAnswer(ExpressionToRPN(heap,expression)))
 }
 fun GetPriority(token: Char): Int {
     when (token) {
