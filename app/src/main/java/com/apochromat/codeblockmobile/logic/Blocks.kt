@@ -11,25 +11,15 @@ class Heap {
         }
     }
 
-    fun setVariableValue(name: String, value: Int) {
-        heap[name] = value
-    }
+    fun setVariableValue(name: String, value: Int) { heap[name] = value }
 
-    fun getVariableValue(name: String): Int? {
-        return heap[name]
-    }
+    fun getVariableValue(name: String): Int? { return heap[name] }
 
-    fun isVariableExist(name: String): Boolean {
-        return name in heap.keys
-    }
+    fun isVariableExist(name: String): Boolean { return name in heap.keys }
 
-    fun getVariablesList(): MutableSet<String> {
-        return heap.keys
-    }
+    fun getVariablesList(): MutableSet<String> { return heap.keys }
 
-    fun deleteVariable(name: String) {
-        heap.remove(name)
-    }
+    fun deleteVariable(name: String) { heap.remove(name) }
 }
 
 open class Block {
@@ -48,7 +38,6 @@ open class Block {
     init {
         allBlocks[this.getBlockId()] = this
     }
-
 
     fun setBlockType(input: String) { type = input }
     fun getBlockType(): String { return type }
@@ -199,6 +188,7 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
     return Pair("OK", RPNToAnswer(ExpressionToRPN(heap,expression)))
 }
+
 fun GetPriority(token: Char): Int {
     when (token) {
         '*', '/','%' -> return 3;
