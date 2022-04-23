@@ -1,4 +1,4 @@
-package com.apochromat.codeblockmobile.logic
+package com.apochromat.codeblockmobile
 
 import java.util.*
 
@@ -20,6 +20,8 @@ class Heap {
     fun getVariablesList(): MutableSet<String> { return heap.keys }
 
     fun deleteVariable(name: String) { heap.remove(name) }
+
+    fun clearVariables() {heap.clear()}
 }
 
 open class Block {
@@ -55,6 +57,7 @@ open class Block {
     fun getPrevBlock(): Block? { return prevBlock }
 
     open fun setBlockData() {}
+    open fun clearBlockData() {}
 
     open fun run() {
         setBlockData()
@@ -82,6 +85,10 @@ class DefinedVariable : Block() {
             value = calculated.second
             accessHeap().setVariableValue(name, value)
         }
+    }
+    override fun clearBlockData() {
+        value = 0
+        name = ""
     }
 
 }
@@ -125,11 +132,21 @@ class Assignment : Block() {
             setBlockStatus("ERROR: Undefined Variable: $inputName")
         }
     }
+    override fun clearBlockData() {
+        value = 0
+        name = ""
+    }
 }
 
 class EntryPoint: Block() {
     init {
         setBlockType("EntryPoint")
+    }
+    override fun setBlockData() {
+        accessHeap().clearVariables()
+        for (bl in getAllBlocks()) {
+            bl.value.clearBlockData()
+        }
     }
 }
 
@@ -170,6 +187,10 @@ class ConsoleInputOne: Block() {
             value = calculated.second
             accessHeap().setVariableValue(name, value)
         }
+    }
+    override fun clearBlockData() {
+        value = 0
+        name = ""
     }
 }
 
