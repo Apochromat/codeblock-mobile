@@ -29,6 +29,7 @@ open class Block {
         var heap: Heap = Heap()
         var counter: Int = 0
         var allBlocks: MutableMap<Int, Block> = mutableMapOf()
+        var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
 
     private var nextBlock: Block? = null
@@ -55,6 +56,11 @@ open class Block {
     fun getNextBlock(): Block? { return nextBlock }
     fun setPrevBlock(block: Block?) { prevBlock = block }
     fun getPrevBlock(): Block? { return prevBlock }
+
+    fun addStrongConnection(pair: Pair<Block, Block>) {
+        strongConnections.add(pair)
+    }
+    fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
 
     open fun setBlockData() {}
     open fun clearBlockData() {}
@@ -147,11 +153,93 @@ class EntryPoint: Block() {
         for (bl in getAllBlocks()) {
             bl.value.clearBlockData()
         }
+        for (pair in getAllStrongConnections()) {
+            connectBlocks(pair.first, pair.second, false)
+        }
     }
 }
 
-class Condition: Block() {
+class BeginEnd() : Block() {
+    init {
+        setBlockType("BeginEnd")
+    }
+}
 
+class ConditionIf: Block() {
+    private var ExpressionLeft: String = ""
+    private var ExpressionRight: String = ""
+    private var ExpressionComparator: String = ">="
+    var IfBegin: BeginEnd = BeginEnd()
+    var IfEnd: BeginEnd = BeginEnd()
+    init {
+        setBlockType("ConditionIf")
+    }
+    fun setBlockInput( _ExpressionLeft: String, _ExpressionRight: String, _ExpressionComparator: String = ">=") {
+        ExpressionLeft = _ExpressionLeft
+        ExpressionRight = _ExpressionRight
+        ExpressionComparator = _ExpressionComparator
+    }
+    override fun setBlockData() {
+        getNextBlock()?.let { connectBlocks(IfEnd, it, true, false) }
+
+        if (ExpressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("ERROR: Invalid Comparator")
+        }
+        else {
+            var calculateLeft = arithmetics(accessHeap(), ExpressionLeft)
+            var calculateRight = arithmetics(accessHeap(), ExpressionRight)
+            if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+                if (expressionComparator(calculateLeft.second, calculateRight.second, ExpressionComparator)) {
+                    connectBlocks(this, IfBegin, false)
+                }
+                else {
+                    connectBlocks(this, IfEnd, false)
+                }
+            } else {
+                setBlockStatus(if (calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+            }
+        }
+    }
+}
+
+class ConditionIfElse: Block() {
+    private var ExpressionLeft: String = ""
+    private var ExpressionRight: String = ""
+    private var ExpressionComparator: String = ">="
+    var IfBegin: BeginEnd = BeginEnd()
+    var IfEnd: BeginEnd = BeginEnd()
+    var ElseBegin: BeginEnd = BeginEnd()
+    var ElseEnd: BeginEnd = BeginEnd()
+    init {
+        setBlockType("ConditionIfElse")
+    }
+    fun setBlockInput( _ExpressionLeft: String, _ExpressionRight: String, _ExpressionComparator: String = ">=") {
+        ExpressionLeft = _ExpressionLeft
+        ExpressionRight = _ExpressionRight
+        ExpressionComparator = _ExpressionComparator
+    }
+    override fun setBlockData() {
+        getNextBlock()?.let { connectBlocks(IfEnd, it, true, false) }
+        getNextBlock()?.let { connectBlocks(ElseEnd, it, true, false) }
+
+        if (ExpressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("ERROR: Invalid Comparator")
+        }
+        else {
+            var calculateLeft = arithmetics(accessHeap(), ExpressionLeft)
+            var calculateRight = arithmetics(accessHeap(), ExpressionRight)
+            if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+                if (expressionComparator(calculateLeft.second, calculateRight.second, ExpressionComparator)) {
+                    connectBlocks(this, IfBegin, false)
+                }
+                else {
+                    connectBlocks(this, ElseBegin, false)
+                }
+            } else {
+                setBlockStatus(if (calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+            }
+        }
+    }
 }
 
 class ConsoleOutput: Block() {
@@ -194,9 +282,12 @@ class ConsoleInputOne: Block() {
     }
 }
 
-fun connectBlocks(blockFrom: Block, blockTo: Block) {
-    blockFrom.getNextBlock()?.setPrevBlock(null)
-    blockTo.getPrevBlock()?.setNextBlock(null)
+fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
+    if (strong) Block().addStrongConnection(Pair(blockFrom, blockTo))
+    if (clear) {
+        blockFrom.getNextBlock()?.setPrevBlock(null)
+        blockTo.getPrevBlock()?.setNextBlock(null)
+    }
     blockFrom.setNextBlock(blockTo)
     blockTo.setPrevBlock(blockFrom)
 }
@@ -204,6 +295,18 @@ fun connectBlocks(blockFrom: Block, blockTo: Block) {
 fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     blockFrom.setNextBlock(null)
     blockTo.setPrevBlock(null)
+}
+
+fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
+    when (comparator) {
+        ">" -> return (numberLeft > numberRight)
+        ">=" -> return (numberLeft >= numberRight)
+        "<" -> return (numberLeft < numberRight)
+        "<=" -> return (numberLeft <= numberRight)
+        "==" -> return (numberLeft == numberRight)
+        "!=" -> return (numberLeft != numberRight)
+    }
+    return false
 }
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
