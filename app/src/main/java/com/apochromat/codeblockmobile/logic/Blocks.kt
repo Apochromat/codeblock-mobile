@@ -1,4 +1,4 @@
-package com.apochromat.codeblockmobile.logic
+package com.apochromat.codeblockmobile
 
 import java.util.*
 
@@ -11,25 +11,17 @@ class Heap {
         }
     }
 
-    fun setVariableValue(name: String, value: Int) {
-        heap[name] = value
-    }
+    fun setVariableValue(name: String, value: Int) { heap[name] = value }
 
-    fun getVariableValue(name: String): Int? {
-        return heap[name]
-    }
+    fun getVariableValue(name: String): Int? { return heap[name] }
 
-    fun isVariableExist(name: String): Boolean {
-        return name in heap.keys
-    }
+    fun isVariableExist(name: String): Boolean { return name in heap.keys }
 
-    fun getVariablesList(): MutableSet<String> {
-        return heap.keys
-    }
+    fun getVariablesList(): MutableSet<String> { return heap.keys }
 
-    fun deleteVariable(name: String) {
-        heap.remove(name)
-    }
+    fun deleteVariable(name: String) { heap.remove(name) }
+
+    fun clearVariables() {heap.clear()}
 }
 
 open class Block {
@@ -37,6 +29,7 @@ open class Block {
         var heap: Heap = Heap()
         var counter: Int = 0
         var allBlocks: MutableMap<Int, Block> = mutableMapOf()
+        var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
 
     private var nextBlock: Block? = null
@@ -48,7 +41,6 @@ open class Block {
     init {
         allBlocks[this.getBlockId()] = this
     }
-
 
     fun setBlockType(input: String) { type = input }
     fun getBlockType(): String { return type }
@@ -65,11 +57,17 @@ open class Block {
     fun setPrevBlock(block: Block?) { prevBlock = block }
     fun getPrevBlock(): Block? { return prevBlock }
 
+    fun addStrongConnection(pair: Pair<Block, Block>) {
+        strongConnections.add(pair)
+    }
+    fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
+
     open fun setBlockData() {}
+    open fun clearBlockData() {}
 
     open fun run() {
         setBlockData()
-        getNextBlock()?.run()
+        if (getBlockStatus() == "OK") getNextBlock()?.run()
     }
 }
 
@@ -86,18 +84,18 @@ class DefinedVariable : Block() {
         inputValue = _value
     }
     override fun setBlockData() {
-        if (inputValue != ""){
-            try {
-                value = inputValue.toInt()
-                setBlockStatus("OK")
-            } catch (e: NumberFormatException) {
-                setBlockStatus("ERROR: Incorrect Number")
-            }
-        }
+        var calculated = arithmetics(accessHeap(), inputValue)
+        setBlockStatus(calculated.first)
         name = inputName
-        accessHeap().setVariableValue(name, value)
+        if (calculated.first == "OK") {
+            value = calculated.second
+            accessHeap().setVariableValue(name, value)
+        }
     }
-
+    override fun clearBlockData() {
+        value = 0
+        name = ""
+    }
 }
 
 class UndefinedVariable: Block() {
@@ -127,18 +125,21 @@ class Assignment : Block() {
     }
     override fun setBlockData() {
         if (accessHeap().isVariableExist(inputName)) {
-            if (inputValue != "") {
-                try {
-                    value = inputValue.toInt()
-                    setBlockStatus("OK")
-                } catch (e: NumberFormatException) { setBlockStatus("ERROR: Incorrect Number") }
-            }
+            var calculated = arithmetics(accessHeap(), inputValue)
+            setBlockStatus(calculated.first)
             name = inputName
-            accessHeap().setVariableValue(name, value)
+            if (calculated.first == "OK") {
+                value = calculated.second
+                accessHeap().setVariableValue(name, value)
+            }
         }
         else {
             setBlockStatus("ERROR: Undefined Variable: $inputName")
         }
+    }
+    override fun clearBlockData() {
+        value = 0
+        name = ""
     }
 }
 
@@ -146,10 +147,98 @@ class EntryPoint: Block() {
     init {
         setBlockType("EntryPoint")
     }
+    override fun setBlockData() {
+        accessHeap().clearVariables()
+        for (bl in getAllBlocks()) {
+            bl.value.clearBlockData()
+        }
+        for (pair in getAllStrongConnections()) {
+            connectBlocks(pair.first, pair.second, false)
+        }
+    }
 }
 
-class Condition: Block() {
+class BeginEnd : Block() {
+    init {
+        setBlockType("BeginEnd")
+    }
+}
 
+class ConditionIf: Block() {
+    private var expressionLeft: String = ""
+    private var expressionRight: String = ""
+    private var expressionComparator: String = ">="
+    var ifBegin: BeginEnd = BeginEnd()
+    var ifEnd: BeginEnd = BeginEnd()
+    init {
+        setBlockType("ConditionIf")
+    }
+    fun setBlockInput(_expressionLeft: String, _expressionRight: String, _expressionComparator: String = ">=") {
+        expressionLeft = _expressionLeft
+        expressionRight = _expressionRight
+        expressionComparator = _expressionComparator
+    }
+    override fun setBlockData() {
+        getNextBlock()?.let { connectBlocks(ifEnd, it, true, false) }
+
+        if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("ERROR: Invalid Comparator")
+        }
+        else {
+            var calculateLeft = arithmetics(accessHeap(), expressionLeft)
+            var calculateRight = arithmetics(accessHeap(), expressionRight)
+            if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+                if (expressionComparator(calculateLeft.second, calculateRight.second, expressionComparator)) {
+                    connectBlocks(this, ifBegin, false)
+                }
+                else {
+                    connectBlocks(this, ifEnd, false)
+                }
+            } else {
+                setBlockStatus(if (calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+            }
+        }
+    }
+}
+
+class ConditionIfElse: Block() {
+    private var expressionLeft: String = ""
+    private var expressionRight: String = ""
+    private var expressionComparator: String = ">="
+    var ifBegin: BeginEnd = BeginEnd()
+    var ifEnd: BeginEnd = BeginEnd()
+    var elseBegin: BeginEnd = BeginEnd()
+    var elseEnd: BeginEnd = BeginEnd()
+    init {
+        setBlockType("ConditionIfElse")
+    }
+    fun setBlockInput(_expressionLeft: String, _expressionRight: String, _expressionComparator: String = ">=") {
+        expressionLeft = _expressionLeft
+        expressionRight = _expressionRight
+        expressionComparator = _expressionComparator
+    }
+    override fun setBlockData() {
+        getNextBlock()?.let { connectBlocks(ifEnd, it, true, false) }
+        getNextBlock()?.let { connectBlocks(elseEnd, it, true, false) }
+
+        if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("ERROR: Invalid Comparator")
+        }
+        else {
+            var calculateLeft = arithmetics(accessHeap(), expressionLeft)
+            var calculateRight = arithmetics(accessHeap(), expressionRight)
+            if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+                if (expressionComparator(calculateLeft.second, calculateRight.second, expressionComparator)) {
+                    connectBlocks(this, ifBegin, false)
+                }
+                else {
+                    connectBlocks(this, elseBegin, false)
+                }
+            } else {
+                setBlockStatus(if (calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+            }
+        }
+    }
 }
 
 class ConsoleOutput: Block() {
@@ -179,21 +268,25 @@ class ConsoleInputOne: Block() {
     override fun setBlockData() {
         print(message)
         val inputValue: String = readln()
-        if (inputValue != ""){
-            try {
-                value = inputValue.toInt()
-                setBlockStatus("OK")
-            } catch (e: NumberFormatException) {
-                setBlockStatus("ERROR: Incorrect Number")
-            }
+        var calculated = arithmetics(accessHeap(), inputValue)
+        setBlockStatus(calculated.first)
+        if (calculated.first == "OK") {
+            value = calculated.second
+            accessHeap().setVariableValue(name, value)
         }
-        accessHeap().setVariableValue(name, value)
+    }
+    override fun clearBlockData() {
+        value = 0
+        name = ""
     }
 }
 
-fun connectBlocks(blockFrom: Block, blockTo: Block) {
-    blockFrom.getNextBlock()?.setPrevBlock(null)
-    blockTo.getPrevBlock()?.setNextBlock(null)
+fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
+    if (strong) Block().addStrongConnection(Pair(blockFrom, blockTo))
+    if (clear) {
+        blockFrom.getNextBlock()?.setPrevBlock(null)
+        blockTo.getPrevBlock()?.setNextBlock(null)
+    }
     blockFrom.setNextBlock(blockTo)
     blockTo.setPrevBlock(blockFrom)
 }
@@ -202,6 +295,7 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     blockFrom.setNextBlock(null)
     blockTo.setPrevBlock(null)
 }
+
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
     val (prepered,expStatus) = preperingExpression(heap,expression);
@@ -214,7 +308,24 @@ fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
     }
 
     return RPNToAnswer(ExpressionToRPN(prepered))
+
+fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
+    when (comparator) {
+        ">" -> return (numberLeft > numberRight)
+        ">=" -> return (numberLeft >= numberRight)
+        "<" -> return (numberLeft < numberRight)
+        "<=" -> return (numberLeft <= numberRight)
+        "==" -> return (numberLeft == numberRight)
+        "!=" -> return (numberLeft != numberRight)
+    }
+    return false
+
 }
+
+fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
+    return Pair("OK", RPNToAnswer(ExpressionToRPN(heap,expression)))
+}
+
 fun GetPriority(token: Char): Int {
     when (token) {
         '*', '/','%' -> return 3;
