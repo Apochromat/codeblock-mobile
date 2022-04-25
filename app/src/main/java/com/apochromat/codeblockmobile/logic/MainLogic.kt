@@ -12,13 +12,14 @@ fun main() {
     var block_aTom = Assignment()
     var block_aSam = Assignment()
     var block_aKate = Assignment()
-    block_dv.setBlockInput("tempVar", "0 - 10")
+
+    block_dv.setBlockInput("tempVar", "0-10")
     block_uv.setBlockInput(listOf("Tom", "Sam", "Kate", "Bob", "Alice"))
     blockIf.setBlockInput("16", "16")
     blockIfElse.setBlockInput("16*2/2", "16", "==")
     block_aAlice.setBlockInput("Alice", "1111")
     block_aBob.setBlockInput("Bob", "1212")
-    block_aTom.setBlockInput("Tom", "1313")
+    block_aTom.setBlockInput("Tom", "2Alice")
     block_aSam.setBlockInput("Sam", "1414")
     block_aKate.setBlockInput("Kate", "1515")
 

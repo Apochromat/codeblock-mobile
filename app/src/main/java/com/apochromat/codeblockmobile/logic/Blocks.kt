@@ -21,7 +21,7 @@ class Heap {
 
     fun deleteVariable(name: String) { heap.remove(name) }
 
-    fun clearVariables() {heap.clear()}
+    fun clearVariables() { heap.clear() }
 }
 
 open class Block {
@@ -67,7 +67,15 @@ open class Block {
 
     open fun run() {
         setBlockData()
-        if (getBlockStatus() == "OK") getNextBlock()?.run()
+        if (getNextBlock() == null) {
+            println("Program finished with status: ${getBlockStatus()}")
+        }
+        else if (getBlockStatus() == "OK") {
+            getNextBlock()?.run()
+        }
+        else {
+            println("Program finished with status: ${getBlockStatus()}")
+        }
     }
 }
 
@@ -134,7 +142,7 @@ class Assignment : Block() {
             }
         }
         else {
-            setBlockStatus("ERROR: Undefined Variable: $inputName")
+            setBlockStatus("Undefined Variable: $inputName")
         }
     }
     override fun clearBlockData() {
@@ -194,7 +202,7 @@ class ConditionIf: Block() {
         getNextBlock()?.let { connectBlocks(ifEnd, it, true, false) }
 
         if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("ERROR: Invalid Comparator")
+            setBlockStatus("Invalid Comparator")
         }
         else {
             var calculateLeft = arithmetics(accessHeap(), expressionLeft)
@@ -234,7 +242,7 @@ class ConditionIfElse: Block() {
         getNextBlock()?.let { connectBlocks(elseEnd, it, true, false) }
 
         if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("ERROR: Invalid Comparator")
+            setBlockStatus("Invalid Comparator")
         }
         else {
             var calculateLeft = arithmetics(accessHeap(), expressionLeft)
@@ -380,7 +388,7 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
             try {
                 stack.push(operand.toInt());
             }catch (e:NumberFormatException){
-                return Pair("Unexpected Symbol2", 0)
+                return Pair("Unexpected Symbol", 0)
             }
             operand = String();
         }
@@ -403,7 +411,7 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
                 '%' -> stack.push(b % a);
                 else -> {
                     println(stack.pop())
-                    return Pair("Unexpected Symbol1", 0);
+                    return Pair("Unexpected Symbol", 0);
                 }
                 }
             } catch (e:EmptyStackException){
@@ -420,8 +428,8 @@ fun lineСheck (string:String): Pair<String,Int>{
     if(str.length == 0){
         return Pair("Empty Input", 0);
     }
-    str=string.replace("[A-Za-z-+*/0-9]".toRegex(),"")
-    if(str.length!=0){
+    str = string.replace("[A-Za-z-+*/0-9 ]".toRegex(),"")
+    if(str.length != 0){
         return Pair("Unexpected Symbol", 0);
     }
 //    for (i in string.indices){
