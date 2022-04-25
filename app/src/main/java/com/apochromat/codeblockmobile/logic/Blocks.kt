@@ -164,6 +164,18 @@ class BeginEnd : Block() {
     }
 }
 
+fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
+    when (comparator) {
+        ">" -> return (numberLeft > numberRight)
+        ">=" -> return (numberLeft >= numberRight)
+        "<" -> return (numberLeft < numberRight)
+        "<=" -> return (numberLeft <= numberRight)
+        "==" -> return (numberLeft == numberRight)
+        "!=" -> return (numberLeft != numberRight)
+    }
+    return false
+}
+
 class ConditionIf: Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
@@ -298,32 +310,16 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
 
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
-    val (prepered,expStatus) = preperingExpression(heap,expression);
-    val (correctLine,lineStatus)=lineСheck(expression);
-    if(expStatus==0){
+    val (prepered, expStatus) = preperingExpression(heap, expression);
+    val (correctLine, lineStatus) = lineСheck(expression);
+    if (expStatus == 0) {
         return Pair(prepered, 0)
     }
-    if(lineStatus==0){
+    if (lineStatus == 0) {
         return Pair(correctLine, 0)
     }
 
     return RPNToAnswer(ExpressionToRPN(prepered))
-
-fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
-    when (comparator) {
-        ">" -> return (numberLeft > numberRight)
-        ">=" -> return (numberLeft >= numberRight)
-        "<" -> return (numberLeft < numberRight)
-        "<=" -> return (numberLeft <= numberRight)
-        "==" -> return (numberLeft == numberRight)
-        "!=" -> return (numberLeft != numberRight)
-    }
-    return false
-
-}
-
-fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
-    return Pair("OK", RPNToAnswer(ExpressionToRPN(heap,expression)))
 }
 
 fun GetPriority(token: Char): Int {
@@ -384,7 +380,7 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
             try {
                 stack.push(operand.toInt());
             }catch (e:NumberFormatException){
-                return Pair("Unexpected Symbol",0)
+                return Pair("Unexpected Symbol", 0)
             }
             operand = String();
         }
@@ -398,72 +394,76 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
                 '-' -> stack.push(b - a);
                 '*' -> stack.push(b * a);
                 '/' ->{
-                    try {
-                        stack.push(b / a);
-                    } catch (e:Exception){
-                        return Pair ("Division By Zero",0);
+                        try {
+                            stack.push(b / a);
+                        } catch (e:Exception){
+                            return Pair ("Division By Zero", 0);
+                        }
                     }
-                }
                 '%' -> stack.push(b % a);
                 else -> {
-                    return Pair("Unexpected Symbol",0);
+                    return Pair("Unexpected Symbol", 0);
                 }
-            }
-        }catch (e:EmptyStackException){
+                }
+            } catch (e:EmptyStackException){
             return Pair("Incorrect Expression",0);
-        }
+            }
         }
         i++;
     }
-    return Pair("Status",stack.pop());
+    return Pair("OK", stack.pop());
 }
+
 fun lineСheck (string:String): Pair<String,Int>{
     var str:String = string.replace("\\s".toRegex(), "");
-    if(str.length==0){
-        return return Pair("Empty Input",0);
+    if(str.length == 0){
+        return Pair("Empty Input", 0);
     }
     for (i in string.indices){
-        if(string[i].code<40 || (string[i].code>58 && string[i].code<64) ||(string[i].code>91 && string[i].code<96)||(string[i].code>123 && string[i].code<127)){
-            return Pair("Unexpected Symbol",0);
+        if(string[i].code < 40 ||
+            (string[i].code > 58 && string[i].code < 64) ||
+            (string[i].code > 91 && string[i].code < 96) ||
+            (string[i].code > 123 && string[i].code < 127)) {
+            return Pair("Unexpected Symbol", 0);
         }
     }
-    return Pair("Norm",1);
+    return Pair("OK", 1);
 }
-fun preperingExpression(heap: Heap,expression:String):Pair<String,Int>{
+
+fun preperingExpression (heap: Heap,expression:String):Pair<String,Int> {
     var exp = expression;
-    var preperedExpression= String();
-    var i=0;
-    while (i<expression.length){
-        if(expression[i].code>=65 && expression[i].code<=127){
+    var preperedExpression = String();
+    var i = 0;
+    while (i < expression.length) {
+        if(expression[i].code >= 65 && expression[i].code <= 127){
             var operand = String();
-            while (expression[i] !=' ' && (expression[i].code>=65 && expression[i].code<=127) ) {
+            while (expression[i] != ' ' && (expression[i].code >= 65 && expression[i].code <= 127)){
                 operand += expression[i++];
                 if (i == expression.length) break;
             }
             if(!heap.isVariableExist(operand)){
-                return Pair("Undefined Variable: ${operand}",0);
+                return Pair("Undefined Variable: ${operand}", 0);
             }
             println(operand);
             var FromVarToNum = heap.getVariableValue(operand);
 
-            exp=expression.replace(operand,FromVarToNum.toString());
+            exp = expression.replace(operand, FromVarToNum.toString());
 
         }
         i++;
     }
 
-    for(j in exp.indices){
-        if(exp[j]=='-'){
-
-            if(j==0){
-                preperedExpression+="0";
+    for(j in exp.indices) {
+        if(exp[j] == '-') {
+            if(j == 0){
+                preperedExpression += "0";
             }
-            else if(exp[j-1]=='('){
-                preperedExpression+="0";
+            else if(exp[j-1] == '('){
+                preperedExpression += "0";
             }
         }
-        preperedExpression+=exp[j];
+        preperedExpression += exp[j];
     }
 
-    return Pair(preperedExpression,1);
+    return Pair(preperedExpression, 1);
 }
