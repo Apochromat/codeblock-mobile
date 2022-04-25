@@ -24,15 +24,29 @@ class ProjectActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "newProject"
 
-
         val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
         items = fetchData()
         adaptor = RVAdaptor(items)
         recyclerView.adapter = adaptor
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        bindingClass.buttonVar.setOnClickListener{
+            items.add("Var")
+        }
+        bindingClass.buttonAddValue.setOnClickListener{
+            items.add("AddValue")
+        }
+        bindingClass.buttonIf.setOnClickListener{
+            items.add("If")
+        }
+        bindingClass.buttonFor.setOnClickListener{
+            items.add("For")
+        }
+        bindingClass.buttonWhile.setOnClickListener{
+            items.add("While")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -81,9 +95,8 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun fetchData() : ArrayList<String>{
         val list = ArrayList<String>()
-        for (i in 0 until 20){
-            list.add("Item $i")
-        }
+        list.add("Begin")
+        list.add("End")
         return list
     }
 }
