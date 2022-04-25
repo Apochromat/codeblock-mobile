@@ -54,6 +54,7 @@ open class Block {
         var heap: Heap = Heap()
         //  Счетчик блоков
         var counter: Int = 0
+        var depth: Int = 0
         //  Словарь со всеми блоками
         var allBlocks: MutableMap<Int, Block> = mutableMapOf()
         //  Список устойчивых связей между блоками
@@ -96,17 +97,32 @@ open class Block {
     fun removeStrongConnection(pair: Pair<Block, Block>) { strongConnections.remove(pair) }
     fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
 
+    fun clearDepth() { depth = 0 }
+    fun increaseDepth() { depth++ }
+    fun getDepth(): Int { return depth }
+
     open fun executeBlock() {}
     open fun clearBlockData() {}
 
     open fun run() {
-        executeBlock()
+        increaseDepth()
+        if (getDepth() > 3500) {
+            setBlockStatus("Stack Overflow")
+        }
+        else {
+            executeBlock()
+        }
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
-                getNextBlock()?.run()
+                try {
+                    getNextBlock()?.run()
+                }
+                catch (e: Exception) {
+                    setBlockStatus("Stack Overflow")
+                }
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
@@ -328,6 +344,50 @@ class ConditionIfElse: Block() {
 }
 
 /**
+ *  Блок цикла While.
+ *  Позволяет выполнять определенный набор команд при выполнении условия.
+ **/
+class CycleWhile: Block() {
+    private var expressionLeft: String = ""
+    private var expressionRight: String = ""
+    private var expressionComparator: String = ">="
+    var cycleBegin: BeginEnd = BeginEnd()
+    var cycleEnd: BeginEnd = BeginEnd()
+    private var cycleExit: BeginEnd = BeginEnd()
+    init {
+        setBlockType("CycleWhile")
+    }
+    fun setBlockInput(_expressionLeft: String, _expressionRight: String, _expressionComparator: String = ">=") {
+        expressionLeft = _expressionLeft
+        expressionRight = _expressionRight
+        expressionComparator = _expressionComparator
+    }
+    override fun executeBlock() {
+        connectBlocks(cycleEnd, this, strong = false, clear = false)
+        getNextBlock()?.let { if (getNextBlock() != cycleBegin )
+            connectBlocks(cycleExit, it, strong = true, clear = false) }
+
+        if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("Invalid comparator")
+        }
+        else {
+            val calculateLeft = arithmetics(accessHeap(), expressionLeft)
+            val calculateRight = arithmetics(accessHeap(), expressionRight)
+            if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+                if (expressionComparator(calculateLeft.second, calculateRight.second, expressionComparator)) {
+                    connectBlocks(this, cycleBegin, strong = false, clear = false)
+                }
+                else {
+                    connectBlocks(this, cycleExit, strong = false, clear = false)
+                }
+            } else {
+                setBlockStatus(if (calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+            }
+        }
+    }
+}
+
+/**
  *  Блок консольного вывода.
  *  Позволяет вывести в консоль сообщение и значение переменной.
  **/
@@ -337,12 +397,17 @@ class ConsoleOutput: Block() {
     init {
         setBlockType("ConsoleOutput")
     }
-    fun setBlockInput( _message: String = "", _variable: String = "") {
+    fun setBlockInput( _variable: String, _message: String = "") {
         message = _message
         variable = _variable
     }
     override fun executeBlock() {
-        println("$message ${accessHeap().getVariableValue(variable).toString()}")
+        if (accessHeap().isVariableExist(variable)) {
+            println("$message ${accessHeap().getVariableValue(variable).toString()}")
+        }
+        else {
+            setBlockStatus("Undefined variable $variable")
+        }
     }
 }
 
@@ -370,10 +435,6 @@ class ConsoleInputOne: Block() {
             value = calculated.second
             accessHeap().setVariableValue(name, value)
         }
-    }
-    override fun clearBlockData() {
-        value = 0
-        name = ""
     }
 }
 
