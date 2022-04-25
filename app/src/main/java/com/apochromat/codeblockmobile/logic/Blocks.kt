@@ -318,8 +318,12 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
 
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
-    val (prepered, expStatus) = preperingExpression(heap, expression);
-    val (correctLine, lineStatus) = lineСheck(expression);
+    var exp = expression.replace("\\s".toRegex(), "");
+    if(exp.length==0) {
+        return Pair("Empty Input", 0);
+    }
+    val (prepered, expStatus) = preperingExpression(heap, exp);
+    val (correctLine, lineStatus) = lineСheck(exp);
     if (expStatus == 0) {
         return Pair(prepered, 0)
     }
@@ -341,7 +345,7 @@ fun GetPriority(token: Char): Int {
 }
 
 fun ExpressionToRPN(expression: String): String {
-    var current: String = "";
+    var current = "";
     var stack: Stack<Char> = Stack<Char>();
     var priority: Int;
     for (i in expression.indices) {
@@ -424,25 +428,17 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
 }
 
 fun lineСheck (string:String): Pair<String,Int>{
-    var str:String = string.replace("\\s".toRegex(), "");
-    if(str.length == 0){
-        return Pair("Empty Input", 0);
-    }
-    str = string.replace("[A-Za-z-+*/0-9 ]".toRegex(),"")
+    var str = string.replace("[A-Za-z-+*/0-9]".toRegex(),"")
     if(str.length != 0){
         return Pair("Unexpected Symbol", 0);
     }
-//    for (i in string.indices){
-//        if(string[i].code < 40 ||
-//            (string[i].code > 58 && string[i].code < 64) ||
-//            (string[i].code > 91 && string[i].code < 96) ||
-//            (string[i].code > 123 && string[i].code < 127)) {
-//            return Pair("Unexpected Symbol", 0);
-//        }
-//    }
+    val reg="[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex();
+    val match=reg.find(string);
+    if (match != null) {
+        return Pair("Incorrect Expression",0)
+    }
     return Pair("OK", 1);
 }
-
 fun preperingExpression (heap: Heap,expression:String):Pair<String,Int> {
     var exp = expression;
     var preperedExpression = String();
@@ -479,4 +475,11 @@ fun preperingExpression (heap: Heap,expression:String):Pair<String,Int> {
     }
 
     return Pair(preperedExpression, 1);
+}
+fun VariableСheck(variable: String): Boolean{
+    var str = variable.replace("[A-Za-z]".toRegex(),"")
+    if(str.length != 0){
+       return false;
+    }
+    return true;
 }
