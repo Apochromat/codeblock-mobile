@@ -62,19 +62,21 @@ open class Block {
     }
     fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
 
-    open fun setBlockData() {}
+    open fun executeBlock() {}
     open fun clearBlockData() {}
 
     open fun run() {
-        setBlockData()
-        if (getNextBlock() == null) {
-            println("Program finished with status: ${getBlockStatus()}")
-        }
-        else if (getBlockStatus() == "OK") {
-            getNextBlock()?.run()
-        }
-        else {
-            println("Program finished with status: ${getBlockStatus()}")
+        executeBlock()
+        when {
+            getNextBlock() == null -> {
+                println("Program finished with status: ${getBlockStatus()}")
+            }
+            getBlockStatus() == "OK" -> {
+                getNextBlock()?.run()
+            }
+            else -> {
+                println("Program finished with status: ${getBlockStatus()}")
+            }
         }
     }
 }
@@ -91,13 +93,18 @@ class DefinedVariable : Block() {
         inputName = _name
         inputValue = _value
     }
-    override fun setBlockData() {
-        var calculated = arithmetics(accessHeap(), inputValue)
-        setBlockStatus(calculated.first)
-        name = inputName
-        if (calculated.first == "OK") {
-            value = calculated.second
-            accessHeap().setVariableValue(name, value)
+    override fun executeBlock() {
+        if (variableCheck(inputName)) {
+            val calculated = arithmetics(accessHeap(), inputValue)
+            setBlockStatus(calculated.first)
+            name = inputName
+            if (calculated.first == "OK") {
+                value = calculated.second
+                accessHeap().setVariableValue(name, value)
+            }
+        }
+        else {
+            setBlockStatus("Incorrect variable naming $inputName")
         }
     }
     override fun clearBlockData() {
@@ -107,15 +114,22 @@ class DefinedVariable : Block() {
 }
 
 class UndefinedVariable: Block() {
-    var inputNames: List<String> = listOf()
+    private var inputNames: List<String> = listOf()
     init {
         setBlockType("UndefinedVariable")
     }
     fun setBlockInput(_names: List<String>) {
         inputNames = _names
     }
-    override fun setBlockData() {
-        accessHeap().createDefaultVariables(inputNames)
+    override fun executeBlock() {
+        var flag: Boolean = true
+        for (el in inputNames) {
+            if (!variableCheck(el)) {
+                setBlockStatus("Incorrect variable naming $el")
+                flag = false
+            }
+        }
+        if (flag) accessHeap().createDefaultVariables(inputNames)
     }
 }
 
@@ -131,18 +145,22 @@ class Assignment : Block() {
         inputName = _name
         inputValue = _value
     }
-    override fun setBlockData() {
-        if (accessHeap().isVariableExist(inputName)) {
-            var calculated = arithmetics(accessHeap(), inputValue)
-            setBlockStatus(calculated.first)
-            name = inputName
-            if (calculated.first == "OK") {
-                value = calculated.second
-                accessHeap().setVariableValue(name, value)
+    override fun executeBlock() {
+        if (variableCheck(inputName)) {
+            if (accessHeap().isVariableExist(inputName)) {
+                val calculated = arithmetics(accessHeap(), inputValue)
+                setBlockStatus(calculated.first)
+                name = inputName
+                if (calculated.first == "OK") {
+                    value = calculated.second
+                    accessHeap().setVariableValue(name, value)
+                }
+            } else {
+                setBlockStatus("Undefined variable $inputName")
             }
         }
         else {
-            setBlockStatus("Undefined Variable: $inputName")
+            setBlockStatus("Incorrect variable naming $inputName")
         }
     }
     override fun clearBlockData() {
@@ -155,7 +173,7 @@ class EntryPoint: Block() {
     init {
         setBlockType("EntryPoint")
     }
-    override fun setBlockData() {
+    override fun executeBlock() {
         accessHeap().clearVariables()
         for (bl in getAllBlocks()) {
             bl.value.clearBlockData()
@@ -198,15 +216,15 @@ class ConditionIf: Block() {
         expressionRight = _expressionRight
         expressionComparator = _expressionComparator
     }
-    override fun setBlockData() {
-        getNextBlock()?.let { connectBlocks(ifEnd, it, true, false) }
+    override fun executeBlock() {
+        getNextBlock()?.let { connectBlocks(ifEnd, it, strong = true, clear = false) }
 
-        if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("Invalid Comparator")
+        if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("Invalid comparator")
         }
         else {
-            var calculateLeft = arithmetics(accessHeap(), expressionLeft)
-            var calculateRight = arithmetics(accessHeap(), expressionRight)
+            val calculateLeft = arithmetics(accessHeap(), expressionLeft)
+            val calculateRight = arithmetics(accessHeap(), expressionRight)
             if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
                 if (expressionComparator(calculateLeft.second, calculateRight.second, expressionComparator)) {
                     connectBlocks(this, ifBegin, false)
@@ -237,16 +255,16 @@ class ConditionIfElse: Block() {
         expressionRight = _expressionRight
         expressionComparator = _expressionComparator
     }
-    override fun setBlockData() {
-        getNextBlock()?.let { connectBlocks(ifEnd, it, true, false) }
-        getNextBlock()?.let { connectBlocks(elseEnd, it, true, false) }
+    override fun executeBlock() {
+        getNextBlock()?.let { connectBlocks(ifEnd, it, strong = true, clear = false) }
+        getNextBlock()?.let { connectBlocks(elseEnd, it, strong = true, clear = false) }
 
-        if (expressionComparator !in listOf<String>(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("Invalid Comparator")
+        if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
+            setBlockStatus("Invalid comparator")
         }
         else {
-            var calculateLeft = arithmetics(accessHeap(), expressionLeft)
-            var calculateRight = arithmetics(accessHeap(), expressionRight)
+            val calculateLeft = arithmetics(accessHeap(), expressionLeft)
+            val calculateRight = arithmetics(accessHeap(), expressionRight)
             if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
                 if (expressionComparator(calculateLeft.second, calculateRight.second, expressionComparator)) {
                     connectBlocks(this, ifBegin, false)
@@ -263,14 +281,16 @@ class ConditionIfElse: Block() {
 
 class ConsoleOutput: Block() {
     private var message: String = ""
+    private var variable: String = ""
     init {
         setBlockType("ConsoleOutput")
     }
-    fun setBlockInput( _message: String = "") {
+    fun setBlockInput( _message: String = "", _variable: String = "") {
         message = _message
+        variable = _variable
     }
-    override fun setBlockData() {
-        println(accessHeap().getVariableValue(message).toString())
+    override fun executeBlock() {
+        println("$message ${accessHeap().getVariableValue(variable).toString()}")
     }
 }
 
@@ -285,10 +305,10 @@ class ConsoleInputOne: Block() {
         name = _name
         message = _message
     }
-    override fun setBlockData() {
+    override fun executeBlock() {
         print(message)
         val inputValue: String = readln()
-        var calculated = arithmetics(accessHeap(), inputValue)
+        val calculated = arithmetics(accessHeap(), inputValue)
         setBlockStatus(calculated.first)
         if (calculated.first == "OK") {
             value = calculated.second
@@ -316,170 +336,168 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     blockTo.setPrevBlock(null)
 }
 
-
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
-    var exp = expression.replace("\\s".toRegex(), "");
-    if(exp.length==0) {
-        return Pair("Empty Input", 0);
+    val exp = expression.replace("\\s".toRegex(), "")
+    if(exp.isEmpty()) {
+        return Pair("Empty input", 0)
     }
-    val (prepered, expStatus) = preperingExpression(heap, exp);
-    val (correctLine, lineStatus) = lineСheck(exp);
+    val (prepared, expStatus) = preparingExpression(heap, exp)
+    val (correctLine, lineStatus) = lineCheck(exp)
     if (expStatus == 0) {
-        return Pair(prepered, 0)
+        return Pair(prepared, 0)
     }
     if (lineStatus == 0) {
         return Pair(correctLine, 0)
     }
 
-    return RPNToAnswer(ExpressionToRPN(prepered))
+    return rpnToAnswer(expressionToRPN(prepared))
 }
 
-fun GetPriority(token: Char): Int {
-    when (token) {
-        '*', '/','%' -> return 3;
-        '+', '-' -> return 2;
-        '(' -> return 1;
-        ')' -> return -1;
-        else -> return 0;
+fun getPriority(token: Char): Int {
+    return when (token) {
+        '*', '/','%' -> 3
+        '+', '-' -> 2
+        '(' -> 1
+        ')' -> -1
+        else -> 0
     }
 }
 
-fun ExpressionToRPN(expression: String): String {
-    var current = "";
-    var stack: Stack<Char> = Stack<Char>();
-    var priority: Int;
+fun expressionToRPN(expression: String): String {
+    var current = ""
+    val stack: Stack<Char> = Stack<Char>()
+    var priority: Int
     for (i in expression.indices) {
-        priority = GetPriority(expression[i]);
+        priority = getPriority(expression[i])
         when (priority) {
-            0 -> current += expression[i];
-            1 -> stack.push(expression[i]);
+            0 -> current += expression[i]
+            1 -> stack.push(expression[i])
             2, 3 -> {
-                current += " ";
+                current += " "
                 while (!stack.empty()) {
-                    if ((GetPriority(stack.peek()) >= priority)) current += stack.pop();
-                    else break;
+                    if ((getPriority(stack.peek()) >= priority)) current += stack.pop()
+                    else break
                 }
-                stack.push(expression[i]);
+                stack.push(expression[i])
             }
             -1 -> {
-                current += " ";
-                while (GetPriority(stack.peek()) != 1) current += stack.pop();
-                stack.pop();
+                current += " "
+                while (getPriority(stack.peek()) != 1) current += stack.pop()
+                stack.pop()
             }
             else -> {
-                return "Error";
+                return "Error"
             }
         }
     }
-    while (!stack.empty()) current += stack.pop();
-    return current;
+    while (!stack.empty()) current += stack.pop()
+    return current
 }
 
-fun RPNToAnswer(rpn: String): Pair<String,Int> {
-    var operand = String();
-    var stack: Stack<Int> = Stack<Int>();
-    var i = 0;
+fun rpnToAnswer(rpn: String): Pair<String,Int> {
+    var operand = String()
+    val stack: Stack<Int> = Stack<Int>()
+    var i = 0
     while (i < rpn.length) {
         if (rpn[i] == ' ') {
-            i++;
-            continue;
+            i++
+            continue
         }
-        if (GetPriority(rpn[i]) == 0) {
-            while (rpn[i] !=' ' && (GetPriority(rpn[i]) == 0)) {
-                operand += rpn[i++];
-                if (i == rpn.length) break;
+        if (getPriority(rpn[i]) == 0) {
+            while (rpn[i] !=' ' && (getPriority(rpn[i]) == 0)) {
+                operand += rpn[i++]
+                if (i == rpn.length) break
             }
             try {
-                stack.push(operand.toInt());
-            }catch (e:NumberFormatException){
-                return Pair("Unexpected Symbol", 0)
+                stack.push(operand.toInt())
+            } catch (e:NumberFormatException){
+                return Pair("Unexpected symbol $operand", 0)
             }
-            operand = String();
+            operand = String()
         }
-        if (i == rpn.length) break;
-        if (GetPriority(rpn[i]) > 1) {
+        if (i == rpn.length) break
+        if (getPriority(rpn[i]) > 1) {
             try{
-            var a: Int = stack.pop();
-            var b: Int = stack.pop();
+            val a: Int = stack.pop()
+            val b: Int = stack.pop()
             when (rpn[i]) {
-                '+' -> stack.push(b + a);
-                '-' -> stack.push(b - a);
-                '*' -> stack.push(b * a);
-                '/' ->{
+                '+' -> stack.push(b + a)
+                '-' -> stack.push(b - a)
+                '*' -> stack.push(b * a)
+                '/' -> {
                         try {
-                            stack.push(b / a);
+                            stack.push(b / a)
                         } catch (e:Exception){
-                            return Pair ("Division By Zero", 0);
+                            return Pair ("Division by zero", 0)
                         }
                     }
-                '%' -> stack.push(b % a);
+                '%' -> stack.push(b % a)
                 else -> {
-                    println(stack.pop())
-                    return Pair("Unexpected Symbol", 0);
+                    return Pair("Unexpected symbol ${rpn[i]}", 0)
                 }
                 }
-            } catch (e:EmptyStackException){
-            return Pair("Incorrect Expression",0);
+            } catch (e:EmptyStackException) {
+                return Pair("Incorrect expression",0)
             }
         }
-        i++;
+        i++
     }
-    return Pair("OK", stack.pop());
+    return Pair("OK", stack.pop())
 }
 
-fun lineСheck (string:String): Pair<String,Int>{
-    var str = string.replace("[A-Za-z-+*/0-9()%]".toRegex(),"")
-    if(str.length != 0){
-        return Pair("Unexpected Symbol", 0);
+fun lineCheck (string:String): Pair<String,Int>{
+    val str = string.replace("[A-Za-z-+*/0-9()%]".toRegex(),"")
+    if(str.isNotEmpty()){
+        return Pair("Unexpected Symbol", 0)
     }
-    val reg="[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex();
-    val match=reg.find(string);
+    val reg="[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex()
+    val match=reg.find(string)
     if (match != null) {
-        return Pair("Incorrect Expression",0)
+        return Pair("Incorrect expression", 0)
     }
-    return Pair("OK", 1);
+    return Pair("OK", 1)
 }
-fun preperingExpression (heap: Heap,expression:String):Pair<String,Int> {
-    var exp = expression;
-    var preperedExpression = String();
-    var i = 0;
+
+fun preparingExpression (heap: Heap, expression:String):Pair<String,Int> {
+    var exp = expression
+    var preparedExpression = String()
+    var i = 0
     while (i < expression.length) {
-        if(expression[i].code >= 65 && expression[i].code <= 127){
-            var operand = String();
-            while (expression[i] != ' ' && (expression[i].code >= 65 && expression[i].code <= 127)){
-                operand += expression[i++];
-                if (i == expression.length) break;
+        if(expression[i].code in 65..127){
+            var operand = String()
+            while (expression[i] != ' ' && (expression[i].code in 65..127)){
+                operand += expression[i++]
+                if (i == expression.length) break
             }
             if(!heap.isVariableExist(operand)){
-                return Pair("Undefined Variable: ${operand}", 0);
+                return Pair("Undefined variable $operand", 0)
             }
-            println(operand);
-            var FromVarToNum = heap.getVariableValue(operand);
+            val fromVarToNum = heap.getVariableValue(operand)
 
-            exp = expression.replace(operand, FromVarToNum.toString());
-
+            exp = expression.replace(operand, fromVarToNum.toString())
         }
-        i++;
+        i++
     }
 
     for(j in exp.indices) {
         if(exp[j] == '-') {
-            if(j == 0){
-                preperedExpression += "0";
+            if (j == 0) {
+                preparedExpression += "0"
             }
-            else if(exp[j-1] == '('){
-                preperedExpression += "0";
+            else if(exp[j-1] == '(') {
+                preparedExpression += "0"
             }
         }
-        preperedExpression += exp[j];
+        preparedExpression += exp[j]
     }
 
-    return Pair(preperedExpression, 1);
+    return Pair(preparedExpression, 1)
 }
-fun VariableСheck(variable: String): Boolean{
-    var str = variable.replace("[A-Za-z]".toRegex(),"")
-    if(str.length != 0){
-       return false;
+
+fun variableCheck(variable: String): Boolean{
+    val str = variable.replace("[A-Za-z]".toRegex(),"")
+    if(str.isNotEmpty()){
+       return false
     }
-    return true;
+    return true
 }

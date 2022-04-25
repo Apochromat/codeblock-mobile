@@ -1,5 +1,7 @@
 package com.apochromat.codeblockmobile
 
+import com.apochromat.codeblockmobile.logic.*
+
 fun main() {
     var ep = EntryPoint()
     var block_empty = Block()
@@ -19,7 +21,7 @@ fun main() {
     blockIfElse.setBlockInput("16*2/2", "16", "==")
     block_aAlice.setBlockInput("Alice", "1111")
     block_aBob.setBlockInput("Bob", "1212")
-    block_aTom.setBlockInput("Tom", "2Alice")
+    block_aTom.setBlockInput("Tom", "2*(1+ Alice)")
     block_aSam.setBlockInput("Sam", "1414")
     block_aKate.setBlockInput("Kate", "1515")
 
