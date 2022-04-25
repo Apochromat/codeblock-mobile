@@ -428,7 +428,7 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
 }
 
 fun lineСheck (string:String): Pair<String,Int>{
-    var str = string.replace("[A-Za-z-+*/0-9]".toRegex(),"")
+    var str = string.replace("[A-Za-z-+*/0-9()%]".toRegex(),"")
     if(str.length != 0){
         return Pair("Unexpected Symbol", 0);
     }
