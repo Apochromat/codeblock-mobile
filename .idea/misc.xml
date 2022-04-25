@@ -4,9 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Git/codeblock-mobile/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
-        <entry key="..\:/Git/codeblock-mobile/app/src/main/res/layout/activity_project.xml" value="0.14270833333333333" />
-        <entry key="..\:/Git/codeblock-mobile/app/src/main/res/menu/project_menu.xml" value="0.14270833333333333" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_authors.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_project.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_rv.xml" value="0.27447916666666666" />
       </map>
     </option>
   </component>

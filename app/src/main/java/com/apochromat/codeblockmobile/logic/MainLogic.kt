@@ -1,7 +1,5 @@
 package com.apochromat.codeblockmobile
 
-import com.apochromat.codeblockmobile.logic.*
-
 fun main() {
     var ep = EntryPoint()
     var block_dv = DefinedVariable()
