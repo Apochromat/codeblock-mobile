@@ -380,7 +380,7 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
             try {
                 stack.push(operand.toInt());
             }catch (e:NumberFormatException){
-                return Pair("Unexpected Symbol", 0)
+                return Pair("Unexpected Symbol2", 0)
             }
             operand = String();
         }
@@ -402,7 +402,8 @@ fun RPNToAnswer(rpn: String): Pair<String,Int> {
                     }
                 '%' -> stack.push(b % a);
                 else -> {
-                    return Pair("Unexpected Symbol", 0);
+                    println(stack.pop())
+                    return Pair("Unexpected Symbol1", 0);
                 }
                 }
             } catch (e:EmptyStackException){
@@ -419,14 +420,18 @@ fun lineСheck (string:String): Pair<String,Int>{
     if(str.length == 0){
         return Pair("Empty Input", 0);
     }
-    for (i in string.indices){
-        if(string[i].code < 40 ||
-            (string[i].code > 58 && string[i].code < 64) ||
-            (string[i].code > 91 && string[i].code < 96) ||
-            (string[i].code > 123 && string[i].code < 127)) {
-            return Pair("Unexpected Symbol", 0);
-        }
+    str=string.replace("[A-Za-z-+*/0-9]".toRegex(),"")
+    if(str.length!=0){
+        return Pair("Unexpected Symbol", 0);
     }
+//    for (i in string.indices){
+//        if(string[i].code < 40 ||
+//            (string[i].code > 58 && string[i].code < 64) ||
+//            (string[i].code > 91 && string[i].code < 96) ||
+//            (string[i].code > 123 && string[i].code < 127)) {
+//            return Pair("Unexpected Symbol", 0);
+//        }
+//    }
     return Pair("OK", 1);
 }
 
