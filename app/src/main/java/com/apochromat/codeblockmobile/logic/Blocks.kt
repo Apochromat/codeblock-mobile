@@ -5,35 +5,65 @@ import java.util.*
 class Heap {
     private var heap: MutableMap<String, Int> = mutableMapOf()
 
+    /**
+     * Создать новые переменные со значением 0 из списка names.
+     **/
     fun createDefaultVariables(names: List<String>) {
         for (name: String in names) {
             heap[name] = 0
         }
     }
 
+    /**
+     * Установить переменной name значение value.
+     **/
     fun setVariableValue(name: String, value: Int) { heap[name] = value }
 
+    /**
+     * Получить значение переменной names.
+     **/
     fun getVariableValue(name: String): Int? { return heap[name] }
 
+    /**
+     * Проверить, существует ли переменная name.
+     **/
     fun isVariableExist(name: String): Boolean { return name in heap.keys }
 
+    /**
+     * Получить список с названием всех переменных.
+     **/
     fun getVariablesList(): MutableSet<String> { return heap.keys }
 
+    /**
+     *  Удалить переменную name.
+     **/
     fun deleteVariable(name: String) { heap.remove(name) }
 
+    /**
+     *  Удалить все переменные.
+     **/
     fun clearVariables() { heap.clear() }
 }
 
+/**
+ *  Основной блок.
+ **/
 open class Block {
     companion object {
+        //  Хранилище переменных
         var heap: Heap = Heap()
+        //  Счетчик блоков
         var counter: Int = 0
+        //  Словарь со всеми блоками
         var allBlocks: MutableMap<Int, Block> = mutableMapOf()
+        //  Список устойчивых связей между блоками
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
 
+    //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null
+    //  Тип, статус и идентификатор блока
     private var type: String = "Undefined"
     private var status: String = "OK"
     private var id: Int = counter++
@@ -42,24 +72,28 @@ open class Block {
         allBlocks[this.getBlockId()] = this
     }
 
+    //  Операции с типом, статусом и идентификатором блока
     fun setBlockType(input: String) { type = input }
     fun getBlockType(): String { return type }
     fun setBlockStatus(input: String) { status = input }
     fun getBlockStatus(): String { return status }
-
     fun getBlockId(): Int { return id }
     fun getBlockById(_id : Int): Block? { return allBlocks[_id] }
+
+    //  Получить словарь всех блоков
     fun getAllBlocks(): MutableMap<Int, Block> { return allBlocks }
+    //  Получить доступ к хранилищу переменных
     fun accessHeap(): Heap { return heap }
 
+    //  Операции с ссылками на предыдущий и следующий блоки
     fun setNextBlock(block: Block?) { nextBlock = block }
     fun getNextBlock(): Block? { return nextBlock }
     fun setPrevBlock(block: Block?) { prevBlock = block }
     fun getPrevBlock(): Block? { return prevBlock }
 
-    fun addStrongConnection(pair: Pair<Block, Block>) {
-        strongConnections.add(pair)
-    }
+    //  Операции со списком устойчивых связей между блоками
+    fun addStrongConnection(pair: Pair<Block, Block>) { strongConnections.add(pair) }
+    fun removeStrongConnection(pair: Pair<Block, Block>) { strongConnections.remove(pair) }
     fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
 
     open fun executeBlock() {}
@@ -81,7 +115,29 @@ open class Block {
     }
 }
 
-class DefinedVariable : Block() {
+/**
+ *  Точка входа в программу.
+ **/
+class EntryPoint: Block() {
+    init {
+        setBlockType("EntryPoint")
+    }
+    override fun executeBlock() {
+        accessHeap().clearVariables()
+        for (bl in getAllBlocks()) {
+            bl.value.clearBlockData()
+        }
+        for (pair in getAllStrongConnections()) {
+            connectBlocks(pair.first, pair.second, false)
+        }
+    }
+}
+
+/**
+ *  Блок определенной переменной.
+ *  Позволяет объявить переменную и установить ей значение.
+ **/
+class DefinedVariable: Block() {
     private var value: Int = 0
     private var name: String = ""
     private var inputValue: String = ""
@@ -113,6 +169,10 @@ class DefinedVariable : Block() {
     }
 }
 
+/**
+ *  Блок неопределенной переменной.
+ *  Позволяет объявить переменные со значением по умолчанию (0).
+ **/
 class UndefinedVariable: Block() {
     private var inputNames: List<String> = listOf()
     init {
@@ -133,7 +193,11 @@ class UndefinedVariable: Block() {
     }
 }
 
-class Assignment : Block() {
+/**
+ *  Блок присвоения.
+ *  Позволяет установить существующей переменной значение.
+ **/
+class Assignment: Block() {
     private var value: Int = 0
     private var name: String = ""
     private var inputValue: String = ""
@@ -169,39 +233,19 @@ class Assignment : Block() {
     }
 }
 
-class EntryPoint: Block() {
-    init {
-        setBlockType("EntryPoint")
-    }
-    override fun executeBlock() {
-        accessHeap().clearVariables()
-        for (bl in getAllBlocks()) {
-            bl.value.clearBlockData()
-        }
-        for (pair in getAllStrongConnections()) {
-            connectBlocks(pair.first, pair.second, false)
-        }
-    }
-}
-
-class BeginEnd : Block() {
+/**
+ *  Служебный блок.
+ **/
+class BeginEnd: Block() {
     init {
         setBlockType("BeginEnd")
     }
 }
 
-fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
-    when (comparator) {
-        ">" -> return (numberLeft > numberRight)
-        ">=" -> return (numberLeft >= numberRight)
-        "<" -> return (numberLeft < numberRight)
-        "<=" -> return (numberLeft <= numberRight)
-        "==" -> return (numberLeft == numberRight)
-        "!=" -> return (numberLeft != numberRight)
-    }
-    return false
-}
-
+/**
+ *  Блок условия If.
+ *  Позволяет выполнять определенный набор команд при выполнении условия.
+ **/
 class ConditionIf: Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
@@ -239,6 +283,10 @@ class ConditionIf: Block() {
     }
 }
 
+/**
+ *  Блок условия IfElse.
+ *  Позволяет выполнять определенные наборы команд при выполнении и не выполнении условия.
+ **/
 class ConditionIfElse: Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
@@ -279,6 +327,10 @@ class ConditionIfElse: Block() {
     }
 }
 
+/**
+ *  Блок консольного вывода.
+ *  Позволяет вывести в консоль сообщение и значение переменной.
+ **/
 class ConsoleOutput: Block() {
     private var message: String = ""
     private var variable: String = ""
@@ -294,6 +346,10 @@ class ConsoleOutput: Block() {
     }
 }
 
+/**
+ *  Блок одиночного консольного ввода.
+ *  Позволяет вывести в консоль сообщение и считать введеное значение, присвоить его переменной.
+ **/
 class ConsoleInputOne: Block() {
     private var message: String = ""
     private var name: String = ""
@@ -321,6 +377,23 @@ class ConsoleInputOne: Block() {
     }
 }
 
+fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
+    when (comparator) {
+        ">" -> return (numberLeft > numberRight)
+        ">=" -> return (numberLeft >= numberRight)
+        "<" -> return (numberLeft < numberRight)
+        "<=" -> return (numberLeft <= numberRight)
+        "==" -> return (numberLeft == numberRight)
+        "!=" -> return (numberLeft != numberRight)
+    }
+    return false
+}
+
+/**
+ *  Функция связывания блоков.
+ *  Позволяет связать блоки blockFrom и blockTo.
+ *  Параметры: strong - создать ли устойчивую связь, clear - очищать ли предыдущие связи.
+ **/
 fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
     if (strong) Block().addStrongConnection(Pair(blockFrom, blockTo))
     if (clear) {
@@ -331,9 +404,14 @@ fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clea
     blockTo.setPrevBlock(blockFrom)
 }
 
+/**
+ *  Функция развязывания блоков.
+ *  Позволяет развязать блоки blockFrom и blockTo.
+ **/
 fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     blockFrom.setNextBlock(null)
     blockTo.setPrevBlock(null)
+    Block().removeStrongConnection(Pair(blockFrom, blockTo))
 }
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {

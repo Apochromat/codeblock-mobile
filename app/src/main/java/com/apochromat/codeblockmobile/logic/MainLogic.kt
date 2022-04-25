@@ -4,7 +4,6 @@ import com.apochromat.codeblockmobile.logic.*
 
 fun main() {
     var ep = EntryPoint()
-    var block_empty = Block()
     var block_dv = DefinedVariable()
     var block_uv = UndefinedVariable()
     var blockIf = ConditionIf()
@@ -25,8 +24,7 @@ fun main() {
     block_aSam.setBlockInput("Sam", "1414")
     block_aKate.setBlockInput("Kate", "1515")
 
-    connectBlocks(ep, block_empty)
-    connectBlocks(block_empty, block_dv)
+    connectBlocks(ep, block_dv)
     connectBlocks(block_dv, block_uv)
     connectBlocks(block_uv, blockIf)
     connectBlocks(blockIf.ifBegin, block_aAlice)
