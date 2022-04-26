@@ -4,6 +4,7 @@ import java.util.*
 
 class Heap {
     private var heap: MutableMap<String, Int> = mutableMapOf()
+    private var heapArray: MutableMap<String, Array<Int>> = mutableMapOf()
 
     /**
      * Создать новые переменные со значением 0 из списка names.
@@ -43,6 +44,53 @@ class Heap {
      *  Удалить все переменные.
      **/
     fun clearVariables() { heap.clear() }
+
+    /**
+     * Создать новый пустой массив.
+     **/
+    fun createArray(arrayName: String, arraySize: Int) {
+        heapArray[arrayName] = Array(arraySize, {0})
+    }
+
+    /**
+     * Удалить массив.
+     **/
+    fun removeArray(arrayName: String) {
+        heapArray.remove(arrayName)
+    }
+
+    /**
+     * Установить значение элемента в массиве.
+     **/
+    fun setArrayValue(arrayName: String, index: Int, value: Int) {
+        heapArray[arrayName]?.set(index, value)
+    }
+
+    /**
+     * Получить значение элемента в массиве.
+     **/
+    fun getArrayValue(arrayName: String, index: Int): Int? {
+        return heapArray[arrayName]?.get(index)
+    }
+
+    /**
+     * Существует ли массив.
+     **/
+    fun isArrayExist(arrayName: String): Boolean {
+        return arrayName in heapArray.keys
+    }
+
+    /**
+     * Получить размер массива.
+     **/
+    fun getArraySize(arrayName: String): Int? {
+        return heapArray[arrayName]?.size
+    }
+
+    /**
+     *  Удалить все массивы.
+     **/
+    fun clearArrays() { heapArray.clear() }
 }
 
 /**
@@ -50,11 +98,11 @@ class Heap {
  **/
 open class Block {
     companion object {
+        var callStack: Stack<Block> = Stack()
         //  Хранилище переменных
         var heap: Heap = Heap()
         //  Счетчик блоков
         var counter: Int = 0
-        var depth: Int = 0
         //  Словарь со всеми блоками
         var allBlocks: MutableMap<Int, Block> = mutableMapOf()
         //  Список устойчивых связей между блоками
@@ -97,32 +145,17 @@ open class Block {
     fun removeStrongConnection(pair: Pair<Block, Block>) { strongConnections.remove(pair) }
     fun getAllStrongConnections(): MutableList<Pair<Block, Block>> { return strongConnections }
 
-    fun clearDepth() { depth = 0 }
-    fun increaseDepth() { depth++ }
-    fun getDepth(): Int { return depth }
-
     open fun executeBlock() {}
     open fun clearBlockData() {}
 
     open fun run() {
-        increaseDepth()
-        if (getDepth() > 3500) {
-            setBlockStatus("Stack Overflow")
-        }
-        else {
-            executeBlock()
-        }
+        executeBlock()
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
-                try {
-                    getNextBlock()?.run()
-                }
-                catch (e: Exception) {
-                    setBlockStatus("Stack Overflow")
-                }
+                callStack.push(getNextBlock())
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
@@ -145,6 +178,12 @@ class EntryPoint: Block() {
         }
         for (pair in getAllStrongConnections()) {
             connectBlocks(pair.first, pair.second, false)
+        }
+    }
+    override fun run() {
+        super.run()
+        while (!callStack.empty()) {
+            callStack.pop().run()
         }
     }
 }
@@ -194,8 +233,8 @@ class UndefinedVariable: Block() {
     init {
         setBlockType("UndefinedVariable")
     }
-    fun setBlockInput(_names: List<String>) {
-        inputNames = _names
+    fun setBlockInput(_names: String) {
+        inputNames = stringToList(_names)
     }
     override fun executeBlock() {
         var flag: Boolean = true
@@ -639,4 +678,8 @@ fun variableCheck(variable: String): Boolean{
        return false
     }
     return true
+}
+
+fun stringToList(string: String): List<String> {
+    return string.replace("[,;]".toRegex()," ").split("[\\s+]".toRegex()).filter { it.length > 0 }
 }
