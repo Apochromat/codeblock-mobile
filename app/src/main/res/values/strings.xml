@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CODEBLOCK</string>
+    <string name="app_name">Codeblock</string>
 
     <string name="mainMenu_newProject">Начать проект</string>
     <string name="mainMenu_about">Авторы</string>
