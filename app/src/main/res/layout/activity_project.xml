@@ -39,54 +39,80 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/buttonVar"
+                    android:id="@+id/buttonDefinedVar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_var" />
+                    android:text="@string/blockMenu_defined_var" />
+                <Button
+                    android:id="@+id/buttonUndefinedVar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_undefined_var" />
+                <Button
+                    android:id="@+id/buttonAssignment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_assignment" />
+                <Button
+                    android:id="@+id/buttonConditionIf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_condition_if" />
+                <Button
+                    android:id="@+id/buttonConditionIfElse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_condition_if_else" />
 
                 <Button
-                    android:id="@+id/buttonAddValue"
+                    android:id="@+id/buttonCycleWhile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_addValue" />
+                    android:text="@string/blockMenu_cycle_while" />
 
                 <Button
-                    android:id="@+id/buttonIf"
+                    android:id="@+id/buttonConsoleOutput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_if" />
+                    android:text="@string/blockMenu_console_output" />
 
                 <Button
-                    android:id="@+id/buttonFor"
+                    android:id="@+id/buttonConsoleInputOne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_for" />
-
-                <Button
-                    android:id="@+id/buttonWhile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:insetLeft="2.5dp"
-                    android:insetRight="2.5dp"
-                    android:insetBottom="8dp"
-                    android:text="@string/blockMenu_while" />
+                    android:text="@string/blockMenu_console_input_one" />
 
             </LinearLayout>
         </HorizontalScrollView>

@@ -14,9 +14,12 @@
     <string name="menu_save">Сохранить проект</string>
     <string name="menu_console">Открыть консоль</string>
 
-    <string name="blockMenu_var">var</string>
-    <string name="blockMenu_addValue">add value</string>
-    <string name="blockMenu_if">if</string>
-    <string name="blockMenu_for">for</string>
-    <string name="blockMenu_while">while</string>
+    <string name="blockMenu_defined_var">def var</string>
+    <string name="blockMenu_undefined_var">undef var</string>
+    <string name="blockMenu_assignment">add val</string>
+    <string name="blockMenu_condition_if">if</string>
+    <string name="blockMenu_condition_if_else">if-else</string>
+    <string name="blockMenu_cycle_while">while</string>
+    <string name="blockMenu_console_output">output</string>
+    <string name="blockMenu_console_input_one">input</string>
 </resources>

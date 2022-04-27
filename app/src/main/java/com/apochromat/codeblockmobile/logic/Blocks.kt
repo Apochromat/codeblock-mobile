@@ -459,7 +459,7 @@ class ConsoleInputOne: Block() {
     private var name: String = ""
     private var value: Int = 0
     init {
-        setBlockType("ConsoleOutput")
+        setBlockType("ConsoleInputOne")
     }
     fun setBlockInput( _name: String, _message: String = "") {
         name = _name

@@ -14,7 +14,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ProjectActivity : AppCompatActivity() {
-    private lateinit var items : ArrayList<String>
+    private lateinit var items : ArrayList<Block>
     private lateinit var adaptor : RVAdaptor
     lateinit var bindingClass : ActivityProjectBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,26 +29,41 @@ class ProjectActivity : AppCompatActivity() {
         items = fetchData()
         adaptor = RVAdaptor(items)
         recyclerView.adapter = adaptor
+
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+        init()
 
-        bindingClass.buttonVar.setOnClickListener{
-            items.add("Var")
-        }
-        bindingClass.buttonAddValue.setOnClickListener{
-            items.add("AddValue")
-        }
-        bindingClass.buttonIf.setOnClickListener{
-            items.add("If")
-        }
-        bindingClass.buttonFor.setOnClickListener{
-            items.add("For")
-        }
-        bindingClass.buttonWhile.setOnClickListener{
-            items.add("While")
+    }
+    private fun init(){
+        bindingClass.apply{
+            buttonDefinedVar.setOnClickListener{
+                adaptor.addBlock(DefinedVariable())
+            }
+            buttonUndefinedVar.setOnClickListener{
+                adaptor.addBlock(UndefinedVariable())
+            }
+            buttonAssignment.setOnClickListener{
+                adaptor.addBlock(Assignment())
+            }
+            buttonConditionIf.setOnClickListener{
+                adaptor.addBlock(ConditionIf())
+            }
+            buttonConditionIfElse.setOnClickListener{
+                adaptor.addBlock(ConditionIfElse())
+            }
+            buttonCycleWhile.setOnClickListener{
+                adaptor.addBlock(CycleWhile())
+            }
+            buttonConsoleOutput.setOnClickListener{
+                adaptor.addBlock(ConsoleOutput())
+            }
+            buttonConsoleInputOne.setOnClickListener{
+                adaptor.addBlock(ConsoleInputOne())
+            }
+
         }
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.project_menu, menu)
         return true
@@ -93,10 +108,8 @@ class ProjectActivity : AppCompatActivity() {
 
     }
 
-    private fun fetchData() : ArrayList<String>{
-        val list = ArrayList<String>()
-        list.add("Begin")
-        list.add("End")
+    private fun fetchData() : ArrayList<Block>{
+        val list = ArrayList<Block>()
         return list
     }
 }
