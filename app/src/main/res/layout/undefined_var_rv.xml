@@ -10,7 +10,7 @@
         android:id="@+id/VarBlock"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/teal_700"
+        android:background="@color/color_var"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="34dp">
 
