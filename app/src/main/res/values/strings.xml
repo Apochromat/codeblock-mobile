@@ -6,9 +6,9 @@
     <string name="mainMenu_exit">Выход</string>
 
     <string name="label_team">Авторы - TEAM 17</string>
-    <string name="label_nikita">Абрамов Никита</string>
-    <string name="label_stepan">Устименко Степан</string>
-    <string name="label_alexander">Юраев Александр</string>
+    <string name="label_nikita">Абрамов\n Никита</string>
+    <string name="label_stepan">Устименко\n Степан</string>
+    <string name="label_alexander">Юраев\n Александр</string>
 
     <string name="menu_run">Запустить проект</string>
     <string name="menu_save">Сохранить проект</string>

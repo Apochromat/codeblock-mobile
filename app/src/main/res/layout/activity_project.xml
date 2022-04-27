@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_grey"
     tools:context=".ProjectActivity">
 
 
@@ -40,79 +41,101 @@
 
                 <Button
                     android:id="@+id/buttonDefinedVar"
+                    android:backgroundTint="@color/color_var"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_defined_var" />
+                    android:text="@string/blockMenu_defined_var"
+                    android:textColor="@color/dark_grey"
+                    />
                 <Button
                     android:id="@+id/buttonUndefinedVar"
+                    android:backgroundTint="@color/color_var"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_undefined_var" />
+                    android:text="@string/blockMenu_undefined_var"
+                    android:textColor="@color/dark_grey"/>
                 <Button
                     android:id="@+id/buttonAssignment"
+                    android:backgroundTint="@color/color_assignment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_assignment" />
+                    android:text="@string/blockMenu_assignment"
+                    android:textColor="@color/dark_grey"/>
                 <Button
                     android:id="@+id/buttonConditionIf"
+                    android:backgroundTint="@color/color_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_condition_if" />
+                    android:text="@string/blockMenu_condition_if"
+                    android:textColor="@color/dark_grey"
+                    />
                 <Button
                     android:id="@+id/buttonConditionIfElse"
+                    android:backgroundTint="@color/color_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_condition_if_else" />
+                    android:text="@string/blockMenu_condition_if_else"
+                    android:textColor="@color/dark_grey"
+                    />
 
                 <Button
                     android:id="@+id/buttonCycleWhile"
+                    android:backgroundTint="@color/color_cycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_cycle_while" />
+                    android:text="@string/blockMenu_cycle_while"
+                    android:textColor="@color/dark_grey"
+                    />
 
                 <Button
                     android:id="@+id/buttonConsoleOutput"
+                    android:backgroundTint="@color/color_console"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_console_output" />
+                    android:text="@string/blockMenu_console_output"
+                    android:textColor="@color/dark_grey"
+                    />
 
                 <Button
                     android:id="@+id/buttonConsoleInputOne"
+                    android:backgroundTint="@color/color_console"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
-                    android:text="@string/blockMenu_console_input_one" />
+                    android:text="@string/blockMenu_console_input_one"
+                    android:textColor="@color/dark_grey"
+                    />
 
             </LinearLayout>
         </HorizontalScrollView>
