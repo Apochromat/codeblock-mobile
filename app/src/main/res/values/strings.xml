@@ -14,6 +14,8 @@
     <string name="menu_save">Сохранить проект</string>
     <string name="menu_console">Открыть консоль</string>
 
+    <string name="console">Консоль</string>
+
     <string name="blockMenu_defined_var">def var</string>
     <string name="blockMenu_undefined_var">undef var</string>
     <string name="blockMenu_assignment">add val</string>

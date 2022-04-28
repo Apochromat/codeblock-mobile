@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +16,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ProjectActivity : AppCompatActivity() {
-    private lateinit var items : ArrayList<Block>
-    private lateinit var adaptor : RVAdaptor
+    private lateinit var listBlocks : ArrayList<Block>
+    private lateinit var listMessage : ArrayList<String>
+    private lateinit var blocksAdapter : BlocksAdapter
+    lateinit var consoleAdapter : ConsoleAdapter
     lateinit var bindingClass : ActivityProjectBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityProjectBinding.inflate(layoutInflater)
@@ -25,42 +29,48 @@ class ProjectActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "newProject"
 
-        val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        items = fetchData()
-        adaptor = RVAdaptor(items)
-        recyclerView.adapter = adaptor
+        val blocksView : RecyclerView = findViewById(R.id.recyclerView)
+        blocksView.layoutManager = LinearLayoutManager(this)
+        listBlocks = fetchData()
+        blocksAdapter = BlocksAdapter(listBlocks)
+        blocksView.adapter = blocksAdapter
+
+        val consoleView : RecyclerView = bindingClass.messageRV
+        consoleView.layoutManager = LinearLayoutManager(this)
+        listMessage = setListMessage()
+        consoleAdapter = ConsoleAdapter(listMessage)
+        consoleView.adapter = consoleAdapter
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        itemTouchHelper.attachToRecyclerView(blocksView)
         init()
 
     }
     private fun init(){
         bindingClass.apply{
             buttonDefinedVar.setOnClickListener{
-                adaptor.addBlock(DefinedVariable())
+                blocksAdapter.addBlock(DefinedVariable())
             }
             buttonUndefinedVar.setOnClickListener{
-                adaptor.addBlock(UndefinedVariable())
+                blocksAdapter.addBlock(UndefinedVariable())
             }
             buttonAssignment.setOnClickListener{
-                adaptor.addBlock(Assignment())
+                blocksAdapter.addBlock(Assignment())
             }
             buttonConditionIf.setOnClickListener{
-                adaptor.addBlock(ConditionIf())
+                blocksAdapter.addBlock(ConditionIf())
             }
             buttonConditionIfElse.setOnClickListener{
-                adaptor.addBlock(ConditionIfElse())
+                blocksAdapter.addBlock(ConditionIfElse())
             }
             buttonCycleWhile.setOnClickListener{
-                adaptor.addBlock(CycleWhile())
+                blocksAdapter.addBlock(CycleWhile())
             }
             buttonConsoleOutput.setOnClickListener{
-                adaptor.addBlock(ConsoleOutput())
+                blocksAdapter.addBlock(ConsoleOutput())
             }
             buttonConsoleInputOne.setOnClickListener{
-                adaptor.addBlock(ConsoleInputOne())
+                blocksAdapter.addBlock(ConsoleInputOne())
             }
 
         }
@@ -76,13 +86,14 @@ class ProjectActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.menuRun -> {
+                runProject(listBlocks)
                 Toast.makeText(this, "Запуск...", Toast.LENGTH_SHORT).show()
             }
             R.id.menuSave -> {
                 Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show()
             }
             R.id.menuConsole -> {
-                Toast.makeText(this, "Консоль открывается...", Toast.LENGTH_SHORT).show()
+                bindingClass.drawer.openDrawer(GravityCompat.START)
             }
         }
         return true
@@ -96,21 +107,33 @@ class ProjectActivity : AppCompatActivity() {
         ): Boolean {
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
-            Collections.swap(items, fromPosition, toPosition)
+            Collections.swap(listBlocks, fromPosition, toPosition)
 
-            adaptor.notifyItemMoved(fromPosition, toPosition)
+            blocksAdapter.notifyItemMoved(fromPosition, toPosition)
 
             return false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
         }
-
     }
 
     private fun fetchData() : ArrayList<Block>{
         val list = ArrayList<Block>()
+        list.add(EntryPoint())
         return list
+    }
+    private fun setListMessage(): ArrayList<String> {
+        return ArrayList()
+    }
+
+    private fun runProject(listBlocks : ArrayList<Block>){
+        for (i in 0 until listBlocks.size-1){
+            connectBlocks(listBlocks[i], listBlocks[i+1], true, false)
+        }
+        for (i in 0 until listBlocks.size){
+            consoleAdapter.addMessage(listBlocks[i].getBlockType())
+        }
+
     }
 }

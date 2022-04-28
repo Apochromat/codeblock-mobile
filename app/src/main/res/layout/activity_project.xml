@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
@@ -41,105 +42,127 @@
 
                 <Button
                     android:id="@+id/buttonDefinedVar"
-                    android:backgroundTint="@color/color_var"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_var"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_defined_var"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
+
                 <Button
                     android:id="@+id/buttonUndefinedVar"
-                    android:backgroundTint="@color/color_var"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_var"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_undefined_var"
-                    android:textColor="@color/dark_grey"/>
+                    android:textColor="@color/dark_grey" />
+
                 <Button
                     android:id="@+id/buttonAssignment"
-                    android:backgroundTint="@color/color_assignment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_assignment"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_assignment"
-                    android:textColor="@color/dark_grey"/>
+                    android:textColor="@color/dark_grey" />
+
                 <Button
                     android:id="@+id/buttonConditionIf"
-                    android:backgroundTint="@color/color_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_condition"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_condition_if"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
+
                 <Button
                     android:id="@+id/buttonConditionIfElse"
-                    android:backgroundTint="@color/color_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_condition"
                     android:insetLeft="5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_condition_if_else"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
 
                 <Button
                     android:id="@+id/buttonCycleWhile"
-                    android:backgroundTint="@color/color_cycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_cycle"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_cycle_while"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
 
                 <Button
                     android:id="@+id/buttonConsoleOutput"
-                    android:backgroundTint="@color/color_console"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_console"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_console_output"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
 
                 <Button
                     android:id="@+id/buttonConsoleInputOne"
-                    android:backgroundTint="@color/color_console"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/color_console"
                     android:insetLeft="2.5dp"
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_console_input_one"
-                    android:textColor="@color/dark_grey"
-                    />
+                    android:textColor="@color/dark_grey" />
 
             </LinearLayout>
         </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/consoleBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/dark_blue"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/console"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messageRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

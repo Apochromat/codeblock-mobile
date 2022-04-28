@@ -9,6 +9,7 @@
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/ic_menu_run.xml" value="0.279" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/ic_menu_save.xml" value="0.279" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_authors.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_console.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_project.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/assignment_rv.xml" value="0.27447916666666666" />
@@ -19,6 +20,10 @@
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/cycle_while_rv.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/defined_var_rv.xml" value="0.536" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_assignment.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_begin_program.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_condition_if.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_bar.xml" value="0.6" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_output.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_defined_var.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_rv.xml" value="0.6548223350253807" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/undefined_var_rv.xml" value="0.27447916666666666" />

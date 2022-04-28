@@ -11,14 +11,17 @@
         android:theme="@style/Theme.CodeblockMobile">
         <activity
             android:name=".AuthorsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ProjectActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.CodeblockMobile.NoActionBar"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@style/Theme.CodeblockMobile.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
