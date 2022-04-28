@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.TextView.OnEditorActionListener
 import androidx.recyclerview.widget.RecyclerView
 import com.apochromat.codeblockmobile.logic.Block
-
+import com.apochromat.codeblockmobile.logic.EntryPoint
 
 class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adapter<BlocksAdapter.ViewHolder>() {
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
-        val textType: TextView = itemView.findViewById(R.id.text1)
-        val textStatus: TextView = itemView.findViewById(R.id.text3)
-//        val edit: EditText = itemView.findViewById(R.id.edit1)
+        val textType: TextView = itemView.findViewById(R.id.textType)
+        val textStatus: TextView = itemView.findViewById(R.id.textStatus)
+        val editLeft: EditText = itemView.findViewById(R.id.editLeft)
+        val editRight: EditText = itemView.findViewById(R.id.editRight)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -41,18 +41,21 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == 0){
+        if (listBlocks[position].getBlockType() == "EntryPoint"){
             return
         }
-//        if (listBlocks[position].getBlockType() == "DefinedVariable"){
-//
-//            holder.edit.setOnEditorActionListener { _, actionId, _ ->
-//                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    listBlocks[position].inputName = holder.edit.text.toString()
-//                }
-//                false
-//            }
-//        }
+        holder.editLeft.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                listBlocks[position].inputLeftEdit = holder.editLeft.text.toString()
+            }
+            false
+        }
+        holder.editRight.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                listBlocks[position].inputRightEdit = holder.editRight.text.toString()
+            }
+            false
+        }
         holder.textType.text = listBlocks[position].getBlockType()
         holder.textStatus.text = listBlocks[position].getBlockStatus()
     }
@@ -60,9 +63,9 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     override fun getItemCount(): Int {
         return listBlocks.size
     }
-    @SuppressLint("NotifyDataSetChanged")
+
     fun addBlock(block : Block){
         listBlocks.add(block)
-        notifyDataSetChanged()
+        notifyItemInserted(listBlocks.size-1)
     }
 }

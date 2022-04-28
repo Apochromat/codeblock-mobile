@@ -26,7 +26,14 @@ class CycleWhile : Block() {
         expressionComparator = _expressionComparator
     }
 
+    private fun initVar(){
+        expressionLeft = inputLeftEdit
+        expressionRight = inputRightEdit
+        expressionComparator = inputComparator
+    }
+
     override fun executeBlock() {
+        initVar()
         connectBlocks(cycleEnd, this, strong = false, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != cycleBegin)

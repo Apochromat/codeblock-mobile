@@ -10,16 +10,21 @@ class UndefinedVariable : Block() {
     init {
         setBlockType("UndefinedVariable")
     }
+    private fun initVar(){
+        inputNames = stringToList(inputLeftEdit)
+    }
 
     fun setBlockInput(_names: String) {
         inputNames = stringToList(_names)
     }
 
     override fun executeBlock() {
+        initVar()
         var flag: Boolean = true
         for (el in inputNames) {
             if (!variableCheck(el)) {
                 setBlockStatus("Incorrect variable naming $el")
+                adapter.addMessage("Incorrect variable naming $el")
                 flag = false
             }
         }

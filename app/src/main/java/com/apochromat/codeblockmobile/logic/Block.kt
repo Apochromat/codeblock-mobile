@@ -1,5 +1,6 @@
 package com.apochromat.codeblockmobile.logic
 
+import com.apochromat.codeblockmobile.ConsoleAdapter
 import java.util.*
 
 /**
@@ -21,7 +22,11 @@ open class Block {
         //  Список устойчивых связей между блоками
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
-
+    // Переменные с данными
+    var inputLeftEdit: String = ""
+    var inputRightEdit: String = ""
+    var inputComparator: String = ">="
+    lateinit var adapter : ConsoleAdapter
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null

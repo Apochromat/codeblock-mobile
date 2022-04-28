@@ -1,11 +1,12 @@
 package com.apochromat.codeblockmobile
 
-import android.annotation.SuppressLint
+import android.R.attr.data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+
 
 class ConsoleAdapter (private val listOutputMessage:ArrayList<String>) : RecyclerView.Adapter<ConsoleAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -22,9 +23,17 @@ class ConsoleAdapter (private val listOutputMessage:ArrayList<String>) : Recycle
     override fun getItemCount(): Int {
         return listOutputMessage.size
     }
-    @SuppressLint("NotifyDataSetChanged")
     fun addMessage(message: String) {
         listOutputMessage.add(message)
-        notifyDataSetChanged()
+        notifyItemInserted(listOutputMessage.size-1)
+    }
+    fun clearListMessages() {
+        val size = listOutputMessage.size
+        if (size > 0) {
+            for (i in 0 until size) {
+                listOutputMessage.removeAt(0)
+            }
+            notifyItemRangeRemoved(0, size)
+        }
     }
 }

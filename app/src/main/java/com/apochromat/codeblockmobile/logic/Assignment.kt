@@ -14,12 +14,18 @@ class Assignment : Block() {
         setBlockType("Assignment")
     }
 
+    private fun initVar(){
+        inputName = inputLeftEdit
+        inputValue = inputRightEdit
+    }
+
     fun setBlockInput(_name: String, _value: String) {
         inputName = _name
         inputValue = _value
     }
 
     override fun executeBlock() {
+        initVar()
         if (variableCheck(inputName)) {
             if (accessHeap().isVariableExist(inputName)) {
                 val calculated = arithmetics(accessHeap(), inputValue)
@@ -31,9 +37,11 @@ class Assignment : Block() {
                 }
             } else {
                 setBlockStatus("Undefined variable $inputName")
+                adapter.addMessage("Undefined variable $inputName")
             }
         } else {
             setBlockStatus("Incorrect variable naming $inputName")
+            adapter.addMessage("Incorrect variable naming $inputName")
         }
     }
 

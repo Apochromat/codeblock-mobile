@@ -13,6 +13,10 @@ class DefinedVariable : Block() {
     init {
         setBlockType("DefinedVariable")
     }
+    private fun initVar(){
+        inputName = inputLeftEdit
+        inputValue = inputRightEdit
+    }
 
     fun setBlockInput(_name: String, _value: String) {
         inputName = _name
@@ -20,6 +24,7 @@ class DefinedVariable : Block() {
     }
 
     override fun executeBlock() {
+        initVar()
         if (variableCheck(inputName)) {
             val calculated = arithmetics(accessHeap(), inputValue)
             setBlockStatus(calculated.first)
@@ -30,6 +35,7 @@ class DefinedVariable : Block() {
             }
         } else {
             setBlockStatus("Incorrect variable naming $inputName")
+            adapter.addMessage("Incorrect variable naming $inputName")
         }
     }
 

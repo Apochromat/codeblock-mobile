@@ -29,17 +29,18 @@ class ProjectActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "newProject"
 
-        val blocksView : RecyclerView = findViewById(R.id.recyclerView)
+        bindingClass.blocksRV.isDrawingCacheEnabled = true
+        bindingClass.blocksRV.setItemViewCacheSize(100);
+
+        createConsoleView()
+
+        val blocksView : RecyclerView = findViewById(R.id.blocksRV)
         blocksView.layoutManager = LinearLayoutManager(this)
-        listBlocks = fetchData()
+        listBlocks = setListBlocks()
         blocksAdapter = BlocksAdapter(listBlocks)
         blocksView.adapter = blocksAdapter
 
-        val consoleView : RecyclerView = bindingClass.messageRV
-        consoleView.layoutManager = LinearLayoutManager(this)
-        listMessage = setListMessage()
-        consoleAdapter = ConsoleAdapter(listMessage)
-        consoleView.adapter = consoleAdapter
+
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(blocksView)
@@ -50,27 +51,35 @@ class ProjectActivity : AppCompatActivity() {
         bindingClass.apply{
             buttonDefinedVar.setOnClickListener{
                 blocksAdapter.addBlock(DefinedVariable())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonUndefinedVar.setOnClickListener{
                 blocksAdapter.addBlock(UndefinedVariable())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonAssignment.setOnClickListener{
                 blocksAdapter.addBlock(Assignment())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonConditionIf.setOnClickListener{
                 blocksAdapter.addBlock(ConditionIf())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonConditionIfElse.setOnClickListener{
                 blocksAdapter.addBlock(ConditionIfElse())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonCycleWhile.setOnClickListener{
                 blocksAdapter.addBlock(CycleWhile())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonConsoleOutput.setOnClickListener{
                 blocksAdapter.addBlock(ConsoleOutput())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonConsoleInputOne.setOnClickListener{
                 blocksAdapter.addBlock(ConsoleInputOne())
+                listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
 
         }
@@ -99,12 +108,16 @@ class ProjectActivity : AppCompatActivity() {
         return true
     }
 
-    private val simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, 0){
+    private val simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or
+            ItemTouchHelper.START or ItemTouchHelper.END, ItemTouchHelper.LEFT){
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
+            if (viewHolder.adapterPosition == 0 || target.adapterPosition == 0){
+                return true
+            }
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
             Collections.swap(listBlocks, fromPosition, toPosition)
@@ -115,12 +128,25 @@ class ProjectActivity : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position =  viewHolder.adapterPosition
+            if (viewHolder.adapterPosition == 0){
+                return
+            }
+            listBlocks.remove(listBlocks[position])
+            blocksAdapter.notifyItemRemoved(position)
         }
     }
-
-    private fun fetchData() : ArrayList<Block>{
+    private fun createConsoleView(){
+        val consoleView : RecyclerView = bindingClass.messageRV
+        consoleView.layoutManager = LinearLayoutManager(this)
+        listMessage = setListMessage()
+        consoleAdapter = ConsoleAdapter(listMessage)
+        consoleView.adapter = consoleAdapter
+    }
+    private fun setListBlocks() : ArrayList<Block>{
         val list = ArrayList<Block>()
         list.add(EntryPoint())
+        list[0].adapter = consoleAdapter
         return list
     }
     private fun setListMessage(): ArrayList<String> {
@@ -128,12 +154,14 @@ class ProjectActivity : AppCompatActivity() {
     }
 
     private fun runProject(listBlocks : ArrayList<Block>){
+        consoleAdapter.clearListMessages()
         for (i in 0 until listBlocks.size-1){
-            connectBlocks(listBlocks[i], listBlocks[i+1], true, false)
+            disconnectBlocks(listBlocks[i], listBlocks[i+1])
         }
-        for (i in 0 until listBlocks.size){
-            consoleAdapter.addMessage(listBlocks[i].getBlockType())
+        for (i in 0 until listBlocks.size-1){
+            connectBlocks(listBlocks[i], listBlocks[i+1])
         }
+        listBlocks[0].run()
 
     }
 }

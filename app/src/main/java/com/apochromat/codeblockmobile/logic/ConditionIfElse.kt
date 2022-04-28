@@ -17,6 +17,11 @@ class ConditionIfElse : Block() {
     init {
         setBlockType("ConditionIfElse")
     }
+    private fun initVar(){
+        expressionLeft = inputLeftEdit
+        expressionRight = inputRightEdit
+        expressionComparator = inputComparator
+    }
 
     fun setBlockInput(
         _expressionLeft: String,
@@ -29,6 +34,7 @@ class ConditionIfElse : Block() {
     }
 
     override fun executeBlock() {
+        initVar()
         connectBlocks(ifEnd, conditionExit, strong = true, clear = false)
         connectBlocks(elseEnd, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {
