@@ -1,5 +1,6 @@
 package com.apochromat.codeblockmobile.logic
 
+import com.apochromat.codeblockmobile.BlocksAdapter
 import com.apochromat.codeblockmobile.ConsoleAdapter
 import java.util.*
 
@@ -27,6 +28,7 @@ open class Block {
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
     lateinit var adapter : ConsoleAdapter
+    lateinit var holder : BlocksAdapter.ViewHolder
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null

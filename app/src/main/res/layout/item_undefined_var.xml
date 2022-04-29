@@ -60,7 +60,7 @@
             android:layout_marginBottom="5dp"
             android:ems="10"
             android:hint="Название"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/editRight"

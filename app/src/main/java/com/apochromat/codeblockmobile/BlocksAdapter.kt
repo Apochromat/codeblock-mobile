@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.apochromat.codeblockmobile.logic.Block
 import com.apochromat.codeblockmobile.logic.EntryPoint
+import com.apochromat.codeblockmobile.logic.connectBlocks
+import com.apochromat.codeblockmobile.logic.disconnectBlocks
 
 class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adapter<BlocksAdapter.ViewHolder>() {
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
@@ -41,6 +43,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        listBlocks[position].holder = holder
         if (listBlocks[position].getBlockType() == "EntryPoint"){
             return
         }
@@ -56,8 +59,11 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
                 holder.editRight.clearFocus()            }
             false
         }
+
+
         holder.textType.text = listBlocks[position].getBlockType()
         holder.textStatus.text = listBlocks[position].getBlockStatus()
+
         holder.editLeft.setText(listBlocks[position].inputLeftEdit)
         holder.editRight.setText(listBlocks[position].inputRightEdit)
     }
@@ -69,5 +75,12 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     fun addBlock(block : Block){
         listBlocks.add(block)
         notifyItemInserted(listBlocks.size-1)
+    }
+
+    fun saveAllData(){
+        for (i in 0 until listBlocks.size){
+            listBlocks[i].inputLeftEdit =  listBlocks[i].holder.editLeft.text.toString()
+            listBlocks[i].inputRightEdit =  listBlocks[i].holder.editRight.text.toString()
+        }
     }
 }

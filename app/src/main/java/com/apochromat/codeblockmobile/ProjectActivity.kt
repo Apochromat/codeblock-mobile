@@ -40,12 +40,9 @@ class ProjectActivity : AppCompatActivity() {
         blocksAdapter = BlocksAdapter(listBlocks)
         blocksView.adapter = blocksAdapter
 
-
-
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(blocksView)
         init()
-
     }
     private fun init(){
         bindingClass.apply{
@@ -95,10 +92,11 @@ class ProjectActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.menuRun -> {
-                runProject(listBlocks)
                 Toast.makeText(this, "Запуск...", Toast.LENGTH_SHORT).show()
+                runProject(listBlocks)
             }
             R.id.menuSave -> {
+                blocksAdapter.saveAllData()
                 Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show()
             }
             R.id.menuConsole -> {
@@ -158,6 +156,7 @@ class ProjectActivity : AppCompatActivity() {
         for (i in 0 until listBlocks.size-1){
             connectBlocks(listBlocks[i], listBlocks[i+1])
         }
+        blocksAdapter.saveAllData()
         listBlocks[0].run()
         for (i in 0 until listBlocks.size-1){
             disconnectBlocks(listBlocks[i], listBlocks[i+1])
