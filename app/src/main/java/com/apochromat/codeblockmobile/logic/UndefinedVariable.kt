@@ -24,7 +24,6 @@ class UndefinedVariable : Block() {
         for (el in inputNames) {
             if (!variableCheck(el)) {
                 setBlockStatus("Incorrect variable naming $el")
-                adapter.addMessage("Incorrect variable naming $el")
                 flag = false
             }
         }

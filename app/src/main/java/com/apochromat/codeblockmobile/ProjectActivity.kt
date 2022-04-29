@@ -128,12 +128,12 @@ class ProjectActivity : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val position =  viewHolder.adapterPosition
-            if (viewHolder.adapterPosition == 0){
-                return
-            }
-            listBlocks.remove(listBlocks[position])
-            blocksAdapter.notifyItemRemoved(position)
+//            val position =  viewHolder.adapterPosition
+//            if (viewHolder.adapterPosition == 0){
+//                return
+//            }
+//            listBlocks.remove(listBlocks[position])
+//            blocksAdapter.notifyItemRemoved(position)
         }
     }
     private fun createConsoleView(){
@@ -156,12 +156,12 @@ class ProjectActivity : AppCompatActivity() {
     private fun runProject(listBlocks : ArrayList<Block>){
         consoleAdapter.clearListMessages()
         for (i in 0 until listBlocks.size-1){
-            disconnectBlocks(listBlocks[i], listBlocks[i+1])
-        }
-        for (i in 0 until listBlocks.size-1){
             connectBlocks(listBlocks[i], listBlocks[i+1])
         }
         listBlocks[0].run()
-
+        for (i in 0 until listBlocks.size-1){
+            disconnectBlocks(listBlocks[i], listBlocks[i+1])
+        }
+        blocksAdapter.notifyItemRangeChanged(0, listBlocks.size)
     }
 }

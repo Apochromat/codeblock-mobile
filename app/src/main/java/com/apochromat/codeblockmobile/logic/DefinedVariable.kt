@@ -35,7 +35,6 @@ class DefinedVariable : Block() {
             }
         } else {
             setBlockStatus("Incorrect variable naming $inputName")
-            adapter.addMessage("Incorrect variable naming $inputName")
         }
     }
 

@@ -37,11 +37,9 @@ class Assignment : Block() {
                 }
             } else {
                 setBlockStatus("Undefined variable $inputName")
-                adapter.addMessage("Undefined variable $inputName")
             }
         } else {
             setBlockStatus("Incorrect variable naming $inputName")
-            adapter.addMessage("Incorrect variable naming $inputName")
         }
     }
 

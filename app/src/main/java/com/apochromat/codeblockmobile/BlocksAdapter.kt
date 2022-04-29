@@ -53,11 +53,13 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
         holder.editRight.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
                 listBlocks[position].inputRightEdit = holder.editRight.text.toString()
-            }
+                holder.editRight.clearFocus()            }
             false
         }
         holder.textType.text = listBlocks[position].getBlockType()
         holder.textStatus.text = listBlocks[position].getBlockStatus()
+        holder.editLeft.setText(listBlocks[position].inputLeftEdit)
+        holder.editRight.setText(listBlocks[position].inputRightEdit)
     }
 
     override fun getItemCount(): Int {

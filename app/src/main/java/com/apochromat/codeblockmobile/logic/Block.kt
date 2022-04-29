@@ -113,12 +113,14 @@ open class Block {
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
+                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
                 callStack.push(getNextBlock())
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
+                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
         }
     }

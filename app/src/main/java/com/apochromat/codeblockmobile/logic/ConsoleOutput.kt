@@ -29,7 +29,6 @@ class ConsoleOutput : Block() {
             return
         }
         setBlockStatus("Undefined variable $variable")
-        adapter.addMessage("Undefined variable $variable")
 
     }
 }
