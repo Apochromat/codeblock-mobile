@@ -8,11 +8,9 @@ class ConditionIfElse : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
-    var ifBegin: BeginEnd = BeginEnd()
-    var ifEnd: BeginEnd = BeginEnd()
-    var elseBegin: BeginEnd = BeginEnd()
-    var elseEnd: BeginEnd = BeginEnd()
-    private var conditionExit: BeginEnd = BeginEnd()
+    var elseBegin: Begin = Begin()
+    var elseEnd: End = End()
+    private var conditionExit: Exit = Exit()
 
     init {
         setBlockType("ConditionIfElse")
@@ -21,6 +19,8 @@ class ConditionIfElse : Block() {
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
+        begin = Begin()
+        end = End()
     }
 
     fun setBlockInput(
@@ -35,10 +35,10 @@ class ConditionIfElse : Block() {
 
     override fun executeBlock() {
         initVar()
-        connectBlocks(ifEnd, conditionExit, strong = true, clear = false)
+        connectBlocks(end, conditionExit, strong = true, clear = false)
         connectBlocks(elseEnd, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {
-            if (getNextBlock() != ifBegin && getNextBlock() != elseBegin)
+            if (getNextBlock() != begin && getNextBlock() != elseBegin)
                 connectBlocks(conditionExit, it, strong = true, clear = false)
         }
 
@@ -55,7 +55,7 @@ class ConditionIfElse : Block() {
                     expressionComparator
                 )
             ) {
-                connectBlocks(this, ifBegin, false)
+                connectBlocks(this, begin, false)
             } else {
                 connectBlocks(this, elseBegin, false)
             }

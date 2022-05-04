@@ -8,9 +8,7 @@ class ConditionIf : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
-    var ifBegin: BeginEnd = BeginEnd()
-    var ifEnd: BeginEnd = BeginEnd()
-    private var conditionExit: BeginEnd = BeginEnd()
+    private var conditionExit: Exit = Exit()
 
     init {
         setBlockType("ConditionIf")
@@ -19,6 +17,8 @@ class ConditionIf : Block() {
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
+        begin = Begin()
+        end = End()
     }
 
     fun setBlockInput(
@@ -33,9 +33,9 @@ class ConditionIf : Block() {
 
     override fun executeBlock() {
         initVar()
-        connectBlocks(ifEnd, conditionExit, strong = true, clear = false)
+        connectBlocks(end, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {
-            if (getNextBlock() != ifBegin && getNextBlock() != null)
+            if (getNextBlock() != begin && getNextBlock() != null)
                 connectBlocks(conditionExit, it, strong = true, clear = false)
         }
 
@@ -53,9 +53,9 @@ class ConditionIf : Block() {
                     expressionComparator
                 )
             ) {
-                connectBlocks(this, ifBegin, false)
+                connectBlocks(this, begin, false)
             } else {
-                connectBlocks(this, ifEnd, false)
+                connectBlocks(this, end, false)
             }
             return
         }

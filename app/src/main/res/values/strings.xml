@@ -24,4 +24,11 @@
     <string name="blockMenu_cycle_while">while</string>
     <string name="blockMenu_console_output">output</string>
     <string name="blockMenu_console_input_one">input</string>
+
+    <string-array name="thins">
+        <item>>=</item>
+        <item>></item>
+        <item>==</item>
+        <item>!=</item>
+    </string-array>
 </resources>

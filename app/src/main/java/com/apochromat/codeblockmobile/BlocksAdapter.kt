@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.apochromat.codeblockmobile.logic.Block
@@ -17,6 +18,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
         val textType: TextView = itemView.findViewById(R.id.textType)
         val textStatus: TextView = itemView.findViewById(R.id.textStatus)
+        val spinnerComparator: Spinner = itemView.findViewById(R.id.spinnerComparator)
         val editLeft: EditText = itemView.findViewById(R.id.editLeft)
         val editRight: EditText = itemView.findViewById(R.id.editRight)
     }
@@ -31,6 +33,8 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             "CycleWhile" -> R.layout.item_cycle_while
             "ConsoleOutput" -> R.layout.item_console_output
             "ConsoleInputOne" -> R.layout.item_console_input_one
+            "Begin" -> R.layout.item_begin
+            "End" -> R.layout.item_end
             else -> R.layout.item_defined_var
         }
         return viewType;
@@ -44,7 +48,8 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         listBlocks[position].holder = holder
-        if (listBlocks[position].getBlockType() == "EntryPoint"){
+        if (listBlocks[position].getBlockType() == "EntryPoint" || listBlocks[position].getBlockType() == "Begin" ||
+            listBlocks[position].getBlockType() == "End"){
             return
         }
         holder.editLeft.setOnEditorActionListener { _, actionId, _ ->
@@ -65,6 +70,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
         holder.textStatus.text = listBlocks[position].getBlockStatus()
 
         holder.editLeft.setText(listBlocks[position].inputLeftEdit)
+        holder.spinnerComparator.setSelection(0)
         holder.editRight.setText(listBlocks[position].inputRightEdit)
     }
 
@@ -81,6 +87,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
         for (i in 0 until listBlocks.size){
             listBlocks[i].inputLeftEdit =  listBlocks[i].holder.editLeft.text.toString()
             listBlocks[i].inputRightEdit =  listBlocks[i].holder.editRight.text.toString()
+            listBlocks[i].inputComparator =  listBlocks[i].holder.spinnerComparator.selectedItem.toString()
         }
     }
 }

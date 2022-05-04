@@ -3,8 +3,8 @@ package com.apochromat.codeblockmobile.logic
 /**
  *  Служебный блок.
  **/
-class BeginEnd : Block() {
+class End : Block() {
     init {
-        setBlockType("BeginEnd")
+        setBlockType("End")
     }
 }

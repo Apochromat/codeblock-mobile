@@ -27,6 +27,8 @@ open class Block {
     var inputLeftEdit: String = ""
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
+    lateinit var begin: Begin
+    lateinit var end: End
     lateinit var adapter : ConsoleAdapter
     lateinit var holder : BlocksAdapter.ViewHolder
     //  Ссылки на следующий и предыдущий блоки
@@ -115,7 +117,7 @@ open class Block {
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
-                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
                 callStack.push(getNextBlock())
