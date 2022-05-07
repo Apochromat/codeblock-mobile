@@ -17,8 +17,10 @@ class ConditionIf : Block() {
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
-        begin = Begin()
-        end = End()
+
+        begin.adapter = this.adapter
+        end.adapter = this.adapter
+        conditionExit.adapter = this.adapter
     }
 
     fun setBlockInput(

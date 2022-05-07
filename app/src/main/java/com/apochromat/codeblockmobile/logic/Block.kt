@@ -31,6 +31,7 @@ open class Block {
     lateinit var end: End
     lateinit var adapter : ConsoleAdapter
     lateinit var holder : BlocksAdapter.ViewHolder
+
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null
@@ -117,7 +118,7 @@ open class Block {
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
-//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
                 callStack.push(getNextBlock())

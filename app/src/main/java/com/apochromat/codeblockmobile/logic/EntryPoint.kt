@@ -13,9 +13,9 @@ class EntryPoint : Block() {
         for (bl in getAllBlocks()) {
             bl.value.clearBlockData()
         }
-        for (pair in getAllStrongConnections()) {
-            connectBlocks(pair.first, pair.second, false)
-        }
+//        for (pair in getAllStrongConnections()) {
+//            connectBlocks(pair.first, pair.second, false)
+//        }
     }
 
     override fun run() {
