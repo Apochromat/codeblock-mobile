@@ -158,37 +158,55 @@ class ProjectActivity : AppCompatActivity() {
         return ArrayList()
     }
 
-    private fun check(index : Int): Int{
+    private fun checkIf(index : Int): Int{
         var i = index + 1
+
         if (listBlocks[i].getBlockType() == "Begin"){
             i += 1
+
             if (listBlocks[i].getBlockType() == "End")
-                return i+1
+                return i + 1
+
             connectBlocks(listBlocks[index].begin, listBlocks[i])
+
             while (listBlocks[i+1].getBlockType() != "End"){
-                if(i+1 == listBlocks.size) {
+                if(i+1 == listBlocks.size)
                     return 0
+
+                if (listBlocks[i].getBlockType() == "ConditionIf" ){
+                    val cur = checkIf(i)
+
+                    if(cur == 0)
+                        return 0
+
+                    else {
+                        if (cur < listBlocks.size && listBlocks[cur].getBlockType() != "End"){
+                            connectBlocks(listBlocks[i], listBlocks[cur])
+                            i = cur
+                        }
+                        else if(listBlocks[cur].getBlockType() == "End"){
+                            connectBlocks(listBlocks[i], listBlocks[index].end)
+                            return cur + 1
+                        }
+                        else
+                            break
+                    }
                 }
-//                if (listBlocks[i].getBlockType() == "ConditionIf" ){
-//
-//                }
-                connectBlocks(listBlocks[i], listBlocks[i+1])
-                i += 1
+
+                else{
+                    connectBlocks(listBlocks[i], listBlocks[i+1])
+                    i += 1
+                }
             }
+
             connectBlocks(listBlocks[i], listBlocks[index].end)
             return i + 2
         }
         else
             return 0
     }
-    private fun printAllConnections(){
-        for (i in 0 until listBlocks.size){
-            listBlocks[i].getNextBlock()?.let { consoleAdapter.addMessage("$i "+ (listBlocks[i].getPrevBlock()
-                ?.getBlockType() ?: "null") + "-"+ listBlocks[i].getBlockType() + "-" + it.getBlockType()) }
-        }
-    }
-    private fun runProject(listBlocks : ArrayList<Block>){
-        consoleAdapter.clearListMessages()
+
+    private fun connectionBlocks() : Boolean{
         var i = 0
         while (i < listBlocks.size-1) {
             if (listBlocks[i].getBlockType() != "ConditionIf" &&
@@ -198,10 +216,10 @@ class ProjectActivity : AppCompatActivity() {
                 i += 1
             }
             else if (listBlocks[i].getBlockType() == "ConditionIf"){
-                val cur = check(i)
+                val cur = checkIf(i)
                 if(cur == 0){
                     consoleAdapter.addMessage("Ошибка соединения в if в строке $i")
-                    return
+                    return false
                 }
                 else {
                     if (cur < listBlocks.size){
@@ -215,11 +233,25 @@ class ProjectActivity : AppCompatActivity() {
             }
             else{
                 consoleAdapter.addMessage("Ошибка соединения в строке $i")
-                return
+                return false
             }
         }
+        return true
+    }
+    
+    private fun runProject(listBlocks : ArrayList<Block>){
+        consoleAdapter.clearListMessages()
+        if (!connectionBlocks())
+            return
         blocksAdapter.saveAllData()
         listBlocks[0].run()
         blocksAdapter.notifyItemRangeChanged(0, listBlocks.size)
+    }
+
+    private fun printAllConnections(){
+        for (i in 0 until listBlocks.size){
+            listBlocks[i].getNextBlock()?.let { consoleAdapter.addMessage("$i "+ (listBlocks[i].getPrevBlock()
+                ?.getBlockType() ?: "null") + "-"+ listBlocks[i].getBlockType() + "-" + it.getBlockType()) }
+        }
     }
 }
