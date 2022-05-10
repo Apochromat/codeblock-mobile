@@ -35,6 +35,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             "ConsoleInputOne" -> R.layout.item_console_input_one
             "Begin" -> R.layout.item_begin
             "End" -> R.layout.item_end
+            "Else" -> R.layout.item_else
             else -> R.layout.item_defined_var
         }
         return viewType;

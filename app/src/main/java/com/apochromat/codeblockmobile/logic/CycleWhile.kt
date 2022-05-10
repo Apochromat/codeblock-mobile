@@ -8,7 +8,7 @@ class CycleWhile : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
-    private var cycleExit: Exit = Exit()
+    private var exit: Exit = Exit()
 
     init {
         setBlockType("CycleWhile")
@@ -28,8 +28,10 @@ class CycleWhile : Block() {
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
-        begin = Begin()
-        end = End()
+
+        begin.adapter = this.adapter
+        end.adapter = this.adapter
+        exit.adapter = this.adapter
     }
 
     override fun executeBlock() {
@@ -37,7 +39,7 @@ class CycleWhile : Block() {
         connectBlocks(end, this, strong = false, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin)
-                connectBlocks(cycleExit, it, strong = true, clear = false)
+                connectBlocks(exit, it, strong = true, clear = false)
         }
 
         if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
@@ -55,7 +57,7 @@ class CycleWhile : Block() {
             ) {
                 connectBlocks(this, begin, strong = false, clear = false)
             } else {
-                connectBlocks(this, cycleExit, strong = false, clear = false)
+                connectBlocks(this, exit, strong = false, clear = false)
             }
             return
         }

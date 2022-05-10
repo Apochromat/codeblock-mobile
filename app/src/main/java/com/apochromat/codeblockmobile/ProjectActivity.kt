@@ -63,10 +63,28 @@ class ProjectActivity : AppCompatActivity() {
             }
             buttonConditionIfElse.setOnClickListener{
                 blocksAdapter.addBlock(ConditionIfElse())
-                listBlocks[listBlocks.size-1].adapter = consoleAdapter
+                blocksAdapter.addBlock(Begin())
+                blocksAdapter.addBlock(End())
+                blocksAdapter.addBlock(Else())
+                blocksAdapter.addBlock(Begin())
+                blocksAdapter.addBlock(End())
+                listBlocks[listBlocks.size-6].begin = Begin()
+                listBlocks[listBlocks.size-6].end = End()
+                listBlocks[listBlocks.size-6].beginElse = Begin()
+                listBlocks[listBlocks.size-6].endElse = End()
+                for (i in 1..6){
+                    listBlocks[listBlocks.size-i].adapter = consoleAdapter
+                }
+
             }
             buttonCycleWhile.setOnClickListener{
                 blocksAdapter.addBlock(CycleWhile())
+                blocksAdapter.addBlock(Begin())
+                blocksAdapter.addBlock(End())
+                listBlocks[listBlocks.size-3].adapter = consoleAdapter
+                listBlocks[listBlocks.size-3].begin = Begin()
+                listBlocks[listBlocks.size-3].end = End()
+                listBlocks[listBlocks.size-2].adapter = consoleAdapter
                 listBlocks[listBlocks.size-1].adapter = consoleAdapter
             }
             buttonConsoleOutput.setOnClickListener{
@@ -158,91 +176,175 @@ class ProjectActivity : AppCompatActivity() {
         return ArrayList()
     }
 
-    private fun checkIf(index : Int): Int{
-        var i = index + 1
+    private fun check(index : Int) : Pair<Int, Int>{
+        var i = index
+        while (listBlocks[i+1].getBlockType() != "End"){
+            if (i+1 == listBlocks.size) {
+                consoleAdapter.addMessage("В строке $i ожидался End")
+                return Pair(0, 0)
+            }
+            if (listBlocks[i].getBlockType() == "ConditionIf" || listBlocks[i].getBlockType() == "ConditionIfElse" || listBlocks[i].getBlockType() == "CycleWhile"){
+                val temp : Int
+                if (listBlocks[i].getBlockType() == "ConditionIfElse")
+                    temp = checkIfElse(i)
+                else
+                    temp = checkIf(i)
 
-        if (listBlocks[i].getBlockType() == "Begin"){
-            i += 1
-
-            if (listBlocks[i].getBlockType() == "End")
-                return i + 1
-
-            connectBlocks(listBlocks[index].begin, listBlocks[i])
-
-            while (listBlocks[i+1].getBlockType() != "End"){
-                if(i+1 == listBlocks.size)
-                    return 0
-
-                if (listBlocks[i].getBlockType() == "ConditionIf" ){
-                    val cur = checkIf(i)
-
-                    if(cur == 0)
-                        return 0
-
-                    else {
-                        if (cur < listBlocks.size && listBlocks[cur].getBlockType() != "End"){
-                            connectBlocks(listBlocks[i], listBlocks[cur])
-                            i = cur
-                        }
-                        else if(listBlocks[cur].getBlockType() == "End"){
-                            connectBlocks(listBlocks[i], listBlocks[index].end)
-                            return cur + 1
-                        }
-                        else
-                            break
+                if(temp == 0)
+                    return Pair(0, 0)
+                else {
+                    if (temp < listBlocks.size && listBlocks[temp].getBlockType() != "End"){
+                        connectBlocks(listBlocks[i], listBlocks[temp])
+                        i = temp
                     }
-                }
-
-                else{
-                    connectBlocks(listBlocks[i], listBlocks[i+1])
-                    i += 1
+                    else if(temp < listBlocks.size && listBlocks[temp].getBlockType() == "End"){
+                        return Pair(i, temp)
+                    }
+                    else if(temp >= listBlocks.size){
+                        consoleAdapter.addMessage("В строке $temp ожидался End")
+                        return Pair(0, 0)
+                    }
+                    else
+                        break
                 }
             }
+            else {
+                connectBlocks(listBlocks[i], listBlocks[i+1])
+                i += 1
+            }
+        }
+        return Pair(i, 0)
+    }
 
+    private fun checkIfElse(index : Int): Int{
+        var i = index + 1
+        if (listBlocks[i].getBlockType() == "Begin"){
+            i += 1
+            if (listBlocks[i].getBlockType() != "End"){
+                connectBlocks(listBlocks[index].begin, listBlocks[i])
+                val (j, temp) = check(i)
+                if (j == 0)
+                    return 0
+                else if (listBlocks[temp].getBlockType() == "End") {
+                    connectBlocks(listBlocks[j], listBlocks[index].end)
+                    i = temp + 1
+                }
+                else{
+                    connectBlocks(listBlocks[j], listBlocks[index].end)
+                    i = j + 2
+                }
+            }
+            else{
+                connectBlocks(listBlocks[index].begin, listBlocks[index].end)
+                i += 1
+            }
+            if (listBlocks[i].getBlockType() == "Else"){
+                i += 1
+                if (listBlocks[i].getBlockType() == "Begin"){
+                    i += 1
+                    if (listBlocks[i].getBlockType() != "End"){
+                        connectBlocks(listBlocks[index].beginElse, listBlocks[i])
+                        val (i, temp) = check(i)
+                        if (i == 0)
+                            return 0
+                        else if (listBlocks[temp].getBlockType() == "End") {
+                            connectBlocks(listBlocks[i], listBlocks[index].end)
+                            return temp + 1
+                        }
+                        connectBlocks(listBlocks[i], listBlocks[index].endElse)
+                        return i + 2
+                    }
+                    else
+                        connectBlocks(listBlocks[index].beginElse, listBlocks[index].endElse)
+                        return i + 1
+                }
+                else {
+                    consoleAdapter.addMessage("В строке $i ожидался Begin")
+                    return 0
+                }
+            }
+            else {
+                consoleAdapter.addMessage("В строке $i ожидался Else")
+                return 0
+            }
+        }
+        else {
+            consoleAdapter.addMessage("В строке $i ожидался Begin")
+            return 0
+        }
+    }
+
+    private fun checkIf(index : Int): Int{
+        var i = index + 1
+        if (listBlocks[i].getBlockType() == "Begin"){
+            i += 1
+            if (listBlocks[i].getBlockType() == "End"){
+                connectBlocks(listBlocks[index].begin, listBlocks[index].end)
+                return i + 1
+            }
+            connectBlocks(listBlocks[index].begin, listBlocks[i])
+            val (i, temp) = check(i)
+            if (i == 0)
+                return 0
+            else if (listBlocks[temp].getBlockType() == "End") {
+                connectBlocks(listBlocks[i], listBlocks[index].end)
+                return temp + 1
+            }
             connectBlocks(listBlocks[i], listBlocks[index].end)
             return i + 2
         }
-        else
+        else {
+            consoleAdapter.addMessage("В строке $i ожидался Begin")
             return 0
+        }
     }
 
     private fun connectionBlocks() : Boolean{
         var i = 0
         while (i < listBlocks.size-1) {
-            if (listBlocks[i].getBlockType() != "ConditionIf" &&
-                listBlocks[i].getBlockType() != "Begin" &&
-                listBlocks[i].getBlockType() != "End") {
-                connectBlocks(listBlocks[i], listBlocks[i + 1])
-                i += 1
+            if(listBlocks[i].getBlockType() == "Begin"){
+                consoleAdapter.addMessage("Обнаружен не к месту Begin в строке $i")
+                return false
             }
-            else if (listBlocks[i].getBlockType() == "ConditionIf"){
-                val cur = checkIf(i)
-                if(cur == 0){
-                    consoleAdapter.addMessage("Ошибка соединения в if в строке $i")
+            else if(listBlocks[i].getBlockType() == "End"){
+                consoleAdapter.addMessage("Обнаружен не к месту End в строке $i")
+                return false
+            }
+            else if(listBlocks[i].getBlockType() == "Else"){
+                consoleAdapter.addMessage("Обнаружен не к месту Else в строке $i")
+                return false
+            }
+            else if (listBlocks[i].getBlockType() == "ConditionIf" || listBlocks[i].getBlockType() == "ConditionIfElse" || listBlocks[i].getBlockType() == "CycleWhile") {
+                val temp : Int
+                if(listBlocks[i].getBlockType() == "ConditionIfElse")
+                    temp = checkIfElse(i)
+                else
+                    temp = checkIf(i)
+                if(temp == 0)
                     return false
-                }
                 else {
-                    if (cur < listBlocks.size){
-                        connectBlocks(listBlocks[i], listBlocks[cur])
-                        i = cur
+                    if (temp < listBlocks.size){
+                        connectBlocks(listBlocks[i], listBlocks[temp])
+                        i = temp
                     }
                     else
                         break
-
                 }
             }
             else{
-                consoleAdapter.addMessage("Ошибка соединения в строке $i")
-                return false
+                connectBlocks(listBlocks[i], listBlocks[i + 1])
+                i += 1
             }
         }
         return true
     }
-    
+
     private fun runProject(listBlocks : ArrayList<Block>){
         consoleAdapter.clearListMessages()
-        if (!connectionBlocks())
+        if (!connectionBlocks()) {
+            consoleAdapter.addMessage("Program finished with status: Fail")
             return
+        }
         blocksAdapter.saveAllData()
         listBlocks[0].run()
         blocksAdapter.notifyItemRangeChanged(0, listBlocks.size)
@@ -250,8 +352,10 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun printAllConnections(){
         for (i in 0 until listBlocks.size){
-            listBlocks[i].getNextBlock()?.let { consoleAdapter.addMessage("$i "+ (listBlocks[i].getPrevBlock()
-                ?.getBlockType() ?: "null") + "-"+ listBlocks[i].getBlockType() + "-" + it.getBlockType()) }
+            consoleAdapter.addMessage("$i "+ (listBlocks[i].getPrevBlock()
+                ?.getBlockType() ?: "null") + "-"+ listBlocks[i].getBlockType() + "-" +
+                    (listBlocks[i].getNextBlock()?.getBlockType() ?: "null"))
+
         }
     }
 }
