@@ -6,29 +6,29 @@ package com.apochromat.codeblockmobile.logic
  **/
 class ConsoleOutput : Block() {
     private var message: String = ""
-    private var variable: String = ""
+    private var expression: String = ""
 
     init {
         setBlockType("ConsoleOutput")
     }
-    private fun initVar(){
-        message = inputLeftEdit
-        variable = inputRightEdit
-    }
+//    private fun initVar(){
+//        message = inputLeftEdit
+//        expression = inputRightEdit
+//    }
 
-    fun setBlockInput(_variable: String, _message: String = "") {
+    fun setBlockInput(_expression: String, _message: String = "") {
         message = _message
-        variable = _variable
+        expression = _expression
     }
 
     override fun executeBlock() {
-        initVar()
-        if (accessHeap().isVariableExist(variable)) {
-            println("$message ${accessHeap().getVariableValue(variable).toString()}")
-            adapter.addMessage("$message ${accessHeap().getVariableValue(variable).toString()}")
+//        initVar()
+        val calculated = arithmetics(heap, expression)
+        if (calculated.first != "OK") {
+            setBlockStatus(calculated.first)
             return
         }
-        setBlockStatus("Undefined variable $variable")
-
+        println("$message ${calculated.second}")
+//            adapter.addMessage("$message ${calculated.second}}")
     }
 }

@@ -59,13 +59,13 @@ class Heap {
      * Создать новый пустой массив.
      **/
     fun createArray(arrayName: String, arraySize: Int) {
-        heapArray[arrayName] = Array(arraySize, { 0 })
+        heapArray[arrayName] = Array(arraySize) { 0 }
     }
 
     /**
      * Удалить массив.
      **/
-    fun removeArray(arrayName: String) {
+    fun deleteArray(arrayName: String) {
         heapArray.remove(arrayName)
     }
 
@@ -88,6 +88,13 @@ class Heap {
      **/
     fun isArrayExist(arrayName: String): Boolean {
         return arrayName in heapArray.keys
+    }
+
+    /**
+     * Получить список с названием всех массивов.
+     **/
+    fun getArraysList(): MutableSet<String> {
+        return heapArray.keys
     }
 
     /**
