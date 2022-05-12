@@ -9,13 +9,12 @@ fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
     }
     val (prepared, expStatus) = preparingExpression(heap, exp)
     val (correctLine, lineStatus) = lineCheck(exp)
-    if (expStatus == 0) {
-        return Pair(prepared, 0)
-    }
     if (lineStatus == 0) {
         return Pair(correctLine, 0)
     }
-
+    if (expStatus == 0) {
+        return Pair(prepared, 0)
+    }
     return rpnToAnswer(expressionToRPN(prepared))
 }
 
@@ -97,7 +96,13 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
                             return Pair("Division by zero", 0)
                         }
                     }
-                    '%' -> stack.push(b % a)
+                    '%' ->{
+                        try {
+                            stack.push(b % a)
+                        } catch (e: Exception){
+                            return Pair("Division by zero", 0)
+                        }
+                    }
                     else -> {
                         return Pair("Unexpected symbol ${rpn[i]}", 0)
                     }
@@ -112,9 +117,20 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
 }
 
 fun lineCheck(string: String): Pair<String, Int> {
-    val str = string.replace("[A-Za-z-+*/0-9()%_\\[\\]]".toRegex(), "")
+    var str = string.replace("[A-Za-z-+*/0-9()%_\\[\\]]".toRegex(), "")
     if (str.isNotEmpty()) {
         return Pair("Unexpected Symbol", 0)
+    }
+    val reg = "(\\W+[0-9_]+[A_Za-z0-9_]+\\W*)|(\\b[\\^0-9_]+[A-Za-z0-9_]+)".toRegex()
+   // println(reg.find(string)?.value)
+    if(reg.find(string)!=null){
+        return Pair("Incorect Expression",0)
+    }
+    str=string.replace("[A-Za-z-+*/0-9%_\\[\\]]".toRegex(), "")
+    val scob1=str.replace("\\(".toRegex(), "")
+    val scob2 =str.replace("\\)".toRegex(), "")
+    if (scob1.length!=scob2.length) {
+        return Pair("Incorect Expression", 0)
     }
     return Pair("OK", 1)
 }
@@ -170,7 +186,7 @@ fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
 }
 fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
     val arr="[A-Za-z]+[\\[(\\d+_*)\\]]".toRegex();
-    val varieble = "[A-Za-z0-9_]".toRegex();
+    val varieble = "[A-Za-z]+[A-Za-z0-9_]*".toRegex();
     if(arr.find(expression)!=null){
         val(name, index)= indexCount(heap,expression);
         if(heap.isArrayExist(name) && index>=0 && index< heap.getArraySize(name)!!.toInt()) {
@@ -199,6 +215,10 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
             var (status, rez) = arithmetics(heap, arm);
             array=array.replace(arm,rez.toString());
             index= rez;
+           // println(index)
+            if(!heap.isArrayExist(arrname)){
+                return Pair("Unidentified array", -1)
+            }
             if (index>=heap.getArraySize(arrname)!!.toInt() || index<0){
                 return Pair("Index out of range", -1)
             }
