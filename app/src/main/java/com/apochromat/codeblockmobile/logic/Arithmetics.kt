@@ -121,16 +121,16 @@ fun lineCheck(string: String): Pair<String, Int> {
     if (str.isNotEmpty()) {
         return Pair("Unexpected Symbol", 0)
     }
-    val reg = "(\\W+[0-9_]+[A_Za-z0-9_]+\\W*)|(\\b[\\^0-9_]+[A-Za-z0-9_]+)".toRegex()
-   // println(reg.find(string)?.value)
+    val reg = "([-+%* ]+[0-9_]+[A_Za-z_]+[0-9]*[-+%* ]*)|(\\b[\\^0-9_]+[A-Za-z_]+[0-9]*)|(\\b[\\^_][0-9]+)".toRegex()
+    //println(reg.find(string)?.value)
     if(reg.find(string)!=null){
-        return Pair("Incorect Expression",0)
+        return Pair("Incorrect Expression",0)
     }
     str=string.replace("[A-Za-z-+*/0-9%_\\[\\]]".toRegex(), "")
     val scob1=str.replace("\\(".toRegex(), "")
     val scob2 =str.replace("\\)".toRegex(), "")
     if (scob1.length!=scob2.length) {
-        return Pair("Incorect Expression", 0)
+        return Pair("Incorrect Expression", 0)
     }
     return Pair("OK", 1)
 }

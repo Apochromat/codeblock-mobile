@@ -24,15 +24,16 @@ open class Block {
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
     // Переменные с данными
-//    var inputLeftEdit: String = ""
-//    var inputRightEdit: String = ""
-//    var inputComparator: String = ">="
-//
+
+    var inputLeftEdit: String = ""
+    var inputRightEdit: String = ""
+    var inputComparator: String = ">="
+
 //    lateinit var begin: Begin
 //    lateinit var end: End
 //    lateinit var beginElse: Begin
 //    lateinit var endElse: End
-//
+
 //    lateinit var adapter : ConsoleAdapter
 //    lateinit var holder : BlocksAdapter.ViewHolder
 
@@ -130,6 +131,8 @@ open class Block {
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
 //                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+
+
             }
         }
     }

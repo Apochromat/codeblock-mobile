@@ -35,8 +35,9 @@
 //        createConsoleView()
 //        createBlocksView()
 //
+
 //        init()
-//    }
+
 //    private fun init(){
 //        bindingClass.apply{
 //            buttonDefinedVar.setOnClickListener{

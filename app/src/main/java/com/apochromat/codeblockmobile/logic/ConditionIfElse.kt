@@ -40,7 +40,9 @@ class ConditionIfElse : Block() {
     }
 
     override fun executeBlock() {
+
 //        initVar()
+
         connectBlocks(end, conditionExit, strong = true, clear = false)
         connectBlocks(endElse, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {

@@ -24,6 +24,7 @@ class DefinedVariable : Block() {
     }
 
     override fun executeBlock() {
+
 //        initVar()
         if (variableCheck(inputName)) {
             val calculated = arithmetics(accessHeap(), inputValue)

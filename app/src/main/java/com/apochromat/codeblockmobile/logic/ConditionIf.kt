@@ -21,6 +21,7 @@ class ConditionIf : Block() {
 //        expressionComparator = inputComparator
 //
 //        begin.adapter = this.adapter
+
 //        end.adapter = this.adapter
 //        conditionExit.adapter = this.adapter
 //    }
@@ -36,7 +37,9 @@ class ConditionIf : Block() {
     }
 
     override fun executeBlock() {
+
 //        initVar()
+
         connectBlocks(end, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin && getNextBlock() != null)

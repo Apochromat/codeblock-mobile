@@ -37,7 +37,10 @@ class CycleWhile : Block() {
 //    }
 
     override fun executeBlock() {
+
 //        initVar()
+
+
         connectBlocks(end, this, strong = false, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin)

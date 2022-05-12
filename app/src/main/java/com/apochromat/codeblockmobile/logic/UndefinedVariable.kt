@@ -19,7 +19,9 @@ class UndefinedVariable : Block() {
     }
 
     override fun executeBlock() {
+
 //        initVar()
+
         var flag: Boolean = true
         for (el in inputNames) {
             if (!variableCheck(el)) {
