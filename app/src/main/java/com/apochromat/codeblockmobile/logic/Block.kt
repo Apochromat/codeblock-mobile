@@ -24,11 +24,12 @@ open class Block {
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
     // Переменные с данными
+
     var inputLeftEdit: String = ""
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
     var indexComparator: Int = 0
-
+  
     lateinit var begin: Begin
     lateinit var end: End
     lateinit var exit: Exit

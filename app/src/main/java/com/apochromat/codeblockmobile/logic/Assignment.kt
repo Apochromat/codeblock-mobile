@@ -27,8 +27,8 @@ class Assignment : Block() {
     override fun executeBlock() {
 //        initVar()
         val obj = defineInput(heap, inputName)
-        if (obj.first == "InputError") {
-            setBlockStatus("Undefined object $inputName")
+        if (obj.first !in listOf("Array", "Variable")) {
+            setBlockStatus(obj.first)
             return
         }
         if (!variableCheck(obj.second)) {

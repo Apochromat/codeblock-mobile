@@ -12,10 +12,11 @@ class ConditionIf : Block() {
     init {
         setBlockType("ConditionIf")
     }
-    private fun initVar(){
-        expressionLeft = inputLeftEdit
-        expressionRight = inputRightEdit
-        expressionComparator = inputComparator
+   private fun initVar() {
+     
+       expressionLeft = inputLeftEdit
+       expressionRight = inputRightEdit
+       expressionComparator = inputComparator
 
         begin.adapterConsole = adapterConsole
         end.adapterConsole = adapterConsole
