@@ -173,14 +173,14 @@ fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
     val varieble = "[A-Za-z0-9_]".toRegex();
     if(arr.find(expression)!=null){
         val(name, index)= indexCount(heap,expression);
-        if(heap.isArrayExist(name)) {
+        if(heap.isArrayExist(name) && index>=0 && index< heap.getArraySize(name)!!.toInt()) {
             return Triple("Array", name, index);
         }
     }
     if(varieble.find(expression)!=null){
-        var value = heap.getVariableValue(expression);
+     //   var value = heap.getVariableValue(expression);
         if(heap.isVariableExist(expression)) {
-            return Triple("Variable", value.toString(), 0);
+            return Triple("Variable", expression, 0);
         }
     }
     return Triple("InputError","NaN",0);
@@ -199,7 +199,7 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
             var (status, rez) = arithmetics(heap, arm);
             array=array.replace(arm,rez.toString());
             index= rez;
-            if (index>=heap.getArraySize(arrname)!!.toInt()){
+            if (index>=heap.getArraySize(arrname)!!.toInt() || index<0){
                 return Pair("Index out of range", -1)
             }
             if(status!="OK"){
