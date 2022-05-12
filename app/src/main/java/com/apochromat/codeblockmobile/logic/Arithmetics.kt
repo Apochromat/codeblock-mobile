@@ -77,7 +77,7 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
             try {
                 stack.push(operand.toInt())
             } catch (e: NumberFormatException) {
-                return Pair("Unexpected symbol1 $operand", 0)
+                return Pair("Unexpected symbol $operand", 0)
             }
             operand = String()
         }
@@ -103,7 +103,7 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
                     }
                 }
             } catch (e: EmptyStackException) {
-                return Pair("Incorrect expression1", 0)
+                return Pair("Incorrect expression", 0)
             }
         }
         i++
@@ -114,27 +114,23 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
 fun lineCheck(string: String): Pair<String, Int> {
     val str = string.replace("[A-Za-z-+*/0-9()%_\\[\\]]".toRegex(), "")
     if (str.isNotEmpty()) {
-        return Pair("Unexpected Symbol2", 0)
+        return Pair("Unexpected Symbol", 0)
     }
-//    val reg = "[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex()
-//    val match = reg.find(string)
-//    if (match != null) {
-//        return Pair("Incorrect expression2", 0)
-//    }
     return Pair("OK", 1)
 }
 
 fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     var exp = expression
-
     var preparedExpression = String()
-    var i = 0
-    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/-_]*]".toRegex();
+    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/_-]*]".toRegex();
     var array = regArr.find(exp);
     while (array!=null) {
         val (arrName, arrIndex) = indexCount(heap, array.value)
+        if(arrIndex==-1){
+            return Pair(arrName, 0)
+        }
         if (!heap.isArrayExist(arrName)) {
-            return Pair("Undefined array1 $arrName", 0)
+            return Pair("Undefined array $arrName", 0)
         }
         val arrValue = heap.getArrayValue(arrName, arrIndex);
         var fromArrToNum =arrValue.toString()
@@ -149,7 +145,7 @@ fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     while (varieble!=null) {
         val VV=varieble.value;
         if (!heap.isVariableExist(varieble.value)) {
-            return Pair("Undefined varieble1 $VV ", 0)
+            return Pair("Undefined varieble $VV ", 0)
         }
         val varValue=heap.getVariableValue(varieble.value)
         var fromVarToNum =varValue.toString()
@@ -159,27 +155,6 @@ fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
         exp = exp.replaceRange(varieble.range, fromVarToNum)
         varieble = reg.find(exp)
     }
-//    halfPrepredExperession=exp
-//    while (i < halfPrepredExperession.length) {
-//        if (halfPrepredExperession[i].code in 65..127) {
-//            var operand = String()
-//            while (halfPrepredExperession[i] != ' ' && (halfPrepredExperession[i].code in 65..127)) {
-//                operand += halfPrepredExperession[i++]
-//                if (i == halfPrepredExperession.length) break
-//            }
-//                if (!heap.isVariableExist(operand)) {
-//                    return Pair("Undefined variable1 $operand", 0)
-//                }
-//                val VarValue = heap.getVariableValue(operand)
-//                var fromVarToNum = VarValue.toString()
-//                if(VarValue!!.toInt()<0){
-//                    fromVarToNum="("+fromVarToNum+")"
-//                }
-//
-//                exp = exp.replace(operand, fromVarToNum)
-//        }
-//        i++
-//    }
 
     for (j in exp.indices) {
         if (exp[j] == '-') {
@@ -218,12 +193,18 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
     while (reg.find(array)!=null){
         val arg="\\[[A-Za-z0-9 +*/_-]*]".toRegex().find(array);
         arrname="[A-Za-z]+[A-Za-z0-9_]*".toRegex().find(reg.find(array)!!.value)!!.value;
-        if(arg!=null && arrname!=null) {
+        if(arg!=null) {
             var arm=arg.value.replace("[","");
             arm=arm.replace("]","");
             var (status, rez) = arithmetics(heap, arm);
             array=array.replace(arm,rez.toString());
             index= rez;
+            if (index>=heap.getArraySize(arrname)!!.toInt()){
+                return Pair("Index out of range", -1)
+            }
+            if(status!="OK"){
+                return Pair(status,-1)
+            }
             var arrayValue=heap.getArrayValue(arrname,rez);
             array=array.replace(reg.find(array)!!.value, arrayValue.toString());
 
