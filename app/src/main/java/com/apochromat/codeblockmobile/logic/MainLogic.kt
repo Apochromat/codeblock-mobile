@@ -3,7 +3,7 @@ package com.apochromat.codeblockmobile.logic
 fun main() {
     val ep = EntryPoint()
     val da = UndefinedArray()
-    val uv = UndefinedVariable()
+    val uv = DefinedVariable()
     val vass = Assignment()
     val ass = Assignment()
     val wh = CycleWhile()
@@ -11,11 +11,11 @@ fun main() {
     val vout = ConsoleOutput()
 
     da.setBlockInput("arr", "5")
-    out.setBlockInput("arr[4]")
+    out.setBlockInput("arr[5]")
     vout.setBlockInput("var")
-    uv.setBlockInput("var")
+    uv.setBlockInput("var", "1")
     vass.setBlockInput("var", "var+1")
-    ass.setBlockInput("arr[var-1]", "var")
+    ass.setBlockInput("arr[var]", "var")
     wh.setBlockInput("var", "4", "<=")
 
     connectBlocks(ep, da)
@@ -23,7 +23,8 @@ fun main() {
     connectBlocks(uv, wh)
     connectBlocks(wh.begin, vass)
     connectBlocks(vass, ass)
-    connectBlocks(ass, wh.end)
+    connectBlocks(ass, vout)
+    connectBlocks(vout, wh.end)
     connectBlocks(wh, out)
 
     ep.run()
