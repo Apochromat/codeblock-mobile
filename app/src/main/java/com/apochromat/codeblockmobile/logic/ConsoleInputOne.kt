@@ -15,7 +15,7 @@ class ConsoleInputOne : Block() {
 
     fun setBlockInput(_name: String, _message: String = "") {
         name = _name
-        message = _message
+        message = if (_message == "") "" else "$_message "
     }
 
     override fun executeBlock() {

@@ -14,10 +14,10 @@ class Assignment : Block() {
         setBlockType("Assignment")
     }
 
-    private fun initVar(){
-        inputName = inputLeftEdit
-        inputValue = inputRightEdit
-    }
+//    private fun initVar(){
+//        inputName = inputLeftEdit
+//        inputValue = inputRightEdit
+//    }
 
     fun setBlockInput(_name: String, _value: String) {
         inputName = _name
@@ -25,21 +25,41 @@ class Assignment : Block() {
     }
 
     override fun executeBlock() {
-        initVar()
-        if (variableCheck(inputName)) {
-            if (accessHeap().isVariableExist(inputName)) {
+//        initVar()
+        val obj = defineInput(heap, inputName)
+        if (obj.first == "InputError") {
+            setBlockStatus("Incorrect variable form")
+            return
+        }
+        if (!variableCheck(obj.second)) {
+            setBlockStatus("Incorrect naming $inputName")
+            return
+        }
+        when (obj.first) {
+            "Array" -> {
+                if (!heap.isArrayExist(obj.second)) {
+                    setBlockStatus("Undefined array $inputName")
+                }
                 val calculated = arithmetics(accessHeap(), inputValue)
                 setBlockStatus(calculated.first)
                 name = inputName
                 if (calculated.first == "OK") {
                     value = calculated.second
-                    accessHeap().setVariableValue(name, value)
+                    heap.setArrayValue(name, obj.third, value)
                 }
-            } else {
-                setBlockStatus("Undefined variable $inputName")
             }
-        } else {
-            setBlockStatus("Incorrect variable naming $inputName")
+            "Variable" -> {
+                if (!heap.isVariableExist(obj.second)) {
+                    setBlockStatus("Undefined variable $inputName")
+                }
+                val calculated = arithmetics(accessHeap(), inputValue)
+                setBlockStatus(calculated.first)
+                name = inputName
+                if (calculated.first == "OK") {
+                    value = calculated.second
+                    heap.setVariableValue(name, value)
+                }
+            }
         }
     }
 

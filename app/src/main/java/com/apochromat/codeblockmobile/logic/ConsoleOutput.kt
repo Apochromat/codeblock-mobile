@@ -17,7 +17,7 @@ class ConsoleOutput : Block() {
 //    }
 
     fun setBlockInput(_expression: String, _message: String = "") {
-        message = _message
+        message = if (_message == "") "" else "$_message "
         expression = _expression
     }
 
@@ -28,7 +28,7 @@ class ConsoleOutput : Block() {
             setBlockStatus(calculated.first)
             return
         }
-        println("$message ${calculated.second}")
-//            adapter.addMessage("$message ${calculated.second}}")
+        println("$message${calculated.second}")
+//            adapter.addMessage("$message${calculated.second}}")
     }
 }

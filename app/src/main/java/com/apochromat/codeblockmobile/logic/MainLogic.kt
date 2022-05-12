@@ -5,8 +5,8 @@ fun main() {
     val da = DefinedArray()
     val out = ConsoleOutput()
 
-    da.setBlockInput("arr", "10, 11, 12, 13, 14", "5")
-    out.setBlockInput("arr[0]")
+    da.setBlockInput("arr", "10, arr[0]+1, arr[1]+ 1, arr[2]+1, arr[3]+1", "5")
+    out.setBlockInput("arr[5]")
 
     connectBlocks(ep, da)
     connectBlocks(da, out)

@@ -13,7 +13,7 @@ fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String):
 }
 
 fun variableCheck(variable: String): Boolean {
-    val str = variable.replace("[A-Za-z]".toRegex(), "")
+    val str = variable.replace("[A-Za-z0-9_]".toRegex(), "")
     if (str.isNotEmpty()) {
         return false
     }
@@ -21,5 +21,7 @@ fun variableCheck(variable: String): Boolean {
 }
 
 fun stringToList(string: String): List<String> {
-    return string.replace("[,;]".toRegex(), " ").split("[\\s+]".toRegex()).filter { it.length > 0 }
+    return string.replace("[\\s*]".toRegex(), "")
+        .replace("[,;]".toRegex(), " ")
+        .split("[\\s*]".toRegex()).filter { it.isNotEmpty() }
 }

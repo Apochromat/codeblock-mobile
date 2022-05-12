@@ -77,7 +77,7 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
             try {
                 stack.push(operand.toInt())
             } catch (e: NumberFormatException) {
-                return Pair("Unexpected symbol $operand", 0)
+                return Pair("Unexpected symbol1 $operand", 0)
             }
             operand = String()
         }
@@ -103,7 +103,7 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
                     }
                 }
             } catch (e: EmptyStackException) {
-                return Pair("Incorrect expression", 0)
+                return Pair("Incorrect expression1", 0)
             }
         }
         i++
@@ -112,38 +112,74 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
 }
 
 fun lineCheck(string: String): Pair<String, Int> {
-    val str = string.replace("[A-Za-z-+*/0-9()%]".toRegex(), "")
+    val str = string.replace("[A-Za-z-+*/0-9()%_\\[\\]]".toRegex(), "")
     if (str.isNotEmpty()) {
-        return Pair("Unexpected Symbol", 0)
+        return Pair("Unexpected Symbol2", 0)
     }
-    val reg = "[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex()
-    val match = reg.find(string)
-    if (match != null) {
-        return Pair("Incorrect expression", 0)
-    }
+//    val reg = "[A-Za-z]+[0-9]|[0-9][A-Za-z]".toRegex()
+//    val match = reg.find(string)
+//    if (match != null) {
+//        return Pair("Incorrect expression2", 0)
+//    }
     return Pair("OK", 1)
 }
 
 fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     var exp = expression
+
     var preparedExpression = String()
     var i = 0
-    while (i < expression.length) {
-        if (expression[i].code in 65..127) {
-            var operand = String()
-            while (expression[i] != ' ' && (expression[i].code in 65..127)) {
-                operand += expression[i++]
-                if (i == expression.length) break
-            }
-            if (!heap.isVariableExist(operand)) {
-                return Pair("Undefined variable $operand", 0)
-            }
-            val fromVarToNum = heap.getVariableValue(operand)
-    
-            exp = exp.replace(operand, fromVarToNum.toString())
+    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/-_]*]".toRegex();
+    var array = regArr.find(exp);
+    while (array!=null) {
+        val (arrName, arrIndex) = indexCount(heap, array.value)
+        if (!heap.isArrayExist(arrName)) {
+            return Pair("Undefined array1 $arrName", 0)
         }
-        i++
+        val arrValue = heap.getArrayValue(arrName, arrIndex);
+        var fromArrToNum =arrValue.toString()
+        if(arrValue!!.toInt()<0){
+            fromArrToNum="("+fromArrToNum+")"
+        }
+        exp = exp.replace(array.value, fromArrToNum)
+        array = regArr.find(exp)
     }
+    val reg="[A-Za-z]+[A-Za-z0-9_]*".toRegex();
+    var varieble = reg.find(exp);
+    while (varieble!=null) {
+        val VV=varieble.value;
+        if (!heap.isVariableExist(varieble.value)) {
+            return Pair("Undefined varieble1 $VV ", 0)
+        }
+        val varValue=heap.getVariableValue(varieble.value)
+        var fromVarToNum =varValue.toString()
+        if(varValue!!.toInt()<0){
+            fromVarToNum="("+fromVarToNum+")"
+        }
+        exp = exp.replaceRange(varieble.range, fromVarToNum)
+        varieble = reg.find(exp)
+    }
+//    halfPrepredExperession=exp
+//    while (i < halfPrepredExperession.length) {
+//        if (halfPrepredExperession[i].code in 65..127) {
+//            var operand = String()
+//            while (halfPrepredExperession[i] != ' ' && (halfPrepredExperession[i].code in 65..127)) {
+//                operand += halfPrepredExperession[i++]
+//                if (i == halfPrepredExperession.length) break
+//            }
+//                if (!heap.isVariableExist(operand)) {
+//                    return Pair("Undefined variable1 $operand", 0)
+//                }
+//                val VarValue = heap.getVariableValue(operand)
+//                var fromVarToNum = VarValue.toString()
+//                if(VarValue!!.toInt()<0){
+//                    fromVarToNum="("+fromVarToNum+")"
+//                }
+//
+//                exp = exp.replace(operand, fromVarToNum)
+//        }
+//        i++
+//    }
 
     for (j in exp.indices) {
         if (exp[j] == '-') {
@@ -155,43 +191,43 @@ fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
         }
         preparedExpression += exp[j]
     }
-
     return Pair(preparedExpression, 1)
 }
-
-fun defineInput(heap: Heap, expression: String): Triple<String, String, Int>{
-    val arr="[A-Za-z]+[\\[(\\d+)\\]]".toRegex();
-    val varieble = "[A-Za-z]".toRegex();
-    if (arr.find(expression)!=null){
+fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
+    val arr="[A-Za-z]+[\\[(\\d+_*)\\]]".toRegex();
+    val varieble = "[A-Za-z0-9_]".toRegex();
+    if(arr.find(expression)!=null){
         val(name, index)= indexCount(heap,expression);
         if(heap.isArrayExist(name)) {
             return Triple("Array", name, index);
         }
     }
-    if (varieble.find(expression) != null){
-        val value = heap.getVariableValue(expression);
-        if (heap.isVariableExist(expression)) {
+    if(varieble.find(expression)!=null){
+        var value = heap.getVariableValue(expression);
+        if(heap.isVariableExist(expression)) {
             return Triple("Variable", value.toString(), 0);
         }
     }
     return Triple("InputError","NaN",0);
 }
+fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
+    var array:String=arr;
+    var index=-1;
+    var arrname="";
+    val reg="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/_-]*]".toRegex();
+    while (reg.find(array)!=null){
+        val arg="\\[[A-Za-z0-9 +*/_-]*]".toRegex().find(array);
+        arrname="[A-Za-z]+[A-Za-z0-9_]*".toRegex().find(reg.find(array)!!.value)!!.value;
+        if(arg!=null && arrname!=null) {
+            var arm=arg.value.replace("[","");
+            arm=arm.replace("]","");
+            var (status, rez) = arithmetics(heap, arm);
+            array=array.replace(arm,rez.toString());
+            index= rez;
+            var arrayValue=heap.getArrayValue(arrname,rez);
+            array=array.replace(reg.find(array)!!.value, arrayValue.toString());
 
-fun indexCount(heap: Heap, arr: String): Pair<String, Int>{
-    var array: String = arr;
-    var index = -1;
-    var arrname = "";
-    val reg = "[A-Za-z]*\\[[A-Za-z0-9 +*/-]*]".toRegex();
-    while (reg.find(array) != null) {
-        val arg = "\\[[A-Za-z0-9 +*/-]*]".toRegex().find(array);
-        arrname = "[A-Za-z]*".toRegex().find(reg.find(array)!!.value)!!.value;
-        if(arg == null) continue
-        var arm = arg.value.replace("[","");
-        arm = arm.replace("]","");
-        val (status, rez) = arithmetics(heap, arm);
-        array = array.replace(arm, rez.toString());
-        index = rez;
-        array = array.replace(reg.find(array)!!.value, heap.getArrayValue(arrname, rez).toString());
+        }
     }
-    return Pair(arrname, index);
+    return Pair(arrname,index);
 }
