@@ -1,7 +1,7 @@
 package com.apochromat.codeblockmobile.logic
 
-import com.apochromat.codeblockmobile.BlocksAdapter
-import com.apochromat.codeblockmobile.ConsoleAdapter
+//import com.apochromat.codeblockmobile.BlocksAdapter
+//import com.apochromat.codeblockmobile.ConsoleAdapter
 import java.util.*
 
 /**
@@ -24,17 +24,17 @@ open class Block {
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
     }
     // Переменные с данными
-    var inputLeftEdit: String = ""
-    var inputRightEdit: String = ""
-    var inputComparator: String = ">="
-
-    lateinit var begin: Begin
-    lateinit var end: End
-    lateinit var beginElse: Begin
-    lateinit var endElse: End
-
-    lateinit var adapter : ConsoleAdapter
-    lateinit var holder : BlocksAdapter.ViewHolder
+//    var inputLeftEdit: String = ""
+//    var inputRightEdit: String = ""
+//    var inputComparator: String = ">="
+//
+//    lateinit var begin: Begin
+//    lateinit var end: End
+//    lateinit var beginElse: Begin
+//    lateinit var endElse: End
+//
+//    lateinit var adapter : ConsoleAdapter
+//    lateinit var holder : BlocksAdapter.ViewHolder
 
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
@@ -122,14 +122,14 @@ open class Block {
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
-                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
             getBlockStatus() == "OK" -> {
                 callStack.push(getNextBlock())
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
-                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
             }
         }
     }

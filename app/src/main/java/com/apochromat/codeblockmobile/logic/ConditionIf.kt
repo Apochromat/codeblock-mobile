@@ -9,19 +9,21 @@ class ConditionIf : Block() {
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
     private var conditionExit: Exit = Exit()
+    var begin: Begin = Begin()
+    var end: Exit = Exit()
 
     init {
         setBlockType("ConditionIf")
     }
-    private fun initVar(){
-        expressionLeft = inputLeftEdit
-        expressionRight = inputRightEdit
-        expressionComparator = inputComparator
-
-        begin.adapter = this.adapter
-        end.adapter = this.adapter
-        conditionExit.adapter = this.adapter
-    }
+//    private fun initVar(){
+//        expressionLeft = inputLeftEdit
+//        expressionRight = inputRightEdit
+//        expressionComparator = inputComparator
+//
+//        begin.adapter = this.adapter
+//        end.adapter = this.adapter
+//        conditionExit.adapter = this.adapter
+//    }
 
     fun setBlockInput(
         _expressionLeft: String,
@@ -34,7 +36,7 @@ class ConditionIf : Block() {
     }
 
     override fun executeBlock() {
-        initVar()
+//        initVar()
         connectBlocks(end, conditionExit, strong = true, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin && getNextBlock() != null)

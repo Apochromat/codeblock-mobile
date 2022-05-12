@@ -10,16 +10,16 @@ class UndefinedVariable : Block() {
     init {
         setBlockType("UndefinedVariable")
     }
-    private fun initVar(){
-        inputNames = stringToList(inputLeftEdit)
-    }
+//    private fun initVar(){
+//        inputNames = stringToList(inputLeftEdit)
+//    }
 
     fun setBlockInput(_names: String) {
         inputNames = stringToList(_names)
     }
 
     override fun executeBlock() {
-        initVar()
+//        initVar()
         var flag: Boolean = true
         for (el in inputNames) {
             if (!variableCheck(el)) {
