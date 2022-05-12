@@ -190,7 +190,7 @@ fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
     val varieble = "[A-Za-z]+[A-Za-z0-9_]*".toRegex();
 
     if(arr.find(expression)!=null){
-        println(expression)
+      // println(expression)
         val(name, index)= indexCount(heap,expression);
         if (index==-1){
             return Triple(name, "NaN", 0);
@@ -223,7 +223,7 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
             index= rez;
            // println(index)
             if(!heap.isArrayExist(arrname)){
-                return Pair("Unidentified array", -5)
+                return Pair("Unidentified array", -1)
             }
             if (index>=heap.getArraySize(arrname)!!.toInt() || index<0){
                 return Pair("Index out of range", -1)
