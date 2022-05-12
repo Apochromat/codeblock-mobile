@@ -10,12 +10,12 @@ fun main() {
     val vout = ConsoleOutput()
 
     da.setBlockInput("arr", "5")
-    out.setBlockInput("arr[5]")
-    vout.setBlockInput("var")
-    uv.setBlockInput("var", "0")
+    out.setBlockInput("arr[4]")
+    vout.setBlockInput("arr[var]")
+    uv.setBlockInput("var", "-1")
     vass.setBlockInput("var", "var+1")
     ass.setBlockInput("arr[var]", "var")
-    wh.setBlockInput("var", "2", "<")
+    wh.setBlockInput("var", "3", "<=")
 
     connectBlocks(ep, da)
     connectBlocks(da, uv)
