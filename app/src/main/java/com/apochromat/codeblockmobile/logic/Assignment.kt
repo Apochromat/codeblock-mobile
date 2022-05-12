@@ -14,10 +14,10 @@ class Assignment : Block() {
         setBlockType("Assignment")
     }
 
-//    private fun initVar(){
-//        inputName = inputLeftEdit
-//        inputValue = inputRightEdit
-//    }
+    private fun initVar(){
+        inputName = inputLeftEdit
+        inputValue = inputRightEdit
+    }
 
     fun setBlockInput(_name: String, _value: String) {
         inputName = _name
@@ -25,7 +25,7 @@ class Assignment : Block() {
     }
 
     override fun executeBlock() {
-//        initVar()
+        initVar()
         val obj = defineInput(heap, inputName)
         if (obj.first !in listOf("Array", "Variable")) {
             setBlockStatus(obj.first)
