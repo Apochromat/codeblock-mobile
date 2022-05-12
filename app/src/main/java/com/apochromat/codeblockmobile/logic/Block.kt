@@ -1,7 +1,7 @@
 package com.apochromat.codeblockmobile.logic
 
-//import com.apochromat.codeblockmobile.BlocksAdapter
-//import com.apochromat.codeblockmobile.ConsoleAdapter
+import com.apochromat.codeblockmobile.BlocksAdapter
+import com.apochromat.codeblockmobile.ConsoleAdapter
 import java.util.*
 
 /**
@@ -28,14 +28,18 @@ open class Block {
     var inputLeftEdit: String = ""
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
+    var indexComparator: Int = 0
+  
+    lateinit var begin: Begin
+    lateinit var end: End
+    lateinit var exit: Exit
+    lateinit var beginElse: Begin
+    lateinit var endElse: End
 
-//    lateinit var begin: Begin
-//    lateinit var end: End
-//    lateinit var beginElse: Begin
-//    lateinit var endElse: End
-
-//    lateinit var adapter : ConsoleAdapter
-//    lateinit var holder : BlocksAdapter.ViewHolder
+    var indexListBlocks = 0
+    lateinit var adapterConsole : ConsoleAdapter
+    lateinit var adapterBlocks : BlocksAdapter
+    lateinit var holder : BlocksAdapter.ViewHolder
 
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
@@ -123,16 +127,16 @@ open class Block {
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
-//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapterBlocks.notifyItemChanged(indexListBlocks)
             }
             getBlockStatus() == "OK" -> {
                 callStack.push(getNextBlock())
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")
-//                adapter.addMessage("Program finished with status: ${getBlockStatus()}")
-
-
+                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapterBlocks.notifyItemChanged(indexListBlocks)
             }
         }
     }

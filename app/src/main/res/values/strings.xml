@@ -16,6 +16,21 @@
 
     <string name="console">Консоль</string>
 
+    <string name="type">Тип</string>
+    <string name="status">Статус</string>
+    <string name="expression_one">Выражение 1</string>
+    <string name="expression_two">Выражение 2</string>
+    <string name="name">Название</string>
+    <string name="names">Название 1, Название 2</string>
+    <string name="name_var">Название переменной</string>
+    <string name="value">Значение</string>
+    <string name="message">Сообщение</string>
+
+
+    <string name="block_begin">begin</string>
+    <string name="block_end">end</string>
+    <string name="block_else">else</string>
+
     <string name="blockMenu_defined_var">def var</string>
     <string name="blockMenu_undefined_var">undef var</string>
     <string name="blockMenu_assignment">add val</string>

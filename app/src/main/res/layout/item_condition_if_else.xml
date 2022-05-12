@@ -2,19 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:layout_margin="18dp"
-    android:background="@color/color_condition">
-
+    android:layout_height="110dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_condition">
 
     <TextView
         android:id="@+id/textType"
-        android:layout_width="113dp"
-        android:layout_height="22dp"
+        android:layout_width="177dp"
+        android:layout_height="23dp"
         android:gravity="center"
-        android:text="Тип"
+        android:text="@string/type"
         android:textAlignment="center"
+        android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toTopOf="@+id/editLeft"
         app:layout_constraintEnd_toStartOf="@+id/textStatus"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,11 +25,12 @@
 
     <TextView
         android:id="@+id/textStatus"
-        android:layout_width="262dp"
-        android:layout_height="22dp"
+        android:layout_width="237dp"
+        android:layout_height="21dp"
         android:gravity="center"
-        android:text="Статус"
+        android:text="@string/status"
         android:textAlignment="center"
+        android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toTopOf="@+id/editLeft"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,22 +38,23 @@
 
     <EditText
         android:id="@+id/editLeft"
-        android:layout_width="280dp"
-        android:layout_height="50dp"
+        android:layout_width="277dp"
+        android:layout_height="54dp"
         android:ems="10"
-        android:hint="Название"
+        android:hint="@string/expression_one"
         android:inputType="textPersonName"
+        android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.128"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22" />
+        app:layout_constraintVertical_bias="0.218" />
 
     <Spinner
         android:id="@+id/spinnerComparator"
-        android:layout_width="94dp"
-        android:layout_height="49dp"
+        android:layout_width="96dp"
+        android:layout_height="53dp"
         android:layout_marginStart="1dp"
         android:entries="@array/thins"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,21 +62,22 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/editLeft"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.215" />
+        app:layout_constraintVertical_bias="0.275" />
 
     <EditText
         android:id="@+id/editRight"
-        android:layout_width="276dp"
-        android:layout_height="49dp"
+        android:layout_width="277dp"
+        android:layout_height="48dp"
         android:ems="10"
-        android:hint="Значение"
+        android:hint="@string/expression_two"
         android:inputType="textPersonName"
+        android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.131"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.712" />
+        app:layout_constraintVertical_bias="0.95" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

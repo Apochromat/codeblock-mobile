@@ -8,26 +8,28 @@ class ConditionIfElse : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
-    private var conditionExit: Exit = Exit()
-    var begin: Begin = Begin()
-    var end: Exit = Exit()
-    var beginElse: Begin = Begin()
-    var endElse: Exit = Exit()
 
     init {
         setBlockType("ConditionIfElse")
     }
-//    private fun initVar(){
-//        expressionLeft = inputLeftEdit
-//        expressionRight = inputRightEdit
-//        expressionComparator = inputComparator
-//
-//        begin.adapter = this.adapter
-//        end.adapter = this.adapter
-//        beginElse.adapter = this.adapter
-//        endElse.adapter = this.adapter
-//        conditionExit.adapter = this.adapter
-//    }
+
+    private fun initVar(){
+        expressionLeft = inputLeftEdit
+        expressionRight = inputRightEdit
+        expressionComparator = inputComparator
+
+        begin.adapterConsole = this.adapterConsole
+        end.adapterConsole = this.adapterConsole
+        beginElse.adapterConsole = this.adapterConsole
+        endElse.adapterConsole = this.adapterConsole
+        exit.adapterConsole = this.adapterConsole
+        begin.adapterBlocks = this.adapterBlocks
+        end.adapterBlocks = this.adapterBlocks
+        exit.adapterBlocks = this.adapterBlocks
+        beginElse.adapterBlocks = this.adapterBlocks
+        endElse.adapterBlocks = this.adapterBlocks
+
+    }
 
     fun setBlockInput(
         _expressionLeft: String,
@@ -40,14 +42,13 @@ class ConditionIfElse : Block() {
     }
 
     override fun executeBlock() {
-
-//        initVar()
-
-        connectBlocks(end, conditionExit, strong = true, clear = false)
-        connectBlocks(endElse, conditionExit, strong = true, clear = false)
+        initVar()
+        connectBlocks(end, exit, strong = true, clear = false)
+        connectBlocks(endElse, exit, strong = true, clear = false)
+        
         getNextBlock()?.let {
             if (getNextBlock() != begin && getNextBlock() != beginElse)
-                connectBlocks(conditionExit, it, strong = true, clear = false)
+                connectBlocks(exit, it, strong = true, clear = false)
         }
 
         if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
