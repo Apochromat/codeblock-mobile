@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="150dp"
+    android:layout_width="match_parent"
     android:layout_height="30dp"
     android:layout_margin="5dp"
-    android:background="@color/color_condition"
+    android:background="@drawable/shape_condition"
     android:backgroundTint="@color/color_condition">
 
     <RelativeLayout
@@ -40,14 +40,15 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="1dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="-22dp"
             android:layout_marginBottom="0dp"
             android:gravity="center|left"
             android:paddingLeft="15dp"
-            android:text="else"
-            android:textAlignment="textStart" />
+            android:text="@string/block_else"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_grey" />
 
         <EditText
             android:id="@+id/editLeft"

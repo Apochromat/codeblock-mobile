@@ -66,12 +66,11 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             false
         }
 
-
         holder.textType.text = listBlocks[position].getBlockType()
         holder.textStatus.text = listBlocks[position].getBlockStatus()
 
         holder.editLeft.setText(listBlocks[position].inputLeftEdit)
-        holder.spinnerComparator.setSelection(0)
+        holder.spinnerComparator.setSelection(listBlocks[position].indexComparator)
         holder.editRight.setText(listBlocks[position].inputRightEdit)
     }
 
@@ -89,6 +88,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             listBlocks[i].inputLeftEdit =  listBlocks[i].holder.editLeft.text.toString()
             listBlocks[i].inputRightEdit =  listBlocks[i].holder.editRight.text.toString()
             listBlocks[i].inputComparator =  listBlocks[i].holder.spinnerComparator.selectedItem.toString()
+            listBlocks[i].indexComparator = listBlocks[i].holder.spinnerComparator.selectedItemId.toInt()
         }
     }
 }

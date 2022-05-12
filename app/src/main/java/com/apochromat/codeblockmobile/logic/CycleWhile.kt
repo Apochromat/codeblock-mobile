@@ -8,7 +8,6 @@ class CycleWhile : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
     private var expressionComparator: String = ">="
-    private var exit: Exit = Exit()
 
     init {
         setBlockType("CycleWhile")
@@ -29,9 +28,13 @@ class CycleWhile : Block() {
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
 
-        begin.adapter = this.adapter
-        end.adapter = this.adapter
-        exit.adapter = this.adapter
+        begin.adapterConsole = this.adapterConsole
+        end.adapterConsole = this.adapterConsole
+        exit = Exit()
+        exit.adapterConsole = this.adapterConsole
+        begin.adapterBlocks = this.adapterBlocks
+        end.adapterBlocks = this.adapterBlocks
+        exit.adapterBlocks = this.adapterBlocks
     }
 
     override fun executeBlock() {
