@@ -139,7 +139,7 @@ fun lineCheck(string: String): Pair<String, Int> {
 fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     var exp = expression
     var preparedExpression = String()
-    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/_-]*]".toRegex();
+    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +%*/_-]*]".toRegex();
     var array = regArr.find(exp);
     while (array!=null) {
         val (arrName, arrIndex) = indexCount(heap, array.value)
@@ -211,9 +211,9 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
     var array:String=arr;
     var index=-1;
     var arrname="";
-    val reg="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/_-]*]".toRegex();
+    val reg="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/%_-]*]".toRegex();
     while (reg.find(array)!=null){
-        val arg="\\[[A-Za-z0-9 +*/_-]*]".toRegex().find(array);
+        val arg="\\[[A-Za-z0-9 +*/_%-]*]".toRegex().find(array);
         arrname="[A-Za-z]+[A-Za-z0-9_]*".toRegex().find(reg.find(array)!!.value)!!.value;
         if(arg!=null) {
             var arm=arg.value.replace("[","");
@@ -221,7 +221,8 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
             var (status, rez) = arithmetics(heap, arm);
             array=array.replace(arm,rez.toString());
             index= rez;
-           // println(index)
+            println(index)
+            println(status)
             if(!heap.isArrayExist(arrname)){
                 return Pair("Unidentified array", -1)
             }
