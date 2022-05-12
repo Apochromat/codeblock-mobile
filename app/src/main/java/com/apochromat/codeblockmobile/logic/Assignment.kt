@@ -28,7 +28,7 @@ class Assignment : Block() {
 //        initVar()
         val obj = defineInput(heap, inputName)
         if (obj.first == "InputError") {
-            setBlockStatus("Incorrect variable form")
+            setBlockStatus("Undefined object $inputName")
             return
         }
         if (!variableCheck(obj.second)) {
@@ -38,11 +38,11 @@ class Assignment : Block() {
         when (obj.first) {
             "Array" -> {
                 if (!heap.isArrayExist(obj.second)) {
-                    setBlockStatus("Undefined array $inputName")
+                    setBlockStatus("Undefined array ${obj.second}")
                 }
                 val calculated = arithmetics(accessHeap(), inputValue)
                 setBlockStatus(calculated.first)
-                name = inputName
+                name = obj.second
                 if (calculated.first == "OK") {
                     value = calculated.second
                     heap.setArrayValue(name, obj.third, value)
