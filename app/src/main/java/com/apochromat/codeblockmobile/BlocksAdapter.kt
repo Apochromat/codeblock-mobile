@@ -32,7 +32,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             "ConditionIfElse" -> R.layout.item_condition_if_else
             "CycleWhile" -> R.layout.item_cycle_while
             "ConsoleOutput" -> R.layout.item_console_output
-            "ConsoleInputOne" -> R.layout.item_console_input_one
+            "ConsoleInput" -> R.layout.item_console_input_one
             "Begin" -> R.layout.item_begin
             "End" -> R.layout.item_end
             "Else" -> R.layout.item_else

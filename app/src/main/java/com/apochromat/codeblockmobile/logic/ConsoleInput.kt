@@ -10,13 +10,13 @@ import com.apochromat.codeblockmobile.R
  *  Блок одиночного консольного ввода.
  *  Позволяет вывести в консоль сообщение и считать введеное значение, присвоить его переменной.
  **/
-class ConsoleInputOne : Block() {
+class ConsoleInput : Block() {
     private var message: String = ""
     private var name: String = ""
     private var value: Int = 0
 
     init {
-        setBlockType("ConsoleInputOne")
+        setBlockType("ConsoleInput")
     }
 
     fun initVar(){

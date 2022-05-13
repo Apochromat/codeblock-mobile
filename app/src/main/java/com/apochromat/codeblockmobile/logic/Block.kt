@@ -128,7 +128,7 @@ open class Block {
     }
 
     open fun run() {
-        if (getBlockType() == "ConsoleInputOne"){
+        if (getBlockType() == "ConsoleInput"){
             executeBlock()
         }
         else{

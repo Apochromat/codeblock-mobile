@@ -122,7 +122,7 @@ class ProjectActivity : AppCompatActivity() {
             buttonConsoleInputOne.setOnClickListener{
                 bindingClass.blocksRV.scrollToPosition(listBlocks.size)
                 blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(ConsoleInputOne())
+                blocksAdapter.addBlock(ConsoleInput())
                 listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
                 listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
 
