@@ -28,7 +28,6 @@ class ProjectActivity : AppCompatActivity() {
         setContentView(bindingClass.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "newProject"
-
         bindingClass.blocksRV.isDrawingCacheEnabled = true
         bindingClass.blocksRV.setItemViewCacheSize(100);
 
@@ -37,6 +36,7 @@ class ProjectActivity : AppCompatActivity() {
 
         init()
     }
+
     private fun init(){
         bindingClass.apply{
             buttonDefinedVar.setOnClickListener{
@@ -125,6 +125,7 @@ class ProjectActivity : AppCompatActivity() {
                 blocksAdapter.addBlock(ConsoleInputOne())
                 listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
                 listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+
             }
         }
     }
@@ -474,14 +475,27 @@ class ProjectActivity : AppCompatActivity() {
     private fun runProject(listBlocks : ArrayList<Block>){
         consoleAdapter.clearListMessages()
         blocksAdapter.saveAllData()
-        for (i in 0 until listBlocks.size)
+        for (i in 0 until listBlocks.size){
             listBlocks[i].indexListBlocks = i
+            if (listBlocks[i].status != "OK"){
+                listBlocks[i].status = "OK"
+                blocksAdapter.notifyItemChanged(i)
+            }
+            if (listBlocks[i].getBlockType() == "ConsoleInputOne"){
+                listBlocks[i].activity = this
+            }
+
+        }
         if (!connectionBlocks()) {
             consoleAdapter.addMessage("Program finished with status: Fail")
             return
         }
+        printAllConnections()
         listBlocks[0].run()
+        printAllConnections()
         disconnectAllBlocks()
+
+
     }
 
     private fun printAllConnections(){

@@ -60,10 +60,4 @@ class DefinedArray : Block() {
             heap.setArrayValue(name, i, calcValue.second)
         }
     }
-
-    override fun clearBlockData() {
-        values = ""
-        size = 0
-        name = ""
-    }
 }

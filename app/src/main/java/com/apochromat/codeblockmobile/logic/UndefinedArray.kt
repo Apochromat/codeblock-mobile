@@ -45,9 +45,4 @@ class UndefinedArray : Block() {
             heap.setArrayValue(name, i, 0)
         }
     }
-
-    override fun clearBlockData() {
-        size = 0
-        name = ""
-    }
 }

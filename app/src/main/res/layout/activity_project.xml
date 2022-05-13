@@ -135,7 +135,7 @@
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_console_input_one"
                     android:textColor="@color/dark_grey"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
         </HorizontalScrollView>

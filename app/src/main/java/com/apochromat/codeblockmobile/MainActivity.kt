@@ -3,9 +3,7 @@ package com.apochromat.codeblockmobile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
 import com.apochromat.codeblockmobile.databinding.ActivityMainBinding
-import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     lateinit var bindingClass : ActivityMainBinding

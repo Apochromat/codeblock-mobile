@@ -2,6 +2,7 @@ package com.apochromat.codeblockmobile.logic
 
 import com.apochromat.codeblockmobile.BlocksAdapter
 import com.apochromat.codeblockmobile.ConsoleAdapter
+import com.apochromat.codeblockmobile.ProjectActivity
 import java.util.*
 
 /**
@@ -29,6 +30,7 @@ open class Block {
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
     var indexComparator: Int = 0
+    var valueVar: String = ""
   
     lateinit var begin: Begin
     lateinit var end: End
@@ -40,6 +42,7 @@ open class Block {
     lateinit var adapterConsole : ConsoleAdapter
     lateinit var adapterBlocks : BlocksAdapter
     lateinit var holder : BlocksAdapter.ViewHolder
+    lateinit var activity: ProjectActivity
 
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
@@ -47,7 +50,7 @@ open class Block {
 
     //  Тип, статус и идентификатор блока
     private var type: String = "Undefined"
-    private var status: String = "OK"
+    var status: String = "OK"
     private var id: Int = counter++
 
     init {
@@ -120,23 +123,30 @@ open class Block {
     }
 
     open fun executeBlock() {}
-    open fun clearBlockData() {}
+    open fun clearBlockData() {
+        status = "OK"
+    }
 
     open fun run() {
-        executeBlock()
-        when {
-            getNextBlock() == null -> {
-                println("Program finished with status: ${getBlockStatus()}")
-                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
-                adapterBlocks.notifyItemChanged(indexListBlocks)
-            }
-            getBlockStatus() == "OK" -> {
-                callStack.push(getNextBlock())
-            }
-            else -> {
-                println("Program finished with status: ${getBlockStatus()}")
-                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
-                adapterBlocks.notifyItemChanged(indexListBlocks)
+        if (getBlockType() == "ConsoleInputOne"){
+            executeBlock()
+        }
+        else{
+            executeBlock()
+            when {
+                getNextBlock() == null -> {
+                    println("Program finished with status: ${getBlockStatus()}")
+                    adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                    adapterBlocks.notifyItemChanged(indexListBlocks)
+                }
+                getBlockStatus() == "OK" -> {
+                    callStack.push(getNextBlock())
+                }
+                else -> {
+                    println("Program finished with status: ${getBlockStatus()}")
+                    adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                    adapterBlocks.notifyItemChanged(indexListBlocks)
+                }
             }
         }
     }

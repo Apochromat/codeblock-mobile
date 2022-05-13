@@ -100,3 +100,4 @@ lint/tmp/
 .externalNativeBuild
 .cxx
 local.properties
+.idea/misc.xml

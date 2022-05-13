@@ -38,9 +38,4 @@ class DefinedVariable : Block() {
             setBlockStatus("Incorrect variable naming $inputName")
         }
     }
-
-    override fun clearBlockData() {
-        value = 0
-        name = ""
-    }
 }

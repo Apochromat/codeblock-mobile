@@ -1,5 +1,4 @@
 package com.apochromat.codeblockmobile.logic
-import kotlinx.coroutines.*
 
 /**
  *  Точка входа в программу.

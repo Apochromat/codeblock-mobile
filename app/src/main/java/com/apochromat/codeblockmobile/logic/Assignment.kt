@@ -64,9 +64,4 @@ class Assignment : Block() {
             }
         }
     }
-
-    override fun clearBlockData() {
-        value = 0
-        name = ""
-    }
 }
