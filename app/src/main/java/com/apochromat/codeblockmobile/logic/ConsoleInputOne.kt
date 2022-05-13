@@ -51,14 +51,17 @@ class ConsoleInputOne : Block() {
         }
     }
 
-    private fun runConsoleInput(){
+    private fun inputAssignment(){
         val calculated = arithmetics(accessHeap(), valueVar)
         setBlockStatus(calculated.first)
         if (calculated.first == "OK") {
             value = calculated.second
             accessHeap().setVariableValue(name, value)
         }
+    }
 
+    private fun runConsoleInput(){
+        inputAssignment()
         when {
             getNextBlock() == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
