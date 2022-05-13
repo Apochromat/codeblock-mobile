@@ -52,11 +52,46 @@ class ConsoleInput : Block() {
     }
 
     private fun inputAssignment(){
+        val stringList = stringToList(valueVar)
+        val obj = defineInput(heap, name)
+        if (stringList.size > 1) {
+            if (obj.first == "Variable") {
+                setBlockStatus("Impossible to assign sequence to variable")
+                return
+            }
+            if (obj.first != "Array") {
+                setBlockStatus(obj.first)
+                return
+            }
+            if (stringList.size != heap.getArraySize(obj.second)) {
+                setBlockStatus("Sizes mismatch")
+                return
+            }
+            for (i in stringList.indices) {
+                val calculated = arithmetics(heap, stringList[i])
+                if (calculated.first != "OK") {
+                    setBlockStatus(calculated.first)
+                    return
+                }
+                heap.setArrayValue(obj.second, i, calculated.second)
+            }
+            return
+        }
         val calculated = arithmetics(accessHeap(), valueVar)
         setBlockStatus(calculated.first)
-        if (calculated.first == "OK") {
-            value = calculated.second
-            accessHeap().setVariableValue(name, value)
+        if (calculated.first != "OK") return
+        if (obj.first !in listOf("Array", "Variable")) {
+            setBlockStatus(obj.first)
+            return
+        }
+        value = calculated.second
+        when (obj.first) {
+            "Array" -> {
+                heap.setArrayValue(name, obj.third, value)
+            }
+            "Variable" -> {
+                heap.setVariableValue(name, value)
+            }
         }
     }
 
@@ -79,16 +114,4 @@ class ConsoleInput : Block() {
         }
 
     }
-
-//    override fun executeBlock() {
-//
-//        print(message)
-//        val inputValue: String = readln()
-//        val calculated = arithmetics(accessHeap(), inputValue)
-//        setBlockStatus(calculated.first)
-//        if (calculated.first == "OK") {
-//            value = calculated.second
-//            accessHeap().setVariableValue(name, value)
-//        }
-//    }
 }

@@ -27,40 +27,21 @@ class Assignment : Block() {
     override fun executeBlock() {
         initVar()
         val obj = defineInput(heap, inputName)
+        name = obj.second
         if (obj.first !in listOf("Array", "Variable")) {
             setBlockStatus(obj.first)
             return
         }
-        if (!variableCheck(obj.second)) {
-            setBlockStatus("Incorrect naming $inputName")
-            return
-        }
+        val calculated = arithmetics(heap, inputValue)
+        setBlockStatus(calculated.first)
+        if (calculated.first != "OK") return
+        value = calculated.second
         when (obj.first) {
             "Array" -> {
-                if (!heap.isArrayExist(obj.second)) {
-                    setBlockStatus("Undefined array ${obj.second}")
-                    return
-                }
-                val calculated = arithmetics(accessHeap(), inputValue)
-                setBlockStatus(calculated.first)
-                name = obj.second
-                if (calculated.first == "OK") {
-                    value = calculated.second
-                    heap.setArrayValue(name, obj.third, value)
-                }
+                heap.setArrayValue(name, obj.third, value)
             }
             "Variable" -> {
-                if (!heap.isVariableExist(obj.second)) {
-                    setBlockStatus("Undefined variable ${obj.second}")
-                    return
-                }
-                val calculated = arithmetics(accessHeap(), inputValue)
-                setBlockStatus(calculated.first)
-                name = obj.second
-                if (calculated.first == "OK") {
-                    value = calculated.second
-                    heap.setVariableValue(name, value)
-                }
+                heap.setVariableValue(name, value)
             }
         }
     }
