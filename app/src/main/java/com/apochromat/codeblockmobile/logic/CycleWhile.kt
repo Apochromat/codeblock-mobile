@@ -43,7 +43,7 @@ class CycleWhile : Block() {
 
         connectBlocks(end, this, strong = false, clear = false)
         getNextBlock()?.let {
-            if (getNextBlock() != begin)
+            if (getNextBlock() != begin && getNextBlock() != exit && getNextBlock() != end && getNextBlock() != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 

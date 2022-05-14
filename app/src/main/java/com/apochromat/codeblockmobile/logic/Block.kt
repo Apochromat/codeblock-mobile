@@ -134,6 +134,7 @@ open class Block {
     }
 
     open fun run() {
+//        adapterConsole.addMessage( getPrevBlock()?.indexListBlocks.toString() + " " + type + " " + getNextBlock()?.indexListBlocks.toString())
         if (getBlockType() == "ConsoleInput"){
             executeBlock()
         }

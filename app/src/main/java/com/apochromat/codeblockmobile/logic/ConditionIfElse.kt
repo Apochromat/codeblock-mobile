@@ -65,9 +65,9 @@ class ConditionIfElse : Block() {
                     expressionComparator
                 )
             ) {
-                connectBlocks(this, begin, false)
+                connectBlocks(this, begin, false, false)
             } else {
-                connectBlocks(this, beginElse, false)
+                connectBlocks(this, beginElse, false, false)
             }
             return
         }

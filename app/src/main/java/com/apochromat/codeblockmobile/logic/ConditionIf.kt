@@ -42,7 +42,7 @@ class ConditionIf : Block() {
         if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         getNextBlock()?.let {
-            if (getNextBlock() != begin && getNextBlock() != null)
+            if (getNextBlock() != begin && getNextBlock() != exit && getNextBlock() != end && getNextBlock() != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
@@ -60,9 +60,9 @@ class ConditionIf : Block() {
                     expressionComparator
                 )
             ) {
-                connectBlocks(this, begin, false)
+                connectBlocks(this, begin, false, false)
             } else {
-                connectBlocks(this, end, false)
+                connectBlocks(this, end, false, false)
             }
             return
         }

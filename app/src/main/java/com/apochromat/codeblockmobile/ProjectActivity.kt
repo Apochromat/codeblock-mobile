@@ -29,7 +29,7 @@ class ProjectActivity : AppCompatActivity() {
     private val updateProgramRunning = object : Runnable {
         override fun run() {
             kicker()
-            mainHandler.postDelayed(this, 11)
+            mainHandler.postDelayed(this, 1)
         }
     }
 
@@ -240,68 +240,68 @@ class ProjectActivity : AppCompatActivity() {
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            if (viewHolder.adapterPosition == 0 ||
-                target.adapterPosition == 0 ||
-                listBlocks[target.adapterPosition].getBlockType() == "Begin" ||
-                listBlocks[viewHolder.adapterPosition].getBlockType() == "Begin"){
-                return true
-            }
-            else if (
-                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIf" ||
-                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIfElse" ||
-                listBlocks[viewHolder.adapterPosition].getBlockType() == "Else" ||
-                listBlocks[viewHolder.adapterPosition].getBlockType() == "CycleWhile"){
-                val fromPosition = viewHolder.adapterPosition
-                val toPosition = target.adapterPosition
-                if (fromPosition > toPosition){
-                    val fromPosition2 = fromPosition + 1
-                    val toPosition2 = toPosition + 1
-                    Collections.swap(listBlocks, fromPosition, toPosition)
-                    Collections.swap(listBlocks, fromPosition2, toPosition2)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-                    blocksAdapter.notifyItemMoved(fromPosition2, toPosition2)
-                }
-                else if(fromPosition < toPosition &&
-                            (listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
-                            listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
-                            listBlocks[target.adapterPosition].getBlockType() == "Else" ||
-                            listBlocks[target.adapterPosition].getBlockType() == "CycleWhile")
-                ){
-                    Collections.swap(listBlocks, fromPosition, toPosition)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-                }
-                else {
-                    val fromPosition2 = fromPosition + 1
-                    Collections.swap(listBlocks, fromPosition, fromPosition2)
-                    Collections.swap(listBlocks, fromPosition, toPosition)
-                    blocksAdapter.notifyItemMoved(fromPosition, fromPosition2)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-                }
-                return false
-            }
-            else if(
-                listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
-                listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
-                listBlocks[target.adapterPosition].getBlockType() == "Else" ||
-                listBlocks[target.adapterPosition].getBlockType() == "CycleWhile"){
-                val fromPosition = viewHolder.adapterPosition
-                val toPosition = target.adapterPosition
-                if (fromPosition < toPosition){
-                    val toPosition2 = toPosition + 1
-                    Collections.swap(listBlocks, fromPosition, toPosition2)
-                    Collections.swap(listBlocks, fromPosition, toPosition)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition2)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-                }
-                else {
-                    val toPosition2 = toPosition + 1
-                    Collections.swap(listBlocks, fromPosition, toPosition)
-                    Collections.swap(listBlocks, toPosition2, fromPosition)
-                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-                    blocksAdapter.notifyItemMoved(toPosition2, fromPosition)
-                }
-                return false
-            }
+//            if (viewHolder.adapterPosition == 0 ||
+//                target.adapterPosition == 0 ||
+//                listBlocks[target.adapterPosition].getBlockType() == "Begin" ||
+//                listBlocks[viewHolder.adapterPosition].getBlockType() == "Begin"){
+//                return true
+//            }
+//            else if (
+//                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIf" ||
+//                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIfElse" ||
+//                listBlocks[viewHolder.adapterPosition].getBlockType() == "Else" ||
+//                listBlocks[viewHolder.adapterPosition].getBlockType() == "CycleWhile"){
+//                val fromPosition = viewHolder.adapterPosition
+//                val toPosition = target.adapterPosition
+//                if (fromPosition > toPosition){
+//                    val fromPosition2 = fromPosition + 1
+//                    val toPosition2 = toPosition + 1
+//                    Collections.swap(listBlocks, fromPosition, toPosition)
+//                    Collections.swap(listBlocks, fromPosition2, toPosition2)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
+//                    blocksAdapter.notifyItemMoved(fromPosition2, toPosition2)
+//                }
+//                else if(fromPosition < toPosition &&
+//                            (listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
+//                            listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
+//                            listBlocks[target.adapterPosition].getBlockType() == "Else" ||
+//                            listBlocks[target.adapterPosition].getBlockType() == "CycleWhile")
+//                ){
+//                    Collections.swap(listBlocks, fromPosition, toPosition)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
+//                }
+//                else {
+//                    val fromPosition2 = fromPosition + 1
+//                    Collections.swap(listBlocks, fromPosition, fromPosition2)
+//                    Collections.swap(listBlocks, fromPosition, toPosition)
+//                    blocksAdapter.notifyItemMoved(fromPosition, fromPosition2)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
+//                }
+//                return false
+//            }
+//            else if(
+//                listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
+//                listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
+//                listBlocks[target.adapterPosition].getBlockType() == "Else" ||
+//                listBlocks[target.adapterPosition].getBlockType() == "CycleWhile"){
+//                val fromPosition = viewHolder.adapterPosition
+//                val toPosition = target.adapterPosition
+//                if (fromPosition < toPosition){
+//                    val toPosition2 = toPosition + 1
+//                    Collections.swap(listBlocks, fromPosition, toPosition2)
+//                    Collections.swap(listBlocks, fromPosition, toPosition)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition2)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
+//                }
+//                else {
+//                    val toPosition2 = toPosition + 1
+//                    Collections.swap(listBlocks, fromPosition, toPosition)
+//                    Collections.swap(listBlocks, toPosition2, fromPosition)
+//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
+//                    blocksAdapter.notifyItemMoved(toPosition2, fromPosition)
+//                }
+//                return false
+//            }
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
             Collections.swap(listBlocks, fromPosition, toPosition)
