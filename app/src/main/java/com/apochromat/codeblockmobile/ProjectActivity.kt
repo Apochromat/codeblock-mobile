@@ -63,99 +63,129 @@ class ProjectActivity : AppCompatActivity() {
         mainHandler.post(updateProgramRunning)
     }
 
-
     private fun init(){
         bindingClass.apply{
             buttonDefinedVar.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(DefinedVariable())
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+                createDefinedVar()
             }
             buttonUndefinedVar.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(UndefinedVariable())
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+                createUndefinedVar()
             }
             buttonAssignment.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(Assignment())
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+                createAssignment()
             }
             buttonConditionIf.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size+2)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(ConditionIf())
-                blocksAdapter.addBlock(Begin())
-                blocksAdapter.addBlock(End())
-                listBlocks[listBlocks.size-3].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-3].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-3].begin = Begin()
-                listBlocks[listBlocks.size-3].end = End()
-                listBlocks[listBlocks.size-3].exit = Exit()
-                listBlocks[listBlocks.size-2].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-2].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
+                createConditionIf()
             }
             buttonConditionIfElse.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size+5)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(ConditionIfElse())
-                blocksAdapter.addBlock(Begin())
-                blocksAdapter.addBlock(End())
-                blocksAdapter.addBlock(Else())
-                blocksAdapter.addBlock(Begin())
-                blocksAdapter.addBlock(End())
-                listBlocks[listBlocks.size-6].begin = Begin()
-                listBlocks[listBlocks.size-6].end = End()
-                listBlocks[listBlocks.size-6].beginElse = Begin()
-                listBlocks[listBlocks.size-6].endElse = End()
-                listBlocks[listBlocks.size-6].exit = Exit()
-                for (i in 1..6){
-                    listBlocks[listBlocks.size-i].adapterConsole = consoleAdapter
-                    listBlocks[listBlocks.size-i].adapterBlocks = blocksAdapter
-                }
-
+                createConditionIfElse()
             }
             buttonCycleWhile.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size+2)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(CycleWhile())
-                blocksAdapter.addBlock(Begin())
-                blocksAdapter.addBlock(End())
-                listBlocks[listBlocks.size-3].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-3].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-3].begin = Begin()
-                listBlocks[listBlocks.size-3].end = End()
-                listBlocks[listBlocks.size-3].exit = Exit()
-                listBlocks[listBlocks.size-2].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-2].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
+                createCycleWhile()
             }
             buttonConsoleOutput.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(ConsoleOutput())
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+                createConsoleOutput()
             }
             buttonConsoleInputOne.setOnClickListener{
-                bindingClass.blocksRV.scrollToPosition(listBlocks.size)
-                blocksAdapter.saveAllData()
-                blocksAdapter.addBlock(ConsoleInput())
-                listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
-                listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
-
+                createConsoleInput()
             }
         }
     }
+
+    fun createConsoleInput() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(ConsoleInput())
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+    }
+
+    fun createConsoleOutput() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(ConsoleOutput())
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+    }
+
+    fun createCycleWhile() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size + 2)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(CycleWhile())
+        blocksAdapter.addBlock(Begin())
+        blocksAdapter.addBlock(End())
+        listBlocks[listBlocks.size - 3].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 3].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 3].begin = Begin()
+        listBlocks[listBlocks.size - 3].end = End()
+        listBlocks[listBlocks.size - 3].exit = Exit()
+        listBlocks[listBlocks.size - 2].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 2].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+    }
+
+    private fun createConditionIfElse() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size + 5)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(ConditionIfElse())
+        blocksAdapter.addBlock(Begin())
+        blocksAdapter.addBlock(End())
+        blocksAdapter.addBlock(Else())
+        blocksAdapter.addBlock(Begin())
+        blocksAdapter.addBlock(End())
+        listBlocks[listBlocks.size - 6].begin = Begin()
+        listBlocks[listBlocks.size - 6].end = End()
+        listBlocks[listBlocks.size - 6].beginElse = Begin()
+        listBlocks[listBlocks.size - 6].endElse = End()
+        listBlocks[listBlocks.size - 6].exit = Exit()
+        for (i in 1..6) {
+            listBlocks[listBlocks.size - i].adapterConsole = consoleAdapter
+            listBlocks[listBlocks.size - i].adapterBlocks = blocksAdapter
+        }
+    }
+
+    fun createConditionIf() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size + 2)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(ConditionIf())
+        blocksAdapter.addBlock(Begin())
+        blocksAdapter.addBlock(End())
+        listBlocks[listBlocks.size - 3].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 3].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 3].begin = Begin()
+        listBlocks[listBlocks.size - 3].end = End()
+        listBlocks[listBlocks.size - 3].exit = Exit()
+        listBlocks[listBlocks.size - 2].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 2].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+    }
+
+    fun createDefinedVar() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(DefinedVariable())
+        listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+    }
+
+    fun createUndefinedVar() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(UndefinedVariable())
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+    }
+
+    fun createAssignment() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(Assignment())
+        listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.project_menu, menu)
         return true
