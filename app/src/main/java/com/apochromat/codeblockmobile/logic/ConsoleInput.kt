@@ -50,6 +50,7 @@ class ConsoleInput : Block() {
                 runConsoleInput()
             }
         }
+        isProgramRunning = false
         dialog.show()
     }
 
@@ -116,6 +117,6 @@ class ConsoleInput : Block() {
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
         }
-
+        isProgramRunning = false
     }
 }
