@@ -117,6 +117,6 @@ class ConsoleInput : Block() {
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
         }
-        isProgramRunning = false
+        isProgramRunning = true
     }
 }

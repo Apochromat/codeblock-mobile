@@ -29,7 +29,7 @@ class ProjectActivity : AppCompatActivity() {
     private val updateProgramRunning = object : Runnable {
         override fun run() {
             kicker()
-            mainHandler.postDelayed(this, 250)
+            mainHandler.postDelayed(this, 11)
         }
     }
 
@@ -51,7 +51,6 @@ class ProjectActivity : AppCompatActivity() {
 
     }
     fun kicker() {
-        consoleAdapter.addMessage("kick")
         listBlocks[0].kickRunning()
     }
     override fun onPause() {
@@ -518,11 +517,11 @@ class ProjectActivity : AppCompatActivity() {
             consoleAdapter.addMessage("Program finished with status: Fail")
             return
         }
-        printAllConnections()
+        //printAllConnections()
         Block.isProgramRunning = true
         listBlocks[0].run()
-        printAllConnections()
-        disconnectAllBlocks()
+        //printAllConnections()
+        //disconnectAllBlocks()
 
 
     }

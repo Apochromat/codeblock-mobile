@@ -12,7 +12,7 @@ class ConsoleOutput : Block() {
         setBlockType("ConsoleOutput")
     }
     private fun initVar(){
-        message = inputLeftEdit
+        message = if (inputLeftEdit == "") "" else "$inputLeftEdit "
         expression = inputRightEdit
     }
 
@@ -23,12 +23,14 @@ class ConsoleOutput : Block() {
 
     override fun executeBlock() {
         initVar()
-        if (accessHeap().isVariableExist(expression)) {
-            println("$message ${accessHeap().getVariableValue(expression).toString()}")
-            adapterConsole.addMessage("$message ${accessHeap().getVariableValue(expression).toString()}")
+        if (expression == "") {
+            adapterConsole.addMessage(message)
             return
         }
-        println("$message${expression}")
-        adapterConsole.addMessage("$message${expression}}")
+        val calculated = arithmetics(heap, expression)
+        setBlockStatus(calculated.first)
+        if (calculated.first != "OK") return
+        println("$message${calculated.second}")
+        adapterConsole.addMessage("$message${calculated.second}")
     }
 }
