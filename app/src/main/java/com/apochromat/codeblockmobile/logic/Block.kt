@@ -130,6 +130,7 @@ open class Block {
     open fun run() {
         if (getBlockType() == "ConsoleInput"){
             executeBlock()
+            adapterConsole.addMessage("Pizza")
         }
         else{
             executeBlock()

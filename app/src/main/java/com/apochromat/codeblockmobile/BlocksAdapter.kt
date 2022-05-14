@@ -1,6 +1,5 @@
 package com.apochromat.codeblockmobile
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.apochromat.codeblockmobile.logic.Block
-import com.apochromat.codeblockmobile.logic.EntryPoint
-import com.apochromat.codeblockmobile.logic.connectBlocks
-import com.apochromat.codeblockmobile.logic.disconnectBlocks
 
 class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adapter<BlocksAdapter.ViewHolder>() {
     class ViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
@@ -32,7 +28,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             "ConditionIfElse" -> R.layout.item_condition_if_else
             "CycleWhile" -> R.layout.item_cycle_while
             "ConsoleOutput" -> R.layout.item_console_output
-            "ConsoleInput" -> R.layout.item_console_input_one
+            "ConsoleInput" -> R.layout.item_console_input
             "Begin" -> R.layout.item_begin
             "End" -> R.layout.item_end
             "Else" -> R.layout.item_else

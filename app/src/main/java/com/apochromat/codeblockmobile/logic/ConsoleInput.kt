@@ -14,6 +14,7 @@ class ConsoleInput : Block() {
     private var message: String = ""
     private var name: String = ""
     private var value: Int = 0
+    private var nextB: Block? = null
 
     init {
         setBlockType("ConsoleInput")
@@ -22,6 +23,7 @@ class ConsoleInput : Block() {
     fun initVar(){
         message = inputLeftEdit
         name = inputRightEdit
+        nextB = getNextBlock()
     }
 
     fun setBlockInput(_name: String, _message: String = "") {
@@ -40,15 +42,15 @@ class ConsoleInput : Block() {
         dialog.setView(view)
         val buttonEdit = view.findViewById<Button>(R.id.buttonEditDialog)
         val editVar = view.findViewById<EditText>(R.id.editVarDialog)
-        dialog.show()
 
         buttonEdit.setOnClickListener(){
             if (editVar.text.toString() != "") {
                 valueVar = editVar.text.toString()
-                runConsoleInput()
                 dialog.dismiss()
+                runConsoleInput()
             }
         }
+        dialog.show()
     }
 
     private fun inputAssignment(){
@@ -98,13 +100,13 @@ class ConsoleInput : Block() {
     private fun runConsoleInput(){
         inputAssignment()
         when {
-            getNextBlock() == null -> {
+            nextB == null -> {
                 println("Program finished with status: ${getBlockStatus()}")
                 adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
             getBlockStatus() == "OK" -> {
-                callStack.push(getNextBlock())
+                callStack.push(nextB)
             }
             else -> {
                 println("Program finished with status: ${getBlockStatus()}")

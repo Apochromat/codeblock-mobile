@@ -3,6 +3,8 @@ package com.apochromat.codeblockmobile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -22,6 +24,15 @@ class ProjectActivity : AppCompatActivity() {
     lateinit var consoleAdapter : ConsoleAdapter
     lateinit var bindingClass : ActivityProjectBinding
 
+    lateinit var mainHandler: Handler
+
+    private val updateProgramRunning = object : Runnable {
+        override fun run() {
+            minusOneSecond()
+            mainHandler.postDelayed(this, 1000)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityProjectBinding.inflate(layoutInflater)
@@ -35,7 +46,23 @@ class ProjectActivity : AppCompatActivity() {
         createBlocksView()
 
         init()
+
+        mainHandler = Handler(Looper.getMainLooper())
+
     }
+    fun minusOneSecond() {
+        consoleAdapter.addMessage("lox")
+    }
+    override fun onPause() {
+        super.onPause()
+        mainHandler.removeCallbacks(updateProgramRunning)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainHandler.post(updateProgramRunning)
+    }
+
 
     private fun init(){
         bindingClass.apply{
@@ -481,7 +508,7 @@ class ProjectActivity : AppCompatActivity() {
                 listBlocks[i].status = "OK"
                 blocksAdapter.notifyItemChanged(i)
             }
-            if (listBlocks[i].getBlockType() == "ConsoleInputOne"){
+            if (listBlocks[i].getBlockType() == "ConsoleInput"){
                 listBlocks[i].activity = this
             }
 
