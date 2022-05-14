@@ -28,8 +28,8 @@ class ProjectActivity : AppCompatActivity() {
 
     private val updateProgramRunning = object : Runnable {
         override fun run() {
-            minusOneSecond()
-            mainHandler.postDelayed(this, 1000)
+            kicker()
+            mainHandler.postDelayed(this, 250)
         }
     }
 
@@ -50,8 +50,9 @@ class ProjectActivity : AppCompatActivity() {
         mainHandler = Handler(Looper.getMainLooper())
 
     }
-    fun minusOneSecond() {
-        consoleAdapter.addMessage("lox")
+    fun kicker() {
+        consoleAdapter.addMessage("kick")
+        listBlocks[0].kickRunning()
     }
     override fun onPause() {
         super.onPause()
@@ -518,6 +519,7 @@ class ProjectActivity : AppCompatActivity() {
             return
         }
         printAllConnections()
+        Block.isProgramRunning = true
         listBlocks[0].run()
         printAllConnections()
         disconnectAllBlocks()

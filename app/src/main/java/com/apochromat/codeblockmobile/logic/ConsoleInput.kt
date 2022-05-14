@@ -101,6 +101,7 @@ class ConsoleInput : Block() {
         inputAssignment()
         when {
             nextB == null -> {
+                isProgramRunning = false
                 println("Program finished with status: ${getBlockStatus()}")
                 adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
                 adapterBlocks.notifyItemChanged(indexListBlocks)
@@ -109,6 +110,7 @@ class ConsoleInput : Block() {
                 callStack.push(nextB)
             }
             else -> {
+                isProgramRunning = false
                 println("Program finished with status: ${getBlockStatus()}")
                 adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
                 adapterBlocks.notifyItemChanged(indexListBlocks)

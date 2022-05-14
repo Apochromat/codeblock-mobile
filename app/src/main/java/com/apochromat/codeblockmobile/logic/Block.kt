@@ -23,6 +23,9 @@ open class Block {
 
         //  Список устойчивых связей между блоками
         var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
+
+        // Флаг работы программы
+        var isProgramRunning = false
     }
     // Переменные с данными
 
@@ -123,7 +126,8 @@ open class Block {
     }
 
     open fun executeBlock() {}
-    open fun clearBlockData() {
+    open fun kickRunning() {}
+    fun clearBlockData() {
         status = "OK"
     }
 
@@ -136,6 +140,7 @@ open class Block {
             executeBlock()
             when {
                 getNextBlock() == null -> {
+                    isProgramRunning = false
                     println("Program finished with status: ${getBlockStatus()}")
                     adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
                     adapterBlocks.notifyItemChanged(indexListBlocks)
@@ -144,6 +149,7 @@ open class Block {
                     callStack.push(getNextBlock())
                 }
                 else -> {
+                    isProgramRunning = false
                     println("Program finished with status: ${getBlockStatus()}")
                     adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
                     adapterBlocks.notifyItemChanged(indexListBlocks)

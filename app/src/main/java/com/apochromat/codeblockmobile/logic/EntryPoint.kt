@@ -24,4 +24,11 @@ class EntryPoint : Block() {
             callStack.pop().run()
         }
     }
+
+    override fun kickRunning() {
+        super.kickRunning()
+        if (!isProgramRunning) return
+        if (callStack.empty()) return
+        callStack.pop().run()
+    }
 }
