@@ -11,12 +11,12 @@ class UndefinedArray : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("DefinedVariable")
+        setBlockType("UndefinedArray")
     }
-//    private fun initVar(){
-//        inputName = inputLeftEdit
-//    хмм, новые поля)
-//    }
+    private fun initVar(){
+        inputName = inputLeftEdit
+        inputSize = inputRightEdit
+    }
 
     fun setBlockInput(_name: String, _size: String) {
         inputName = _name
@@ -24,7 +24,7 @@ class UndefinedArray : Block() {
     }
 
     override fun executeBlock() {
-//        initVar()
+        initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
             setBlockStatus("Incorrect naming $inputName")

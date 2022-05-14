@@ -85,7 +85,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:ems="10"
-            android:hint="@string/message"
+            android:hint="@string/name_var"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
             android:textColor="@color/dark_grey"
@@ -106,6 +106,21 @@
             app:layout_constraintStart_toEndOf="@+id/editLeft"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.215" />
+        <EditText
+            android:id="@+id/editMedium"
+            android:layout_width="137dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:hint="@string/sizeArray"
+            android:inputType="textPersonName"
+            android:textColor="@color/dark_grey"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.931"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.274" />
     </RelativeLayout>
 
 

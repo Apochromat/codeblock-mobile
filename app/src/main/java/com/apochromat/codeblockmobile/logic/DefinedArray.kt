@@ -13,13 +13,13 @@ class DefinedArray : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("DefinedVariable")
+        setBlockType("DefinedArray")
     }
-//    private fun initVar(){
-//        inputName = inputLeftEdit
-//        inputValue = inputRightEdit
-//    хмм, новые поля)
-//    }
+    private fun initVar(){
+        inputName = inputLeftEdit
+        inputSize = inputMediumEdit
+        inputValues = inputRightEdit
+    }
 
     fun setBlockInput(_name: String, _values: String, _size: String) {
         inputName = _name
@@ -28,7 +28,7 @@ class DefinedArray : Block() {
     }
 
     override fun executeBlock() {
-//        initVar()
+        initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
             setBlockStatus("Incorrect naming $inputName")

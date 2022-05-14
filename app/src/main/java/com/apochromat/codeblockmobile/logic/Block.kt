@@ -30,6 +30,7 @@ open class Block {
     // Переменные с данными
 
     var inputLeftEdit: String = ""
+    var inputMediumEdit: String = ""
     var inputRightEdit: String = ""
     var inputComparator: String = ">="
     var indexComparator: Int = 0
@@ -47,6 +48,7 @@ open class Block {
     lateinit var holder : BlocksAdapter.ViewHolder
     lateinit var activity: ProjectActivity
 
+    var crutch = true
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null

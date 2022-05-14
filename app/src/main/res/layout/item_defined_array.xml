@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:layout_margin="5dp"
-    android:background="@drawable/shape_cycle">
+    android:background="@drawable/shape_variable">
     <TextView
         android:id="@+id/textType"
         android:layout_width="177dp"
@@ -37,18 +37,18 @@
 
     <EditText
         android:id="@+id/editLeft"
-        android:layout_width="277dp"
-        android:layout_height="54dp"
+        android:layout_width="204dp"
+        android:layout_height="49dp"
         android:ems="10"
-        android:hint="@string/expression_one"
+        android:hint="@string/name"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintHorizontal_bias="0.092"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintVertical_bias="0.262" />
 
     <Spinner
         android:id="@+id/spinnerComparator"
@@ -56,6 +56,7 @@
         android:layout_height="53dp"
         android:layout_marginStart="1dp"
         android:entries="@array/thins"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -65,18 +66,18 @@
 
     <EditText
         android:id="@+id/editRight"
-        android:layout_width="277dp"
-        android:layout_height="48dp"
+        android:layout_width="356dp"
+        android:layout_height="49dp"
         android:ems="10"
-        android:hint="@string/expression_two"
+        android:hint="@string/value"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintVertical_bias="0.955" />
 
     <EditText
         android:id="@+id/editMedium"
@@ -86,7 +87,6 @@
         android:hint="@string/sizeArray"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.931"

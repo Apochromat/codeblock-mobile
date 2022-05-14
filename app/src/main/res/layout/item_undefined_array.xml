@@ -10,7 +10,7 @@
         android:id="@+id/VarBlock"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/shape_console"
+        android:background="@drawable/shape_variable"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="34dp">
 
@@ -50,18 +50,18 @@
 
         <EditText
             android:id="@+id/editLeft"
-            android:layout_width="172dp"
-            android:layout_height="49dp"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="8dp"
             android:layout_marginTop="26dp"
-            android:layout_marginEnd="223dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="152dp"
+            android:layout_marginBottom="6dp"
             android:ems="10"
-            android:hint="@string/message"
+            android:hint="@string/name"
             android:imeOptions="actionNext"
             android:inputType="textPersonName"
             android:textColor="@color/dark_grey"
@@ -74,18 +74,18 @@
 
         <EditText
             android:id="@+id/editRight"
-            android:layout_width="216dp"
-            android:layout_height="49dp"
+            android:layout_width="144dp"
+            android:layout_height="48dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="180dp"
+            android:layout_marginStart="246dp"
             android:layout_marginTop="26dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="6dp"
             android:ems="10"
-            android:hint="@string/expression"
+            android:hint="@string/sizeArray"
             android:imeOptions="actionDone"
             android:inputType="textPersonName"
             android:textColor="@color/dark_grey"
@@ -106,6 +106,7 @@
             app:layout_constraintStart_toEndOf="@+id/editLeft"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.215" />
+
         <EditText
             android:id="@+id/editMedium"
             android:layout_width="137dp"

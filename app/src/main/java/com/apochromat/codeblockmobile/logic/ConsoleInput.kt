@@ -37,8 +37,8 @@ class ConsoleInput : Block() {
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_entry, null)
         val dialog = builder.create()
 
-        dialog.setTitle(message)
-        dialog.setMessage(name)
+        dialog.setTitle("Введите значение")
+        dialog.setMessage(message)
         dialog.setView(view)
         val buttonEdit = view.findViewById<Button>(R.id.buttonEditDialog)
         val editVar = view.findViewById<EditText>(R.id.editVarDialog)

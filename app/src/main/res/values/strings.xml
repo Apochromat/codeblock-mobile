@@ -25,6 +25,8 @@
     <string name="name_var">Название переменной</string>
     <string name="value">Значение</string>
     <string name="message">Сообщение</string>
+    <string name="expression">Выражение</string>
+    <string name="sizeArray">Размер</string>
 
 
     <string name="block_begin">begin</string>
@@ -33,6 +35,8 @@
 
     <string name="blockMenu_defined_var">def var</string>
     <string name="blockMenu_undefined_var">undef var</string>
+    <string name="blockMenu_defined_array">def arr</string>
+    <string name="blockMenu_undefined_array">undef arr</string>
     <string name="blockMenu_assignment">add val</string>
     <string name="blockMenu_condition_if">if</string>
     <string name="blockMenu_condition_if_else">if-else</string>

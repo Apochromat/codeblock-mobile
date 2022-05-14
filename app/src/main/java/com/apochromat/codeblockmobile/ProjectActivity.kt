@@ -74,6 +74,12 @@ class ProjectActivity : AppCompatActivity() {
             buttonAssignment.setOnClickListener{
                 createAssignment()
             }
+            buttonDefinedArray.setOnClickListener{
+                createDefinedArray()
+            }
+            buttonUndefinedArray.setOnClickListener{
+                createUndefinedArray()
+            }
             buttonConditionIf.setOnClickListener{
                 createConditionIf()
             }
@@ -160,6 +166,22 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size - 2].adapterBlocks = blocksAdapter
         listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
         listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
+    }
+
+    fun createDefinedArray() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(DefinedArray())
+        listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
+    }
+
+    fun createUndefinedArray() {
+        bindingClass.blocksRV.scrollToPosition(listBlocks.size)
+        blocksAdapter.saveAllData()
+        blocksAdapter.addBlock(UndefinedArray())
+        listBlocks[listBlocks.size-1].adapterConsole = consoleAdapter
+        listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
     }
 
     fun createDefinedVar() {
@@ -505,6 +527,7 @@ class ProjectActivity : AppCompatActivity() {
             else if (listBlocks[i].getBlockType() == "ConditionIf" ||
                 listBlocks[i].getBlockType() == "ConditionIfElse" ||
                 listBlocks[i].getBlockType() == "CycleWhile") {
+
                 val temp : Int
                 if(listBlocks[i].getBlockType() == "ConditionIfElse")
                     temp = checkIfElse(i)
@@ -534,6 +557,7 @@ class ProjectActivity : AppCompatActivity() {
         blocksAdapter.saveAllData()
         for (i in 0 until listBlocks.size){
             listBlocks[i].indexListBlocks = i
+            listBlocks[i].crutch = true
             if (listBlocks[i].status != "OK"){
                 listBlocks[i].status = "OK"
                 blocksAdapter.notifyItemChanged(i)

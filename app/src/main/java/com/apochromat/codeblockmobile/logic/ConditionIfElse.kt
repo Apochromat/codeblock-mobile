@@ -22,6 +22,7 @@ class ConditionIfElse : Block() {
         end.adapterConsole = this.adapterConsole
         beginElse.adapterConsole = this.adapterConsole
         endElse.adapterConsole = this.adapterConsole
+        exit = Exit()
         exit.adapterConsole = this.adapterConsole
         begin.adapterBlocks = this.adapterBlocks
         end.adapterBlocks = this.adapterBlocks
@@ -42,7 +43,7 @@ class ConditionIfElse : Block() {
     }
 
     override fun executeBlock() {
-        initVar()
+        if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         connectBlocks(endElse, exit, strong = true, clear = false)
         

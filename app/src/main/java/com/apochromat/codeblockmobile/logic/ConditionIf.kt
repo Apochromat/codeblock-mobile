@@ -25,7 +25,8 @@ class ConditionIf : Block() {
         begin.adapterBlocks = this.adapterBlocks
         end.adapterBlocks = this.adapterBlocks
         exit.adapterBlocks = this.adapterBlocks
-    }
+       crutch = false
+   }
 
     fun setBlockInput(
         _expressionLeft: String,
@@ -38,7 +39,7 @@ class ConditionIf : Block() {
     }
 
     override fun executeBlock() {
-        initVar()
+        if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin && getNextBlock() != null)

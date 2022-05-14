@@ -77,6 +77,30 @@
                     android:textColor="@color/dark_grey" />
 
                 <Button
+                    android:id="@+id/buttonDefinedArray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/color_var"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_defined_array"
+                    android:textColor="@color/dark_grey" />
+
+                <Button
+                    android:id="@+id/buttonUndefinedArray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/color_var"
+                    android:insetLeft="5dp"
+                    android:insetRight="2.5dp"
+                    android:insetBottom="8dp"
+                    android:text="@string/blockMenu_undefined_array"
+                    android:textColor="@color/dark_grey" />
+
+                <Button
                     android:id="@+id/buttonConditionIf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
