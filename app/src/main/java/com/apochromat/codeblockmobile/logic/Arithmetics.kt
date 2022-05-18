@@ -1,7 +1,7 @@
 package com.apochromat.codeblockmobile.logic
 
 import java.util.*
-import kotlin.math.exp
+import kotlin.math.*
 
 fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
     val exp = expression.replace("\\s".toRegex(), "")
@@ -21,6 +21,7 @@ fun arithmetics(heap: Heap, expression: String): Pair<String, Int> {
 
 fun getPriority(token: Char): Int {
     return when (token) {
+        '#','^' -> 4
         '*', '/', '%' -> 3
         '+', '-' -> 2
         '(' -> 1
@@ -38,7 +39,7 @@ fun expressionToRPN(expression: String): String {
         when (priority) {
             0 -> current += expression[i]
             1 -> stack.push(expression[i])
-            2, 3 -> {
+            2, 3,4 -> {
                 current += " "
                 while (!stack.empty()) {
                     if ((getPriority(stack.peek()) >= priority)) current += stack.pop()
@@ -87,6 +88,25 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
                 val a: Int = stack.pop()
                 val b: Int = stack.pop()
                 when (rpn[i]) {
+                    '^' ->{
+                        val result = b.toDouble().pow(a).toLong()
+                        if(result>=2147483647){
+                            return Pair("Memory limit", 0)
+                        }
+                        stack.push(result.toInt())
+                    }
+                    '#' ->{
+                        val step =1/a.toDouble()
+                        val result = b.toDouble().pow(step).toLong()
+
+                        if (b<0){
+                            return Pair("Root of a negative number",0)
+                        }
+                        if(result>=2147483647){
+                            return Pair("Memory limit", 0)
+                        }
+                        stack.push(result.toInt())
+                    }
                     '+' -> stack.push(b + a)
                     '-' -> stack.push(b - a)
                     '*' -> stack.push(b * a)
@@ -118,16 +138,15 @@ fun rpnToAnswer(rpn: String): Pair<String, Int> {
 }
 
 fun lineCheck(string: String): Pair<String, Int> {
-    var str = string.replace("[A-Za-z-+*/0-9()%_\\[\\]]".toRegex(), "")
+    var str = string.replace("[A-Za-z-+*/0-9()%_^#\\[\\]]".toRegex(), "")
     if (str.isNotEmpty()) {
         return Pair("Unexpected Symbol", 0)
     }
-    val reg = "([-+%* ]+[0-9_]+[A_Za-z_]+[0-9]*[-+%* ]*)|(\\b[\\^0-9_]+[A-Za-z_]+[0-9]*)|(\\b[\\^_][0-9]+)".toRegex()
-    //println(reg.find(string)?.value)
+    val reg = "([-+%#^ ]+[0-9_]+[A_Za-z_]+[0-9]*[-+%*#^ ]*)|(\\b[0-9_]+[A-Za-z_]+[0-9]*)|(\\b[_][0-9]+)".toRegex()
     if(reg.find(string)!=null){
         return Pair("Incorrect Expression",0)
     }
-    str=string.replace("[A-Za-z-+*/0-9%_\\[\\]]".toRegex(), "")
+    str=string.replace("[A-Za-z-+*/0-9%^#_\\[\\]]".toRegex(), "")
     val scob1=str.replace("\\(".toRegex(), "")
     val scob2 =str.replace("\\)".toRegex(), "")
     if (scob1.length!=scob2.length) {
@@ -139,7 +158,7 @@ fun lineCheck(string: String): Pair<String, Int> {
 fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     var exp = expression
     var preparedExpression = String()
-    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +%*/_-]*]".toRegex();
+    val regArr="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +%*/_#^-]*]".toRegex();
     var array = regArr.find(exp);
     while (array!=null) {
         val (arrName, arrIndex) = indexCount(heap, array.value)
@@ -186,11 +205,10 @@ fun preparingExpression(heap: Heap, expression: String): Pair<String, Int> {
     return Pair(preparedExpression, 1)
 }
 fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
-    val arr="[A-Za-z]+[\\[(\\d+_*)\\]]".toRegex();
+    val arr="[A-Za-z]+[\\[(\\d+_*^#)\\]]".toRegex();
     val varieble = "[A-Za-z]+[A-Za-z0-9_]*".toRegex();
 
     if(arr.find(expression)!=null){
-      // println(expression)
         val(name, index)= indexCount(heap,expression);
         if (index==-1){
             return Triple(name, "NaN", 0);
@@ -200,7 +218,6 @@ fun defineInput(heap:Heap, expression: String):Triple<String,String, Int>{
         }
     }
     if(varieble.find(expression)!=null){
-     //   var value = heap.getVariableValue(expression);
         if(heap.isVariableExist(expression)) {
             return Triple("Variable", expression, 0);
         }
@@ -211,9 +228,9 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
     var array:String=arr;
     var index=-1;
     var arrname="";
-    val reg="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/%_-]*]".toRegex();
+    val reg="([A-Za-z]+[A-Za-z0-9_]*)\\[[A-Za-z0-9 +*/%_^#-]*]".toRegex();
     while (reg.find(array)!=null){
-        val arg="\\[[A-Za-z0-9 +*/_%-]*]".toRegex().find(array);
+        val arg="\\[[A-Za-z0-9 +*/_%^#-]*]".toRegex().find(array);
         arrname="[A-Za-z]+[A-Za-z0-9_]*".toRegex().find(reg.find(array)!!.value)!!.value;
         if(arg!=null) {
             var arm=arg.value.replace("[","");
@@ -232,7 +249,7 @@ fun indexCount(heap:Heap, arr:String):Pair<String,Int>{
             if(status!="OK"){
                 return Pair(status,-1)
             }
-            var arrayValue=heap.getArrayValue(arrname,rez);
+            val arrayValue=heap.getArrayValue(arrname,rez);
             array=array.replace(reg.find(array)!!.value, arrayValue.toString());
 
         }
