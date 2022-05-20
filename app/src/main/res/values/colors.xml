@@ -11,8 +11,9 @@
     <color name="dark_grey">#222222</color>
     <color name="cian">#276474</color>
     <color name="color_var">#5fb6a2</color>
+    <color name="color_var_arr">#0BAC87</color>
     <color name="color_assignment">#db8483</color>
     <color name="color_condition">#e29956</color>
     <color name="color_cycle">#00bbde</color>
-    <color name="color_console">#0F59DF</color>
+    <color name="color_console">#1261F0</color>
 </resources>

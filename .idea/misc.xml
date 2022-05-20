@@ -14,6 +14,7 @@
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/shape_console.xml" value="0.1935" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/shape_cycle.xml" value="0.174" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/shape_end.xml" value="0.1935" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/drawable/shape_variable_array.xml" value="0.1935" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_authors.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_console.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
@@ -31,12 +32,12 @@
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_begin_program.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_condition_if.xml" value="0.1" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_condition_if_else.xml" value="0.27447916666666666" />
-        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_bar.xml" value="0.6" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_bar.xml" value="0.1" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_input.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_input_one.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_console_output.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_cycle_while.xml" value="0.27447916666666666" />
-        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_defined_array.xml" value="0.536" />
+        <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_defined_array.xml" value="0.8800000000000001" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_defined_var.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_end.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Alex/Documents/GitHub/codeblock-mobile/app/src/main/res/layout/item_entry_point.xml" value="0.27447916666666666" />

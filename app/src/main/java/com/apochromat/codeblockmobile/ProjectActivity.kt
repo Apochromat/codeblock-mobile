@@ -99,7 +99,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    fun createConsoleInput() {
+    private fun createConsoleInput() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(ConsoleInput())
@@ -107,7 +107,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
     }
 
-    fun createConsoleOutput() {
+    private fun createConsoleOutput() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(ConsoleOutput())
@@ -115,7 +115,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
     }
 
-    fun createCycleWhile() {
+    private fun createCycleWhile() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size + 2)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(CycleWhile())
@@ -152,7 +152,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    fun createConditionIf() {
+    private fun createConditionIf() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size + 2)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(ConditionIf())
@@ -169,7 +169,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size - 1].adapterConsole = consoleAdapter
     }
 
-    fun createDefinedArray() {
+    private fun createDefinedArray() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(DefinedArray())
@@ -177,7 +177,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
     }
 
-    fun createUndefinedArray() {
+    private fun createUndefinedArray() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(UndefinedArray())
@@ -185,7 +185,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
     }
 
-    fun createDefinedVar() {
+    private fun createDefinedVar() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(DefinedVariable())
@@ -193,7 +193,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size-1].adapterBlocks = blocksAdapter
     }
 
-    fun createUndefinedVar() {
+    private fun createUndefinedVar() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(UndefinedVariable())
@@ -201,7 +201,7 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[listBlocks.size - 1].adapterBlocks = blocksAdapter
     }
 
-    fun createAssignment() {
+    private fun createAssignment() {
         bindingClass.blocksRV.scrollToPosition(listBlocks.size)
         blocksAdapter.saveAllData()
         blocksAdapter.addBlock(Assignment())
@@ -525,6 +525,7 @@ class ProjectActivity : AppCompatActivity() {
         }
         Block.isProgramRunning = true
         listBlocks[0].run()
+        bindingClass.drawer.openDrawer(GravityCompat.START)
     }
 
     private fun printAllConnections(){

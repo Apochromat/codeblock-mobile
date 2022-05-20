@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="18dp">
+    android:layout_margin="10dp">
 
     <RelativeLayout
         android:id="@+id/content"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
-            android:text="TextView"
+            android:text=""
             android:textAlignment="textStart"
             android:textColor="@color/white" />
     </RelativeLayout>
