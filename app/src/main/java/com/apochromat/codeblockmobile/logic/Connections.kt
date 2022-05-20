@@ -8,11 +8,11 @@ package com.apochromat.codeblockmobile.logic
 fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
     if (blockFrom == blockTo) return
     if (clear) {
-        blockFrom.getNextBlock()?.setPrevBlock(null)
-        blockTo.getPrevBlock()?.setNextBlock(null)
+        blockFrom.nextBlock?.prevBlock = null
+        blockTo.prevBlock?.nextBlock = null
     }
-    blockFrom.setNextBlock(blockTo)
-    blockTo.setPrevBlock(blockFrom)
+    blockFrom.nextBlock = blockTo
+    blockTo.prevBlock = blockFrom
 }
 
 /**
@@ -21,6 +21,6 @@ fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clea
  **/
 fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     if (blockFrom == blockTo) return
-    blockFrom.setNextBlock(null)
-    blockTo.setPrevBlock(null)
+    blockFrom.nextBlock = null
+    blockTo.prevBlock = null
 }

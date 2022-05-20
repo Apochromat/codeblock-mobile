@@ -10,7 +10,7 @@ class CycleWhile : Block() {
     private var expressionComparator: String = ">="
 
     init {
-        setBlockType("CycleWhile")
+        type = "CycleWhile"
     }
 
     fun setBlockInput(
@@ -42,13 +42,13 @@ class CycleWhile : Block() {
         super.executeBlock()
         if (crutch) initVar()
         connectBlocks(end, this, strong = false, clear = false)
-        getNextBlock()?.let {
-            if (getNextBlock() != begin && getNextBlock() != exit && getNextBlock() != end && getNextBlock() != null)
+        nextBlock?.let {
+            if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
         if (expressionComparator !in allComparators) {
-            setBlockStatus(invalidComparator())
+            status = invalidComparator()
             return
         }
         val calculateLeft = arithmetics(accessHeap(), expressionLeft)
@@ -66,6 +66,6 @@ class CycleWhile : Block() {
             }
             return
         }
-        setBlockStatus(if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first)
+        status = if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
     }
 }

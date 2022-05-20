@@ -9,7 +9,7 @@ class ConsoleOutput : Block() {
     private var expression: String = ""
 
     init {
-        setBlockType("ConsoleOutput")
+        type = "ConsoleOutput"
     }
     private fun initVar(){
         message = if (inputLeftEdit == "") "" else "$inputLeftEdit "
@@ -29,7 +29,7 @@ class ConsoleOutput : Block() {
             return
         }
         val calculated = arithmetics(heap, expression)
-        setBlockStatus(calculated.first)
+        status = calculated.first
         if (calculated.first != ok()) return
         adapterConsole.addMessage("$message${calculated.second}")
     }

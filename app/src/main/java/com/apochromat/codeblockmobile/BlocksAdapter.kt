@@ -21,7 +21,7 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
     }
 
     override fun getItemViewType(position: Int): Int {
-        val viewType = when(listBlocks[position].getBlockType()){
+        val viewType = when(listBlocks[position].type){
             "EntryPoint" -> R.layout.item_entry_point
             "UndefinedVariable" -> R.layout.item_undefined_var
             "UndefinedArray" -> R.layout.item_undefined_array
@@ -48,8 +48,8 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         listBlocks[position].holder = holder
-        if (listBlocks[position].getBlockType() == "EntryPoint" || listBlocks[position].getBlockType() == "Begin" ||
-            listBlocks[position].getBlockType() == "End" || listBlocks[position].getBlockType() == "Else"){
+        if (listBlocks[position].type == "EntryPoint" || listBlocks[position].type== "Begin" ||
+            listBlocks[position].type == "End" || listBlocks[position].type == "Else"){
             return
         }
         holder.editLeft.setOnEditorActionListener { _, actionId, _ ->
@@ -65,8 +65,8 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             false
         }
 
-        holder.textType.text = listBlocks[position].getBlockType()
-        holder.textStatus.text = listBlocks[position].getBlockStatus()
+        holder.textType.text = listBlocks[position].type
+        holder.textStatus.text = listBlocks[position].status
 
         holder.editLeft.setText(listBlocks[position].inputLeftEdit)
         holder.editMedium.setText(listBlocks[position].inputMediumEdit)

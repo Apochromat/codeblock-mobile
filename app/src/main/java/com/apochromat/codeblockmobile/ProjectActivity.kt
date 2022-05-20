@@ -40,7 +40,7 @@ class ProjectActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "newProject"
         bindingClass.blocksRV.isDrawingCacheEnabled = true
-        bindingClass.blocksRV.setItemViewCacheSize(100);
+        bindingClass.blocksRV.setItemViewCacheSize(100)
 
         createConsoleView()
         createBlocksView()
@@ -48,7 +48,6 @@ class ProjectActivity : AppCompatActivity() {
         init()
 
         mainHandler = Handler(Looper.getMainLooper())
-
     }
     fun kicker() {
         listBlocks[0].kickRunning()
@@ -312,16 +311,16 @@ class ProjectActivity : AppCompatActivity() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position =  viewHolder.adapterPosition
             if (viewHolder.adapterPosition == 0 ||
-                listBlocks[position].getBlockType() == "Begin" ||
-                listBlocks[position].getBlockType() == "End" ||
-                listBlocks[position].getBlockType() == "Else"   ){
+                listBlocks[position].type == "Begin" ||
+                listBlocks[position].type == "End" ||
+                listBlocks[position].type == "Else"){
                 blocksAdapter.notifyItemRemoved(position)
                 return
             }
-            else if( listBlocks[position].getBlockType() == "ConditionIf" ||
-                listBlocks[position].getBlockType() == "ConditionIfElse" ||
-                listBlocks[position].getBlockType() == "CycleWhile"){
-                    val type = listBlocks[position].getBlockType()
+            else if( listBlocks[position].type == "ConditionIf" ||
+                listBlocks[position].type == "ConditionIfElse" ||
+                listBlocks[position].type == "CycleWhile"){
+                    val type = listBlocks[position].type
                 listBlocks.remove(listBlocks[position])
                 listBlocks.remove(listBlocks[position])
                 blocksAdapter.notifyItemRemoved(position)
@@ -348,13 +347,13 @@ class ProjectActivity : AppCompatActivity() {
     }
     private fun findNearEnd(start : Int) : Int{
         for (i in start until listBlocks.size)
-            if (listBlocks[i].getBlockType() == "End")
+            if (listBlocks[i].type == "End")
                 return i
         return -1
     }
     private fun findNearElse(start : Int) : Int{
         for (i in start until listBlocks.size)
-            if (listBlocks[i].getBlockType() == "Else")
+            if (listBlocks[i].type == "Else")
                 return i
         return -1
     }
@@ -386,28 +385,27 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun check(index : Int) : Pair<Int, Int>{
         var i = index
-        while (listBlocks[i+1].getBlockType() != "End"){
+        while (listBlocks[i+1].type != "End"){
             if (i+1 == listBlocks.size) {
                 consoleAdapter.addMessage("В строке $i ожидался End")
                 return Pair(0, 0)
             }
-            if (listBlocks[i].getBlockType() == "ConditionIf" ||
-                listBlocks[i].getBlockType() == "ConditionIfElse" ||
-                listBlocks[i].getBlockType() == "CycleWhile"){
-                val temp : Int
-                if (listBlocks[i].getBlockType() == "ConditionIfElse")
-                    temp = checkIfElse(i)
+            if (listBlocks[i].type == "ConditionIf" ||
+                listBlocks[i].type == "ConditionIfElse" ||
+                listBlocks[i].type == "CycleWhile"){
+                val temp = if (listBlocks[i].type == "ConditionIfElse")
+                    checkIfElse(i)
                 else
-                    temp = checkIf(i)
+                    checkIf(i)
 
                 if(temp == 0)
                     return Pair(0, 0)
                 else {
-                    if (temp < listBlocks.size && listBlocks[temp].getBlockType() != "End"){
+                    if (temp < listBlocks.size && listBlocks[temp].type != "End"){
                         connectBlocks(listBlocks[i], listBlocks[temp])
                         i = temp
                     }
-                    else if(temp < listBlocks.size && listBlocks[temp].getBlockType() == "End"){
+                    else if(temp < listBlocks.size && listBlocks[temp].type == "End"){
                         return Pair(i, temp)
                     }
                     else if(temp >= listBlocks.size){
@@ -428,14 +426,14 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun checkIfElse(index : Int): Int{
         var i = index + 1
-        if (listBlocks[i].getBlockType() == "Begin"){
+        if (listBlocks[i].type == "Begin"){
             i += 1
-            if (listBlocks[i].getBlockType() != "End"){
+            if (listBlocks[i].type != "End"){
                 connectBlocks(listBlocks[index].begin, listBlocks[i])
                 val (j, temp) = check(i)
                 if (j == 0)
                     return 0
-                else if (listBlocks[temp].getBlockType() == "End") {
+                else if (listBlocks[temp].type == "End") {
                     connectBlocks(listBlocks[j], listBlocks[index].end)
                     i = temp + 1
                 }
@@ -448,16 +446,16 @@ class ProjectActivity : AppCompatActivity() {
                 connectBlocks(listBlocks[index].begin, listBlocks[index].end)
                 i += 1
             }
-            if (listBlocks[i].getBlockType() == "Else"){
+            if (listBlocks[i].type == "Else"){
                 i += 1
-                if (listBlocks[i].getBlockType() == "Begin"){
+                if (listBlocks[i].type == "Begin"){
                     i += 1
-                    if (listBlocks[i].getBlockType() != "End"){
+                    if (listBlocks[i].type != "End"){
                         connectBlocks(listBlocks[index].beginElse, listBlocks[i])
                         val (i, temp) = check(i)
                         if (i == 0)
                             return 0
-                        else if (listBlocks[temp].getBlockType() == "End") {
+                        else if (listBlocks[temp].type == "End") {
                             connectBlocks(listBlocks[i], listBlocks[index].end)
                             return temp + 1
                         }
@@ -486,9 +484,9 @@ class ProjectActivity : AppCompatActivity() {
 
     private fun checkIf(index : Int): Int{
         var i = index + 1
-        if (listBlocks[i].getBlockType() == "Begin"){
+        if (listBlocks[i].type == "Begin"){
             i += 1
-            if (listBlocks[i].getBlockType() == "End"){
+            if (listBlocks[i].type == "End"){
                 connectBlocks(listBlocks[index].begin, listBlocks[index].end)
                 return i + 1
             }
@@ -496,7 +494,7 @@ class ProjectActivity : AppCompatActivity() {
             val (i, temp) = check(i)
             if (i == 0)
                 return 0
-            else if (listBlocks[temp].getBlockType() == "End") {
+            else if (listBlocks[temp].type == "End") {
                 connectBlocks(listBlocks[i], listBlocks[index].end)
                 return temp + 1
             }
@@ -512,29 +510,28 @@ class ProjectActivity : AppCompatActivity() {
     private fun connectionBlocks() : Boolean{
         var i = 0
         while (i < listBlocks.size-1) {
-            if(listBlocks[i].getBlockType() == "Begin"){
+            if(listBlocks[i].type == "Begin"){
                 consoleAdapter.addMessage("Обнаружен не к месту Begin в строке $i")
                 return false
             }
-            else if(listBlocks[i].getBlockType() == "End"){
+            else if(listBlocks[i].type == "End"){
                 consoleAdapter.addMessage("Обнаружен не к месту End в строке $i")
                 return false
             }
-            else if(listBlocks[i].getBlockType() == "Else"){
+            else if(listBlocks[i].type == "Else"){
                 consoleAdapter.addMessage("Обнаружен не к месту Else в строке $i")
                 return false
             }
-            else if (listBlocks[i].getBlockType() == "ConditionIf" ||
-                listBlocks[i].getBlockType() == "ConditionIfElse" ||
-                listBlocks[i].getBlockType() == "CycleWhile") {
+            else if (listBlocks[i].type == "ConditionIf" ||
+                listBlocks[i].type == "ConditionIfElse" ||
+                listBlocks[i].type == "CycleWhile") {
 
-                val temp : Int
-                if(listBlocks[i].getBlockType() == "ConditionIfElse")
-                    temp = checkIfElse(i)
+                val temp = if (listBlocks[i].type == "ConditionIfElse")
+                    checkIfElse(i)
                 else
-                    temp = checkIf(i)
-                if(temp == 0)
-                    return false
+                    checkIf(i)
+
+                if (temp == 0) return false
                 else {
                     if (temp < listBlocks.size){
                         connectBlocks(listBlocks[i], listBlocks[temp])
@@ -559,17 +556,17 @@ class ProjectActivity : AppCompatActivity() {
         for (i in 0 until listBlocks.size){
             listBlocks[i].indexListBlocks = i
             listBlocks[i].crutch = true
-            if (listBlocks[i].status != "OK"){
-                listBlocks[i].status = "OK"
+            if (listBlocks[i].status != ok()){
+                listBlocks[i].status = ok()
                 blocksAdapter.notifyItemChanged(i)
             }
-            if (listBlocks[i].getBlockType() == "ConsoleInput"){
+            if (listBlocks[i].type == "ConsoleInput"){
                 listBlocks[i].activity = this
             }
 
         }
         if (!connectionBlocks()) {
-            consoleAdapter.addMessage("Program finished with status: Fail")
+            consoleAdapter.addMessage(programFinish("Fail"))
             return
         }
         //printAllConnections()
@@ -577,22 +574,20 @@ class ProjectActivity : AppCompatActivity() {
         listBlocks[0].run()
         //printAllConnections()
         //disconnectAllBlocks()
-
-
     }
 
     private fun printAllConnections(){
         for (i in 0 until listBlocks.size){
-            consoleAdapter.addMessage("$i "+ (listBlocks[i].getPrevBlock()
-                ?.getBlockType() ?: "null") + "-"+ listBlocks[i].getBlockType() + "-" +
-                    (listBlocks[i].getNextBlock()?.getBlockType() ?: "null"))
+            consoleAdapter.addMessage("$i "+ (listBlocks[i].prevBlock
+                ?.type?: "null") + "-"+ listBlocks[i].type + "-" +
+                    (listBlocks[i].nextBlock?.type?: "null"))
 
         }
     }
     private fun disconnectAllBlocks(){
         for (i in 0 until listBlocks.size){
-            listBlocks[i].setPrevBlock(null)
-            listBlocks[i].setNextBlock(null)
+            listBlocks[i].prevBlock = null
+            listBlocks[i].nextBlock = null
             listBlocks[i].begin = Begin()
             listBlocks[i].end = End()
             listBlocks[i].beginElse = Begin()

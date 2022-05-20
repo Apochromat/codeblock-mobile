@@ -13,7 +13,7 @@ class DefinedArray : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("DefinedArray")
+        type = "DefinedArray"
     }
     private fun initVar(){
         inputName = inputLeftEdit
@@ -32,15 +32,15 @@ class DefinedArray : Block() {
         initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
-            setBlockStatus(incorrectNaming(inputName))
+            status = incorrectNaming(inputName)
             return
         }
         if (calcSize.first != ok() || calcSize.second < 1) {
-            setBlockStatus(incorrectSize(inputSize))
+            status = incorrectSize(inputSize)
             return
         }
         if (heap.isVariableExist(inputName)) {
-            setBlockStatus(typeMismatchVariable(inputName))
+            status = typeMismatchVariable(inputName)
             return
         }
         name = inputName
@@ -49,13 +49,13 @@ class DefinedArray : Block() {
         heap.createArray(name, size)
         val valuesList = stringToList(values)
         if (valuesList.size != size) {
-            setBlockStatus(sizesMismatch())
+            status = sizesMismatch()
             return
         }
         for (i in valuesList.indices) {
             val calcValue = arithmetics(heap, valuesList[i])
             if (calcValue.first != ok()) {
-                setBlockStatus(incorrectValue(valuesList[i]))
+                status = incorrectValue(valuesList[i])
                 return
             }
             heap.setArrayValue(name, i, calcValue.second)

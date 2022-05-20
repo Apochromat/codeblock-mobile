@@ -5,7 +5,7 @@ package com.apochromat.codeblockmobile.logic
  **/
 class EntryPoint : Block() {
     init {
-        setBlockType("EntryPoint")
+        type = "EntryPoint"
     }
 
     override fun executeBlock() {

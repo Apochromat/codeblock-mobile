@@ -11,7 +11,7 @@ class Assignment : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("Assignment")
+        type = "Assignment"
     }
 
     private fun initVar(){
@@ -30,11 +30,11 @@ class Assignment : Block() {
         val obj = defineInput(heap, inputName)
         name = obj.second
         if (obj.first !in listOf(tagArray(), tagVariable())) {
-            setBlockStatus(obj.first)
+            status = obj.first
             return
         }
         val calculated = arithmetics(heap, inputValue)
-        setBlockStatus(calculated.first)
+        status = calculated.first
         if (calculated.first != ok()) return
         value = calculated.second
         when (obj.first) {

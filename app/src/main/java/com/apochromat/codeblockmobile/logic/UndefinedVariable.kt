@@ -8,7 +8,7 @@ class UndefinedVariable : Block() {
     private var inputNames: List<String> = listOf()
 
     init {
-        setBlockType("UndefinedVariable")
+        type = "UndefinedVariable"
     }
 
     private fun initVar(){
@@ -25,11 +25,11 @@ class UndefinedVariable : Block() {
         var flag = true
         for (el in inputNames) {
             if (heap.isArrayExist(el)) {
-                setBlockStatus(typeMismatchArray(el))
+                status = typeMismatchArray(el)
                 flag = false
             }
             if (!variableCheck(el)) {
-                setBlockStatus(incorrectNaming(el))
+                status = incorrectNaming(el)
                 flag = false
             }
         }

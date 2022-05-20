@@ -10,7 +10,7 @@ class ConditionIfElse : Block() {
     private var expressionComparator: String = ">="
 
     init {
-        setBlockType("ConditionIfElse")
+        type = "ConditionIfElse"
     }
 
     private fun initVar(){
@@ -47,14 +47,15 @@ class ConditionIfElse : Block() {
         if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         connectBlocks(endElse, exit, strong = true, clear = false)
-        
-        getNextBlock()?.let {
-            if (getNextBlock() != begin && getNextBlock() != beginElse)
+
+        nextBlock?.let {
+            if (nextBlock != begin && nextBlock != beginElse && nextBlock != exit &&
+                nextBlock != end && nextBlock != endElse && nextBlock != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
         if (expressionComparator !in allComparators) {
-            setBlockStatus(invalidComparator())
+            status = invalidComparator()
             return
         }
         val calculateLeft = arithmetics(accessHeap(), expressionLeft)
@@ -72,6 +73,6 @@ class ConditionIfElse : Block() {
             }
             return
         }
-        setBlockStatus(if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first)
+        status = if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
     }
 }

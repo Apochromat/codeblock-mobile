@@ -10,7 +10,7 @@ class ConditionIf : Block() {
     private var expressionComparator: String = ">="
 
     init {
-        setBlockType("ConditionIf")
+        type = "ConditionIf"
     }
    private fun initVar() {
      
@@ -42,13 +42,13 @@ class ConditionIf : Block() {
         super.executeBlock()
         if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
-        getNextBlock()?.let {
-            if (getNextBlock() != begin && getNextBlock() != exit && getNextBlock() != end && getNextBlock() != null)
+        nextBlock?.let {
+            if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
         if (expressionComparator !in allComparators) {
-            setBlockStatus(invalidComparator())
+            status = invalidComparator()
             return
         }
 
@@ -67,6 +67,6 @@ class ConditionIf : Block() {
             }
             return
         }
-        setBlockStatus(if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first)
+        status = if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
     }
 }

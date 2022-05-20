@@ -11,7 +11,7 @@ class UndefinedArray : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("UndefinedArray")
+        type = "UndefinedArray"
     }
     private fun initVar(){
         inputName = inputLeftEdit
@@ -28,15 +28,15 @@ class UndefinedArray : Block() {
         initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
-            setBlockStatus(incorrectNaming(inputName))
+            status = incorrectNaming(inputName)
             return
         }
         if (calcSize.first != ok() || calcSize.second < 1) {
-            setBlockStatus(incorrectSize(inputSize))
+            status = incorrectSize(inputSize)
             return
         }
         if (heap.isVariableExist(inputName)) {
-            setBlockStatus(typeMismatchVariable(inputName))
+            status = typeMismatchVariable(inputName)
             return
         }
         name = inputName

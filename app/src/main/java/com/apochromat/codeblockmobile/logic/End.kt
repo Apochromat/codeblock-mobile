@@ -5,6 +5,6 @@ package com.apochromat.codeblockmobile.logic
  **/
 class End : Block() {
     init {
-        setBlockType("End")
+        type = "End"
     }
 }

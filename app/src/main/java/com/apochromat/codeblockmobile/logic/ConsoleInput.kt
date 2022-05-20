@@ -17,13 +17,13 @@ class ConsoleInput : Block() {
     private var nextB: Block? = null
 
     init {
-        setBlockType("ConsoleInput")
+        type = "ConsoleInput"
     }
 
     fun initVar(){
         message = inputLeftEdit
         name = inputRightEdit
-        nextB = getNextBlock()
+        nextB = nextBlock
     }
 
     fun setBlockInput(_name: String, _message: String = "") {
@@ -60,21 +60,21 @@ class ConsoleInput : Block() {
         val obj = defineInput(heap, name)
         if (stringList.size > 1) {
             if (obj.first == tagVariable()) {
-                setBlockStatus(variableAssignSequence())
+                status = variableAssignSequence()
                 return
             }
             if (obj.first != tagArray()) {
-                setBlockStatus(obj.first)
+                status = obj.first
                 return
             }
             if (stringList.size != heap.getArraySize(obj.second)) {
-                setBlockStatus(sizesMismatch())
+                status = sizesMismatch()
                 return
             }
             for (i in stringList.indices) {
                 val calculated = arithmetics(heap, stringList[i])
                 if (calculated.first != ok()) {
-                    setBlockStatus(calculated.first)
+                    status = calculated.first
                     return
                 }
                 heap.setArrayValue(obj.second, i, calculated.second)
@@ -82,10 +82,10 @@ class ConsoleInput : Block() {
             return
         }
         val calculated = arithmetics(accessHeap(), valueVar)
-        setBlockStatus(calculated.first)
+        status = calculated.first
         if (calculated.first != ok()) return
         if (obj.first !in listOf(tagArray(), tagVariable())) {
-            setBlockStatus(obj.first)
+            status = obj.first
             return
         }
         value = calculated.second
@@ -107,7 +107,7 @@ class ConsoleInput : Block() {
                 adapterConsole.addMessage(programFinish(status))
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
-            getBlockStatus() == ok() -> {
+            status == ok() -> {
                 callStack.push(nextB)
             }
             else -> {

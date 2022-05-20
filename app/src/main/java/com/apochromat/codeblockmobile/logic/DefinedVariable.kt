@@ -11,7 +11,7 @@ class DefinedVariable : Block() {
     private var inputName: String = ""
 
     init {
-        setBlockType("DefinedVariable")
+        type = "DefinedVariable"
     }
     private fun initVar(){
         inputName = inputLeftEdit
@@ -27,15 +27,15 @@ class DefinedVariable : Block() {
         super.executeBlock()
         initVar()
         if (heap.isArrayExist(inputName)) {
-            setBlockStatus(typeMismatchArray(inputName))
+            status = typeMismatchArray(inputName)
             return
         }
         if (!variableCheck(inputName)) {
-            setBlockStatus(incorrectNaming(inputName))
+            status = incorrectNaming(inputName)
             return
         }
         val calculated = arithmetics(accessHeap(), inputValue)
-        setBlockStatus(calculated.first)
+        status = calculated.first
         name = inputName
         if (calculated.first == ok()) {
             value = calculated.second

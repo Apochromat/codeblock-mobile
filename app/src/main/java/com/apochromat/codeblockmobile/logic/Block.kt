@@ -42,50 +42,16 @@ open class Block {
     var crutch = true
 
     //  Ссылки на следующий и предыдущий блоки
-    private var nextBlock: Block? = null
-    private var prevBlock: Block? = null
+    var nextBlock: Block? = null
+    var prevBlock: Block? = null
 
     //  Тип, статус и идентификатор блока
-    private var type: String = ""
+    var type: String = ""
     var status: String = ok()
-
-    //  Операции с типом, статусом и идентификатором блока
-    fun setBlockType(input: String) {
-        type = input
-    }
-
-    fun getBlockType(): String {
-        return type
-    }
-
-    fun setBlockStatus(input: String) {
-        status = input
-    }
-
-    fun getBlockStatus(): String {
-        return status
-    }
 
     //  Получить доступ к хранилищу переменных
     fun accessHeap(): Heap {
         return heap
-    }
-
-    //  Операции с ссылками на предыдущий и следующий блоки
-    fun setNextBlock(block: Block?) {
-        nextBlock = block
-    }
-
-    fun getNextBlock(): Block? {
-        return nextBlock
-    }
-
-    fun setPrevBlock(block: Block?) {
-        prevBlock = block
-    }
-
-    fun getPrevBlock(): Block? {
-        return prevBlock
     }
 
     open fun executeBlock() {
@@ -94,19 +60,19 @@ open class Block {
     open fun kickRunning() {}
 
     open fun run() {
-        if (getBlockType() == "ConsoleInput"){
+        if (type == "ConsoleInput"){
             executeBlock()
         }
         else{
             executeBlock()
             when {
-                getNextBlock() == null -> {
+                nextBlock == null -> {
                     isProgramRunning = false
                     adapterConsole.addMessage(programFinish(status))
                     adapterBlocks.notifyItemChanged(indexListBlocks)
                 }
-                getBlockStatus() == ok() -> {
-                    callStack.push(getNextBlock())
+                status == ok() -> {
+                    callStack.push(nextBlock)
                 }
                 else -> {
                     isProgramRunning = false
