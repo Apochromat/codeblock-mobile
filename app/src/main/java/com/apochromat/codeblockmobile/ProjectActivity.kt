@@ -553,6 +553,7 @@ class ProjectActivity : AppCompatActivity() {
     }
 
     private fun runProject(listBlocks : ArrayList<Block>){
+        listBlocks[0].adapterBlocks = blocksAdapter
         consoleAdapter.clearListMessages()
         blocksAdapter.saveAllData()
         for (i in 0 until listBlocks.size){
