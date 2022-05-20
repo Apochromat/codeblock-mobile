@@ -52,16 +52,25 @@ class BlocksAdapter(private val listBlocks:ArrayList<Block>) : RecyclerView.Adap
             listBlocks[position].type == "End" || listBlocks[position].type == "Else"){
             return
         }
+        holder.editMedium.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+//                listBlocks[position].inputMediumEdit = holder.editMedium.text.toString()
+                holder.editMedium.clearFocus()
+            }
+            false
+        }
         holder.editLeft.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                listBlocks[position].inputLeftEdit = holder.editLeft.text.toString()
+//                listBlocks[position].inputLeftEdit = holder.editLeft.text.toString()
+                holder.editLeft.clearFocus()
             }
             false
         }
         holder.editRight.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                listBlocks[position].inputRightEdit = holder.editRight.text.toString()
-                holder.editRight.clearFocus()            }
+//                listBlocks[position].inputRightEdit = holder.editRight.text.toString()
+                holder.editRight.clearFocus()
+            }
             false
         }
 
