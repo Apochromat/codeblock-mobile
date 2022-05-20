@@ -85,7 +85,7 @@ class ConsoleInput : Block() {
                     status = calculated.first
                     return
                 }
-                heap.setArrayValue(obj.second, i, calculated.second)
+                heap.setArrayValue(name, i, calculated.second)
             }
             return
         }
