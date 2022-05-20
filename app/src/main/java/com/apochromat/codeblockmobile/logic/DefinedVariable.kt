@@ -24,18 +24,22 @@ class DefinedVariable : Block() {
     }
 
     override fun executeBlock() {
-
+        super.executeBlock()
         initVar()
-        if (variableCheck(inputName)) {
-            val calculated = arithmetics(accessHeap(), inputValue)
-            setBlockStatus(calculated.first)
-            name = inputName
-            if (calculated.first == "OK") {
-                value = calculated.second
-                accessHeap().setVariableValue(name, value)
-            }
-        } else {
-            setBlockStatus("Incorrect variable naming $inputName")
+        if (heap.isArrayExist(inputName)) {
+            setBlockStatus(typeMismatchArray(inputName))
+            return
+        }
+        if (!variableCheck(inputName)) {
+            setBlockStatus(incorrectNaming(inputName))
+            return
+        }
+        val calculated = arithmetics(accessHeap(), inputValue)
+        setBlockStatus(calculated.first)
+        name = inputName
+        if (calculated.first == ok()) {
+            value = calculated.second
+            accessHeap().setVariableValue(name, value)
         }
     }
 }

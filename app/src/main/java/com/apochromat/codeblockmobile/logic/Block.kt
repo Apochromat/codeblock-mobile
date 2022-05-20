@@ -15,20 +15,11 @@ open class Block {
         //  Хранилище переменных
         var heap: Heap = Heap()
 
-        //  Счетчик блоков
-        var counter: Int = 0
-
-        //  Словарь со всеми блоками
-        var allBlocks: MutableMap<Int, Block> = mutableMapOf()
-
-        //  Список устойчивых связей между блоками
-        var strongConnections: MutableList<Pair<Block, Block>> = mutableListOf()
-
         // Флаг работы программы
         var isProgramRunning = false
     }
-    // Переменные с данными
 
+    // Переменные с данными
     var inputLeftEdit: String = ""
     var inputMediumEdit: String = ""
     var inputRightEdit: String = ""
@@ -49,18 +40,14 @@ open class Block {
     lateinit var activity: ProjectActivity
 
     var crutch = true
+
     //  Ссылки на следующий и предыдущий блоки
     private var nextBlock: Block? = null
     private var prevBlock: Block? = null
 
     //  Тип, статус и идентификатор блока
-    private var type: String = "Undefined"
-    var status: String = "OK"
-    private var id: Int = counter++
-
-    init {
-        allBlocks[this.getBlockId()] = this
-    }
+    private var type: String = ""
+    var status: String = ok()
 
     //  Операции с типом, статусом и идентификатором блока
     fun setBlockType(input: String) {
@@ -77,19 +64,6 @@ open class Block {
 
     fun getBlockStatus(): String {
         return status
-    }
-
-    fun getBlockId(): Int {
-        return id
-    }
-
-    fun getBlockById(_id: Int): Block? {
-        return allBlocks[_id]
-    }
-
-    //  Получить словарь всех блоков
-    fun getAllBlocks(): MutableMap<Int, Block> {
-        return allBlocks
     }
 
     //  Получить доступ к хранилищу переменных
@@ -114,27 +88,12 @@ open class Block {
         return prevBlock
     }
 
-    //  Операции со списком устойчивых связей между блоками
-    fun addStrongConnection(pair: Pair<Block, Block>) {
-        strongConnections.add(pair)
+    open fun executeBlock() {
+        status = ok()
     }
-
-    fun removeStrongConnection(pair: Pair<Block, Block>) {
-        strongConnections.remove(pair)
-    }
-
-    fun getAllStrongConnections(): MutableList<Pair<Block, Block>> {
-        return strongConnections
-    }
-
-    open fun executeBlock() {}
     open fun kickRunning() {}
-    fun clearBlockData() {
-        status = "OK"
-    }
 
     open fun run() {
-//        adapterConsole.addMessage( getPrevBlock()?.indexListBlocks.toString() + " " + type + " " + getNextBlock()?.indexListBlocks.toString())
         if (getBlockType() == "ConsoleInput"){
             executeBlock()
         }
@@ -143,17 +102,15 @@ open class Block {
             when {
                 getNextBlock() == null -> {
                     isProgramRunning = false
-                    println("Program finished with status: ${getBlockStatus()}")
-                    adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                    adapterConsole.addMessage(programFinish(status))
                     adapterBlocks.notifyItemChanged(indexListBlocks)
                 }
-                getBlockStatus() == "OK" -> {
+                getBlockStatus() == ok() -> {
                     callStack.push(getNextBlock())
                 }
                 else -> {
                     isProgramRunning = false
-                    println("Program finished with status: ${getBlockStatus()}")
-                    adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                    adapterConsole.addMessage(programFinish(status))
                     adapterBlocks.notifyItemChanged(indexListBlocks)
                 }
             }

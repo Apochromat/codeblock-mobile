@@ -28,18 +28,19 @@ class DefinedArray : Block() {
     }
 
     override fun executeBlock() {
+        super.executeBlock()
         initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
-            setBlockStatus("Incorrect naming $inputName")
+            setBlockStatus(incorrectNaming(inputName))
             return
         }
-        if (calcSize.first != "OK" || calcSize.second < 1) {
-            setBlockStatus("Incorrect size $inputSize")
+        if (calcSize.first != ok() || calcSize.second < 1) {
+            setBlockStatus(incorrectSize(inputSize))
             return
         }
         if (heap.isVariableExist(inputName)) {
-            setBlockStatus("Type mismatch, $inputName is an existing variable")
+            setBlockStatus(typeMismatchVariable(inputName))
             return
         }
         name = inputName
@@ -48,13 +49,13 @@ class DefinedArray : Block() {
         heap.createArray(name, size)
         val valuesList = stringToList(values)
         if (valuesList.size != size) {
-            setBlockStatus("Sizes mismatch")
+            setBlockStatus(sizesMismatch())
             return
         }
         for (i in valuesList.indices) {
             val calcValue = arithmetics(heap, valuesList[i])
-            if (calcValue.first != "OK") {
-                setBlockStatus("Incorrect value '$valuesList[i]'")
+            if (calcValue.first != ok()) {
+                setBlockStatus(incorrectValue(valuesList[i]))
                 return
             }
             heap.setArrayValue(name, i, calcValue.second)

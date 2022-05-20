@@ -32,18 +32,19 @@ class ConsoleInput : Block() {
     }
 
     override fun executeBlock(){
+        super.executeBlock()
         initVar()
         val builder = AlertDialog.Builder(activity)
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_entry, null)
         val dialog = builder.create()
 
-        dialog.setTitle("Введите значение")
+        dialog.setTitle(titleInput)
         dialog.setMessage(message)
         dialog.setView(view)
         val buttonEdit = view.findViewById<Button>(R.id.buttonEditDialog)
         val editVar = view.findViewById<EditText>(R.id.editVarDialog)
 
-        buttonEdit.setOnClickListener(){
+        buttonEdit.setOnClickListener{
             if (editVar.text.toString() != "") {
                 valueVar = editVar.text.toString()
                 dialog.dismiss()
@@ -58,21 +59,21 @@ class ConsoleInput : Block() {
         val stringList = stringToList(valueVar)
         val obj = defineInput(heap, name)
         if (stringList.size > 1) {
-            if (obj.first == "Variable") {
-                setBlockStatus("Impossible to assign sequence to variable")
+            if (obj.first == tagVariable()) {
+                setBlockStatus(variableAssignSequence())
                 return
             }
-            if (obj.first != "Array") {
+            if (obj.first != tagArray()) {
                 setBlockStatus(obj.first)
                 return
             }
             if (stringList.size != heap.getArraySize(obj.second)) {
-                setBlockStatus("Sizes mismatch")
+                setBlockStatus(sizesMismatch())
                 return
             }
             for (i in stringList.indices) {
                 val calculated = arithmetics(heap, stringList[i])
-                if (calculated.first != "OK") {
+                if (calculated.first != ok()) {
                     setBlockStatus(calculated.first)
                     return
                 }
@@ -82,17 +83,17 @@ class ConsoleInput : Block() {
         }
         val calculated = arithmetics(accessHeap(), valueVar)
         setBlockStatus(calculated.first)
-        if (calculated.first != "OK") return
-        if (obj.first !in listOf("Array", "Variable")) {
+        if (calculated.first != ok()) return
+        if (obj.first !in listOf(tagArray(), tagVariable())) {
             setBlockStatus(obj.first)
             return
         }
         value = calculated.second
         when (obj.first) {
-            "Array" -> {
+            tagArray() -> {
                 heap.setArrayValue(name, obj.third, value)
             }
-            "Variable" -> {
+            tagVariable() -> {
                 heap.setVariableValue(name, value)
             }
         }
@@ -103,17 +104,15 @@ class ConsoleInput : Block() {
         when {
             nextB == null -> {
                 isProgramRunning = false
-                println("Program finished with status: ${getBlockStatus()}")
-                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapterConsole.addMessage(programFinish(status))
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
-            getBlockStatus() == "OK" -> {
+            getBlockStatus() == ok() -> {
                 callStack.push(nextB)
             }
             else -> {
                 isProgramRunning = false
-                println("Program finished with status: ${getBlockStatus()}")
-                adapterConsole.addMessage("Program finished with status: ${getBlockStatus()}")
+                adapterConsole.addMessage(programFinish(status))
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
         }

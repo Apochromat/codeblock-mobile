@@ -39,21 +39,21 @@ class CycleWhile : Block() {
     }
 
     override fun executeBlock() {
-       if (crutch) initVar()
-
+        super.executeBlock()
+        if (crutch) initVar()
         connectBlocks(end, this, strong = false, clear = false)
         getNextBlock()?.let {
             if (getNextBlock() != begin && getNextBlock() != exit && getNextBlock() != end && getNextBlock() != null)
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
-        if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("Invalid comparator")
+        if (expressionComparator !in allComparators) {
+            setBlockStatus(invalidComparator())
             return
         }
         val calculateLeft = arithmetics(accessHeap(), expressionLeft)
         val calculateRight = arithmetics(accessHeap(), expressionRight)
-        if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+        if ((calculateLeft.first == ok()) && (calculateRight.first == ok())) {
             if (expressionComparator(
                     calculateLeft.second,
                     calculateRight.second,
@@ -66,6 +66,6 @@ class CycleWhile : Block() {
             }
             return
         }
-        setBlockStatus(if(calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+        setBlockStatus(if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first)
     }
 }

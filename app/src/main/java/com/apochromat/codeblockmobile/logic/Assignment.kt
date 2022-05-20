@@ -25,22 +25,23 @@ class Assignment : Block() {
     }
 
     override fun executeBlock() {
+        super.executeBlock()
         initVar()
         val obj = defineInput(heap, inputName)
         name = obj.second
-        if (obj.first !in listOf("Array", "Variable")) {
+        if (obj.first !in listOf(tagArray(), tagVariable())) {
             setBlockStatus(obj.first)
             return
         }
         val calculated = arithmetics(heap, inputValue)
         setBlockStatus(calculated.first)
-        if (calculated.first != "OK") return
+        if (calculated.first != ok()) return
         value = calculated.second
         when (obj.first) {
-            "Array" -> {
+            tagArray() -> {
                 heap.setArrayValue(name, obj.third, value)
             }
-            "Variable" -> {
+            tagVariable() -> {
                 heap.setVariableValue(name, value)
             }
         }

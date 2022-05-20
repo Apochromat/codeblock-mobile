@@ -7,7 +7,6 @@ package com.apochromat.codeblockmobile.logic
  **/
 fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
     if (blockFrom == blockTo) return
-    if (strong) Block().addStrongConnection(Pair(blockFrom, blockTo))
     if (clear) {
         blockFrom.getNextBlock()?.setPrevBlock(null)
         blockTo.getPrevBlock()?.setNextBlock(null)
@@ -24,5 +23,4 @@ fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
     if (blockFrom == blockTo) return
     blockFrom.setNextBlock(null)
     blockTo.setPrevBlock(null)
-    Block().removeStrongConnection(Pair(blockFrom, blockTo))
 }

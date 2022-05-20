@@ -22,6 +22,7 @@ class ConsoleOutput : Block() {
     }
 
     override fun executeBlock() {
+        super.executeBlock()
         initVar()
         if (expression == "") {
             adapterConsole.addMessage(message)
@@ -29,8 +30,7 @@ class ConsoleOutput : Block() {
         }
         val calculated = arithmetics(heap, expression)
         setBlockStatus(calculated.first)
-        if (calculated.first != "OK") return
-        println("$message${calculated.second}")
+        if (calculated.first != ok()) return
         adapterConsole.addMessage("$message${calculated.second}")
     }
 }

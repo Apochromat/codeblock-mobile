@@ -10,6 +10,7 @@ class UndefinedVariable : Block() {
     init {
         setBlockType("UndefinedVariable")
     }
+
     private fun initVar(){
         inputNames = stringToList(inputLeftEdit)
     }
@@ -19,13 +20,16 @@ class UndefinedVariable : Block() {
     }
 
     override fun executeBlock() {
-
+        super.executeBlock()
         initVar()
-
-        var flag: Boolean = true
+        var flag = true
         for (el in inputNames) {
+            if (heap.isArrayExist(el)) {
+                setBlockStatus(typeMismatchArray(el))
+                flag = false
+            }
             if (!variableCheck(el)) {
-                setBlockStatus("Incorrect variable naming $el")
+                setBlockStatus(incorrectNaming(el))
                 flag = false
             }
         }

@@ -24,18 +24,19 @@ class UndefinedArray : Block() {
     }
 
     override fun executeBlock() {
+        super.executeBlock()
         initVar()
         val calcSize = arithmetics(heap, inputSize)
         if (!variableCheck(inputName)) {
-            setBlockStatus("Incorrect naming $inputName")
+            setBlockStatus(incorrectNaming(inputName))
             return
         }
-        if (calcSize.first != "OK" || calcSize.second < 1) {
-            setBlockStatus("Incorrect size $inputSize")
+        if (calcSize.first != ok() || calcSize.second < 1) {
+            setBlockStatus(incorrectSize(inputSize))
             return
         }
         if (heap.isVariableExist(inputName)) {
-            setBlockStatus("Type mismatch, $inputName is an existing variable")
+            setBlockStatus(typeMismatchVariable(inputName))
             return
         }
         name = inputName

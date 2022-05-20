@@ -10,12 +10,7 @@ class EntryPoint : Block() {
 
     override fun executeBlock() {
         accessHeap().clearVariables()
-        for (bl in getAllBlocks()) {
-            bl.value.clearBlockData()
-        }
-//        for (pair in getAllStrongConnections()) {
-//            connectBlocks(pair.first, pair.second, false)
-//        }
+        accessHeap().clearArrays()
     }
 
     override fun kickRunning() {

@@ -39,6 +39,7 @@ class ConditionIf : Block() {
     }
 
     override fun executeBlock() {
+        super.executeBlock()
         if (crutch) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         getNextBlock()?.let {
@@ -46,14 +47,14 @@ class ConditionIf : Block() {
                 connectBlocks(exit, it, strong = true, clear = false)
         }
 
-        if (expressionComparator !in listOf(">", ">=", "<", "<=", "==", "!=")) {
-            setBlockStatus("Invalid comparator")
+        if (expressionComparator !in allComparators) {
+            setBlockStatus(invalidComparator())
             return
         }
 
         val calculateLeft = arithmetics(accessHeap(), expressionLeft)
         val calculateRight = arithmetics(accessHeap(), expressionRight)
-        if ((calculateLeft.first == "OK") && (calculateRight.first == "OK")) {
+        if ((calculateLeft.first == ok()) && (calculateRight.first == ok())) {
             if (expressionComparator(
                     calculateLeft.second,
                     calculateRight.second,
@@ -66,6 +67,6 @@ class ConditionIf : Block() {
             }
             return
         }
-        setBlockStatus(if(calculateLeft.first == "OK") calculateRight.first else calculateLeft.first)
+        setBlockStatus(if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first)
     }
 }
