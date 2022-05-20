@@ -26,7 +26,7 @@ open class Block {
     var inputComparator: String = ">="
     var indexComparator: Int = 0
     var valueVar: String = ""
-  
+
     lateinit var begin: Begin
     lateinit var end: End
     lateinit var exit: Exit
@@ -34,11 +34,13 @@ open class Block {
     lateinit var endElse: End
 
     var indexListBlocks = 0
-    lateinit var adapterConsole : ConsoleAdapter
-    lateinit var adapterBlocks : BlocksAdapter
-    lateinit var holder : BlocksAdapter.ViewHolder
+    lateinit var adapterConsole: ConsoleAdapter
+    lateinit var adapterBlocks: BlocksAdapter
+    lateinit var holder: BlocksAdapter.ViewHolder
     var activity: ProjectActivity? = null
 
+    // Флаг. В while, if, if-else заставляет выполниться initVar() единожды
+    // т.к. он перезаписывает блоки выхода Exit
     var flagInit = true
 
     //  Ссылки на следующий и предыдущий блоки
@@ -49,23 +51,38 @@ open class Block {
     var type: String = ""
     var status: String = ok()
 
-    //  Получить доступ к хранилищу переменных
+    /**
+     * Функция, которая дает доступ к хранилищу переменных
+     **/
     fun accessHeap(): Heap {
         return heap
     }
 
+    /**
+     * Функция, которая инициализирует входные данные из полей
+     **/
+    open fun initVar() {
+    }
+    /**
+     * Функция, которая исполняет внутреннюю логику блока
+     **/
     open fun executeBlock() {
         status = ok()
     }
+
+    /**
+     * Функция, которая запускает выполнение очередного блока
+     **/
     open fun kickRunning() {}
 
     open fun run() {
-        if (type == "ConsoleInput"){
+        // Отдельно работаем с выполнением ConsoleInput т.к. он ставит выполнение на паузу
+        if (type == "ConsoleInput") {
             executeBlock()
-        }
-        else{
+        } else {
             executeBlock()
             when {
+                // При конце выполнения программы опускаем флаг, разъединяем все блоки, выводим статус
                 nextBlock == null -> {
                     isProgramRunning = false
                     activity?.disconnectAllBlocks()
@@ -75,6 +92,7 @@ open class Block {
                 status == ok() -> {
                     callStack.push(nextBlock)
                 }
+                // Если произошла какая-то ошибка при выполнении
                 else -> {
                     isProgramRunning = false
                     activity?.disconnectAllBlocks()

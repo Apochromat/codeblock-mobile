@@ -9,13 +9,15 @@ class EntryPoint : Block() {
     }
 
     override fun executeBlock() {
+        // Очищаем все с прошлых запусков, вывадим сообщение о старте
         adapterConsole.addMessage(programStart())
-        accessHeap().clearVariables()
-        accessHeap().clearArrays()
+        heap.clearVariables()
+        heap.clearArrays()
     }
 
     override fun kickRunning() {
         super.kickRunning()
+        // Пока поднят флаг работы и стак непустой, выполняем крайний блок
         if (!isProgramRunning) return
         if (callStack.empty()) return
         callStack.pop().run()

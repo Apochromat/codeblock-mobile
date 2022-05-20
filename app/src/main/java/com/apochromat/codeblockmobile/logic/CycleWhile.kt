@@ -23,7 +23,7 @@ class CycleWhile : Block() {
         expressionComparator = _expressionComparator
     }
 
-    private fun initVar(){
+    override fun initVar(){
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
         expressionComparator = inputComparator
@@ -40,32 +40,41 @@ class CycleWhile : Block() {
 
     override fun executeBlock() {
         super.executeBlock()
+        // Выполняем initVar() единожды
         if (flagInit) initVar()
-        connectBlocks(end, this, strong = false, clear = false)
+        // Соединяем блок конца при выполнении условия с выходом - блоком которым соединен while блок
+        connectBlocks(end, this, clear = false)
+
+        // Соединяем выход с блоком, после if, если это не блок логики if
         nextBlock?.let {
             if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)
-                connectBlocks(exit, it, strong = true, clear = false)
+                connectBlocks(exit, it, clear = false)
         }
 
+        // Проверяем правильность операторов сравнения
         if (expressionComparator !in allComparators) {
             status = invalidComparator()
             return
         }
+
+        // Высчитываем левую и правую часть для сравнения
         val calculateLeft = arithmetics(accessHeap(), expressionLeft)
         val calculateRight = arithmetics(accessHeap(), expressionRight)
-        if ((calculateLeft.first == ok()) && (calculateRight.first == ok())) {
-            if (expressionComparator(
-                    calculateLeft.second,
-                    calculateRight.second,
-                    expressionComparator
-                )
-            ) {
-                connectBlocks(this, begin, strong = false, clear = false)
-            } else {
-                connectBlocks(this, exit, strong = false, clear = false)
-            }
+        // Проверяем правильность вычислений
+        if ((calculateLeft.first != ok()) || (calculateRight.first != ok())) {
+            status = if (calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
             return
         }
-        status = if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
+        // Сравниваем
+        if (expressionComparator(
+                calculateLeft.second,
+                calculateRight.second,
+                expressionComparator
+            )
+        ) {
+            connectBlocks(this, begin, clear = false)
+        } else {
+            connectBlocks(this, exit, clear = false)
+        }
     }
 }

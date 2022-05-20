@@ -20,31 +20,31 @@ class ConsoleInput : Block() {
         type = "ConsoleInput"
     }
 
-    fun initVar(){
+    override fun initVar() {
         message = inputLeftEdit
         name = inputRightEdit
         nextB = nextBlock
     }
 
-    fun setBlockInput(_name: String, _message: String = "") {
-        name = _name
-        message = if (_message == "") "" else "$_message "
-    }
-
-    override fun executeBlock(){
+    override fun executeBlock() {
         super.executeBlock()
+        // Инициализируем поля из ввода
         initVar()
+        // Создаем штуки для диалоговоро окна
         val builder = AlertDialog.Builder(activity)
         val view = LayoutInflater.from(activity).inflate(R.layout.dialog_entry, null)
         val dialog = builder.create()
 
+        // Устанавливаеи параметры диалогового окна
         dialog.setTitle(titleInput)
         dialog.setMessage(message)
         dialog.setView(view)
+        // Создаем кнопку принятия данных
         val buttonEdit = view.findViewById<Button>(R.id.buttonEditDialog)
         val editVar = view.findViewById<EditText>(R.id.editVarDialog)
 
-        buttonEdit.setOnClickListener{
+        // Привязываем кнопке нажатие
+        buttonEdit.setOnClickListener {
             if (editVar.text.toString() != "") {
                 valueVar = editVar.text.toString()
                 dialog.dismiss()
@@ -55,23 +55,30 @@ class ConsoleInput : Block() {
         dialog.show()
     }
 
-    private fun inputAssignment(){
+    private fun inputAssignment() {
+        // Делаем список из входных данных "1, arr[10], 3+1, 4-a" => ["1", "arr[10]", "3+1", "4-a"]
         val stringList = stringToList(valueVar)
+        // Определяем, что за объект, которому мы будем присваивать
         val obj = defineInput(heap, name)
+
+        // Если введена последовательность более чем из одного элемента
         if (stringList.size > 1) {
+            // Отлавливаем попытку присвоить переменной последовательность
             if (obj.first == tagVariable()) {
                 status = variableAssignSequence()
                 return
             }
-            // костыль
+            // Отлавливаем попытку присвоить последовательность не массиву
             if (obj.first != tagArray() && !heap.isArrayExist(name)) {
                 status = obj.first
                 return
             }
+            // Отлавливаем несоответствие размеров массива и количества введеных чисел
             if (stringList.size != heap.getArraySize(name)) {
                 status = sizesMismatch()
                 return
             }
+            // Каждому элементу массива присваиваем высчитанное значение
             for (i in stringList.indices) {
                 val calculated = arithmetics(heap, stringList[i])
                 if (calculated.first != ok()) {
@@ -82,7 +89,9 @@ class ConsoleInput : Block() {
             }
             return
         }
-        val calculated = arithmetics(accessHeap(), valueVar)
+        // Если введено одно число
+        // Высчитываем, что будем присваивать
+        val calculated = arithmetics(heap, valueVar)
         status = calculated.first
         if (calculated.first != ok()) return
         if (obj.first !in listOf(tagArray(), tagVariable())) {
@@ -90,6 +99,7 @@ class ConsoleInput : Block() {
             return
         }
         value = calculated.second
+        // Присваеваем высчитанное значение либо переменной, либо элементу массива
         when (obj.first) {
             tagArray() -> {
                 heap.setArrayValue(name, obj.third, value)
@@ -100,7 +110,8 @@ class ConsoleInput : Block() {
         }
     }
 
-    private fun runConsoleInput(){
+    private fun runConsoleInput() {
+        // Если пользователь не отменил ввод, запускаем присваивание
         inputAssignment()
         when {
             nextB == null -> {

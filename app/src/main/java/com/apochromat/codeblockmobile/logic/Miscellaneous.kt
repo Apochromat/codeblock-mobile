@@ -1,5 +1,8 @@
 package com.apochromat.codeblockmobile.logic
 
+/**
+ *  Сравнение двух чисел.
+ **/
 fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String): Boolean {
     when (comparator) {
         ">" -> return (numberLeft > numberRight)
@@ -12,6 +15,9 @@ fun expressionComparator(numberLeft: Int, numberRight: Int, comparator: String):
     return false
 }
 
+/**
+ *  Проверка правильности названия переменной.
+ **/
 fun variableCheck(variable: String): Boolean {
     val str = variable.replace("[A-Za-z0-9_]".toRegex(), "")
     if (str.isNotEmpty()) {
@@ -20,6 +26,9 @@ fun variableCheck(variable: String): Boolean {
     return true
 }
 
+/**
+ *  Делает список из входных данных "a, B, Pussycat_17" => ["a", "B", "Pussycat_17"].
+ **/
 fun stringToList(string: String): List<String> {
     return string.replace("[\\s*]".toRegex(), "")
         .replace("[,;]".toRegex(), " ")

@@ -15,30 +15,31 @@ class DefinedArray : Block() {
     init {
         type = "DefinedArray"
     }
-    private fun initVar(){
+
+    override fun initVar() {
         inputName = inputLeftEdit
         inputSize = inputMediumEdit
         inputValues = inputRightEdit
     }
 
-    fun setBlockInput(_name: String, _values: String, _size: String) {
-        inputName = _name
-        inputValues = _values
-        inputSize = _size
-    }
-
     override fun executeBlock() {
         super.executeBlock()
+        // Инициализируем поля из ввода
         initVar()
+        // Высчитаваем размер массива
         val calcSize = arithmetics(heap, inputSize)
+
+        // Отлавливаем неправильное название
         if (!variableCheck(inputName)) {
             status = incorrectNaming(inputName)
             return
         }
+        // Отлавливаем неправильный размер массива
         if (calcSize.first != ok() || calcSize.second < 1) {
             status = incorrectSize(inputSize)
             return
         }
+        // Отлавливаем ситуацию, когда с таким названием уже существует переменная
         if (heap.isVariableExist(inputName)) {
             status = typeMismatchVariable(inputName)
             return
@@ -46,12 +47,17 @@ class DefinedArray : Block() {
         name = inputName
         size = calcSize.second
         values = inputValues
+        // Создаем массив
         heap.createArray(name, size)
+        // Делаем список из входных данных "1, 2, 3+1, 4 - a" => ["1", "2", "3+1", "4-a"]
         val valuesList = stringToList(values)
+        // Отлавливаем несоответствие размеров массива и количества введеных чисел
         if (valuesList.size != size) {
             status = sizesMismatch()
             return
         }
+        // Для каждого элемента ввода высчитаваем его и присваеваем массиву
+        // Если хоть один неверный, прекращаем работу
         for (i in valuesList.indices) {
             val calcValue = arithmetics(heap, valuesList[i])
             if (calcValue.first != ok()) {

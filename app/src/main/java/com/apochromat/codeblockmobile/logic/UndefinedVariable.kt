@@ -11,28 +11,30 @@ class UndefinedVariable : Block() {
         type = "UndefinedVariable"
     }
 
-    private fun initVar(){
+    override fun initVar() {
+        // Делаем список из входных данных "a, B, Pussycat_17" => ["a", "B", "Pussycat_17"]
         inputNames = stringToList(inputLeftEdit)
-    }
-
-    fun setBlockInput(_names: String) {
-        inputNames = stringToList(_names)
     }
 
     override fun executeBlock() {
         super.executeBlock()
+        // Инициализируем поля из ввода
         initVar()
+        // Проверяем все переменные на правильность
         var flag = true
         for (el in inputNames) {
-            if (heap.isArrayExist(el)) {
-                status = typeMismatchArray(el)
-                flag = false
-            }
+            // Отлавливаем неправильное название
             if (!variableCheck(el)) {
                 status = incorrectNaming(el)
                 flag = false
             }
+            // Отлавливаем ситуацию, когда с таким названием уже существует массив
+            if (heap.isArrayExist(el)) {
+                status = typeMismatchArray(el)
+                flag = false
+            }
         }
-        if (flag) accessHeap().createDefaultVariables(inputNames)
+        // Создаем переменные, наполненные нулями
+        if (flag) heap.createDefaultVariables(inputNames)
     }
 }

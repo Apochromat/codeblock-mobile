@@ -7,16 +7,16 @@ package com.apochromat.codeblockmobile.logic
 class ConditionIf : Block() {
     private var expressionLeft: String = ""
     private var expressionRight: String = ""
-    private var expressionComparator: String = ">="
+    private var comparator: String = ">="
 
     init {
         type = "ConditionIf"
     }
-   private fun initVar() {
-     
+
+    override fun initVar() {
         expressionLeft = inputLeftEdit
         expressionRight = inputRightEdit
-        expressionComparator = inputComparator
+        comparator = inputComparator
 
         begin.adapterConsole = adapterConsole
         end.adapterConsole = adapterConsole
@@ -26,47 +26,45 @@ class ConditionIf : Block() {
         end.adapterBlocks = this.adapterBlocks
         exit.adapterBlocks = this.adapterBlocks
         flagInit = false
-   }
-
-    fun setBlockInput(
-        _expressionLeft: String,
-        _expressionRight: String,
-        _expressionComparator: String = ">="
-    ) {
-        expressionLeft = _expressionLeft
-        expressionRight = _expressionRight
-        expressionComparator = _expressionComparator
     }
 
     override fun executeBlock() {
         super.executeBlock()
+        // Выполняем initVar() единожды
         if (flagInit) initVar()
-        connectBlocks(end, exit, strong = true, clear = false)
+        // Соединяем блок конца при выполнении условия с выходом - блоком которым соединен if блок
+        connectBlocks(end, exit, clear = false)
+
+        // Соединяем выход с блоком, после if, если это не блок логики if
         nextBlock?.let {
             if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)
-                connectBlocks(exit, it, strong = true, clear = false)
+                connectBlocks(exit, it, clear = false)
         }
 
-        if (expressionComparator !in allComparators) {
+        // Проверяем правильность операторов сравнения
+        if (comparator !in allComparators) {
             status = invalidComparator()
             return
         }
 
-        val calculateLeft = arithmetics(accessHeap(), expressionLeft)
-        val calculateRight = arithmetics(accessHeap(), expressionRight)
-        if ((calculateLeft.first == ok()) && (calculateRight.first == ok())) {
-            if (expressionComparator(
-                    calculateLeft.second,
-                    calculateRight.second,
-                    expressionComparator
-                )
-            ) {
-                connectBlocks(this, begin, false, false)
-            } else {
-                connectBlocks(this, end, false, false)
-            }
+        // Высчитываем левую и правую часть для сравнения
+        val calculateLeft = arithmetics(heap, expressionLeft)
+        val calculateRight = arithmetics(heap, expressionRight)
+        // Проверяем правильность вычислений
+        if ((calculateLeft.first != ok()) || (calculateRight.first != ok())) {
+            status = if (calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
             return
         }
-        status = if(calculateLeft.first == ok()) calculateRight.first else calculateLeft.first
+        // Сравниваем
+        if (expressionComparator(
+                calculateLeft.second,
+                calculateRight.second,
+                comparator
+            )
+        ) {
+            connectBlocks(this, begin, false)
+        } else {
+            connectBlocks(this, exit, false)
+        }
     }
 }

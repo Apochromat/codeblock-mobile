@@ -7,6 +7,7 @@
     android:layout_height="110dp"
     android:layout_margin="5dp"
     android:background="@drawable/shape_variable_array">
+
     <TextView
         android:id="@+id/textType"
         android:layout_width="177dp"
@@ -41,9 +42,9 @@
         android:layout_height="50dp"
         android:ems="10"
         android:hint="@string/name"
+        android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey"
-        android:imeOptions="actionDone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editMedium"
         app:layout_constraintHorizontal_bias="0.327"
@@ -67,8 +68,10 @@
 
     <EditText
         android:id="@+id/editRight"
-        android:layout_width="352dp"
-        android:layout_height="49dp"
+        android:layout_width="330dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="28dp"
         android:ems="10"
         android:hint="@string/value"
         android:imeOptions="actionDone"
@@ -76,10 +79,10 @@
         android:textColor="@color/dark_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editMedium"
-        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toStartOf="@+id/editLeft"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintVertical_bias="0.946" />
 
     <EditText
         android:id="@+id/editMedium"
@@ -87,12 +90,12 @@
         android:layout_height="48dp"
         android:ems="10"
         android:hint="@string/sizeArray"
+        android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey"
-        android:imeOptions="actionDone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
+        app:layout_constraintHorizontal_bias="0.941"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.338" />

@@ -14,29 +14,28 @@ class Assignment : Block() {
         type = "Assignment"
     }
 
-    private fun initVar(){
+    override fun initVar() {
         inputName = inputLeftEdit
         inputValue = inputRightEdit
-    }
-
-    fun setBlockInput(_name: String, _value: String) {
-        inputName = _name
-        inputValue = _value
     }
 
     override fun executeBlock() {
         super.executeBlock()
         initVar()
+        // Определяем, что за объект, которому мы будем присваивать
         val obj = defineInput(heap, inputName)
         name = obj.second
+        // Отсеиваем ненужное
         if (obj.first !in listOf(tagArray(), tagVariable())) {
             status = obj.first
             return
         }
+        // Высчитываем, что будем присваивать
         val calculated = arithmetics(heap, inputValue)
         status = calculated.first
         if (calculated.first != ok()) return
         value = calculated.second
+        // Присваеваем высчитанное значение либо переменной, либо элементу массива
         when (obj.first) {
             tagArray() -> {
                 heap.setArrayValue(name, obj.third, value)

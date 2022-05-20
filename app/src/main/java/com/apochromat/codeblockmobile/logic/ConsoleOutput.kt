@@ -11,27 +11,28 @@ class ConsoleOutput : Block() {
     init {
         type = "ConsoleOutput"
     }
-    private fun initVar(){
+
+    override fun initVar() {
         message = if (inputLeftEdit == "") "" else "$inputLeftEdit "
         expression = inputRightEdit
     }
 
-    fun setBlockInput(_expression: String, _message: String = "") {
-        message = if (_message == "") "" else "$_message "
-        expression = _expression
-    }
-
     override fun executeBlock() {
         super.executeBlock()
+        // Инициализируем поля из ввода
         initVar()
+
+        // Выводим сообщение
         if (expression == "") {
             adapterConsole.addMessage(message)
             return
         }
+        // Выводим массив целиком
         if (heap.isArrayExist(expression)) {
             adapterConsole.addMessage("$message[${heap.getArray(expression)?.joinToString()}]")
             return
         }
+        // Выводим значение переменной или элемента массива
         val calculated = arithmetics(heap, expression)
         status = calculated.first
         if (calculated.first != ok()) return

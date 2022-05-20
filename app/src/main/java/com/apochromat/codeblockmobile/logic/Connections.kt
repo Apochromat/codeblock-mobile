@@ -3,10 +3,12 @@ package com.apochromat.codeblockmobile.logic
 /**
  *  Функция связывания блоков.
  *  Позволяет связать блоки blockFrom и blockTo.
- *  Параметры: strong - создать ли устойчивую связь, clear - очищать ли предыдущие связи.
+ *  Параметры: clear - очищать ли предыдущие связи.
  **/
-fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clear: Boolean = true) {
+fun connectBlocks(blockFrom: Block, blockTo: Block, clear: Boolean = true) {
+    // Не соединяем блок сам с собой
     if (blockFrom == blockTo) return
+    // Если нужно, при соединении очищаем другие связи
     if (clear) {
         blockFrom.nextBlock?.prevBlock = null
         blockTo.prevBlock?.nextBlock = null
@@ -20,7 +22,6 @@ fun connectBlocks(blockFrom: Block, blockTo: Block, strong: Boolean = true, clea
  *  Позволяет развязать блоки blockFrom и blockTo.
  **/
 fun disconnectBlocks(blockFrom: Block, blockTo: Block) {
-    if (blockFrom == blockTo) return
     blockFrom.nextBlock = null
     blockTo.prevBlock = null
 }

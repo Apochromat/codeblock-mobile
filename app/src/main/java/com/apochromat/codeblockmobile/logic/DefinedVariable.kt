@@ -13,33 +13,36 @@ class DefinedVariable : Block() {
     init {
         type = "DefinedVariable"
     }
-    private fun initVar(){
+
+    override fun initVar() {
         inputName = inputLeftEdit
         inputValue = inputRightEdit
     }
 
-    fun setBlockInput(_name: String, _value: String) {
-        inputName = _name
-        inputValue = _value
-    }
-
     override fun executeBlock() {
         super.executeBlock()
+        // Инициализируем поля из ввода
         initVar()
-        if (heap.isArrayExist(inputName)) {
-            status = typeMismatchArray(inputName)
-            return
-        }
+
+        // Отлавливаем неправильное название
         if (!variableCheck(inputName)) {
             status = incorrectNaming(inputName)
             return
         }
-        val calculated = arithmetics(accessHeap(), inputValue)
+        // Отлавливаем ситуацию, когда с таким названием уже существует массив
+        if (heap.isArrayExist(inputName)) {
+            status = typeMismatchArray(inputName)
+            return
+        }
+
+        // Высчитываем значение для переменной
+        val calculated = arithmetics(heap, inputValue)
         status = calculated.first
         name = inputName
+        // Присваиваем переменной значение
         if (calculated.first == ok()) {
             value = calculated.second
-            accessHeap().setVariableValue(name, value)
+            heap.setVariableValue(name, value)
         }
     }
 }
