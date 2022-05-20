@@ -9,6 +9,7 @@ class EntryPoint : Block() {
     }
 
     override fun executeBlock() {
+        adapterConsole.addMessage(programStart())
         accessHeap().clearVariables()
         accessHeap().clearArrays()
     }

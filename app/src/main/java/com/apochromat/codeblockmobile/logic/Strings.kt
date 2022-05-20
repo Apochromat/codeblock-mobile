@@ -29,6 +29,7 @@ var tagVariable = fun(): String { return "Variable" }
 var tagArray = fun(): String { return "Array" }
 
 var programFinish = fun(status: String): String { return "Program finished with status: $status" }
+var programStart = fun(): String { return "Program started" }
 
 var allComparators = listOf(">", ">=", "<", "<=", "==", "!=")
 

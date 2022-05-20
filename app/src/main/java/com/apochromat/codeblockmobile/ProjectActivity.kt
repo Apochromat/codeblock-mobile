@@ -560,9 +560,7 @@ class ProjectActivity : AppCompatActivity() {
                 listBlocks[i].status = ok()
                 blocksAdapter.notifyItemChanged(i)
             }
-            if (listBlocks[i].type == "ConsoleInput"){
-                listBlocks[i].activity = this
-            }
+            listBlocks[i].activity = this
 
         }
         if (!connectionBlocks()) {
@@ -584,7 +582,7 @@ class ProjectActivity : AppCompatActivity() {
 
         }
     }
-    private fun disconnectAllBlocks(){
+    fun disconnectAllBlocks(){
         for (i in 0 until listBlocks.size){
             listBlocks[i].prevBlock = null
             listBlocks[i].nextBlock = null

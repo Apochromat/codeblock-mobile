@@ -104,6 +104,7 @@ class ConsoleInput : Block() {
         when {
             nextB == null -> {
                 isProgramRunning = false
+                activity?.disconnectAllBlocks()
                 adapterConsole.addMessage(programFinish(status))
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }
@@ -112,6 +113,7 @@ class ConsoleInput : Block() {
             }
             else -> {
                 isProgramRunning = false
+                activity?.disconnectAllBlocks()
                 adapterConsole.addMessage(programFinish(status))
                 adapterBlocks.notifyItemChanged(indexListBlocks)
             }

@@ -37,7 +37,7 @@ open class Block {
     lateinit var adapterConsole : ConsoleAdapter
     lateinit var adapterBlocks : BlocksAdapter
     lateinit var holder : BlocksAdapter.ViewHolder
-    lateinit var activity: ProjectActivity
+    var activity: ProjectActivity? = null
 
     var crutch = true
 
@@ -68,6 +68,7 @@ open class Block {
             when {
                 nextBlock == null -> {
                     isProgramRunning = false
+                    activity?.disconnectAllBlocks()
                     adapterConsole.addMessage(programFinish(status))
                     adapterBlocks.notifyItemChanged(indexListBlocks)
                 }
@@ -76,6 +77,7 @@ open class Block {
                 }
                 else -> {
                     isProgramRunning = false
+                    activity?.disconnectAllBlocks()
                     adapterConsole.addMessage(programFinish(status))
                     adapterBlocks.notifyItemChanged(indexListBlocks)
                 }
