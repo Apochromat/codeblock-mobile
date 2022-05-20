@@ -239,68 +239,9 @@ class ProjectActivity : AppCompatActivity() {
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-//            if (viewHolder.adapterPosition == 0 ||
-//                target.adapterPosition == 0 ||
-//                listBlocks[target.adapterPosition].getBlockType() == "Begin" ||
-//                listBlocks[viewHolder.adapterPosition].getBlockType() == "Begin"){
-//                return true
-//            }
-//            else if (
-//                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIf" ||
-//                listBlocks[viewHolder.adapterPosition].getBlockType() == "ConditionIfElse" ||
-//                listBlocks[viewHolder.adapterPosition].getBlockType() == "Else" ||
-//                listBlocks[viewHolder.adapterPosition].getBlockType() == "CycleWhile"){
-//                val fromPosition = viewHolder.adapterPosition
-//                val toPosition = target.adapterPosition
-//                if (fromPosition > toPosition){
-//                    val fromPosition2 = fromPosition + 1
-//                    val toPosition2 = toPosition + 1
-//                    Collections.swap(listBlocks, fromPosition, toPosition)
-//                    Collections.swap(listBlocks, fromPosition2, toPosition2)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-//                    blocksAdapter.notifyItemMoved(fromPosition2, toPosition2)
-//                }
-//                else if(fromPosition < toPosition &&
-//                            (listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
-//                            listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
-//                            listBlocks[target.adapterPosition].getBlockType() == "Else" ||
-//                            listBlocks[target.adapterPosition].getBlockType() == "CycleWhile")
-//                ){
-//                    Collections.swap(listBlocks, fromPosition, toPosition)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-//                }
-//                else {
-//                    val fromPosition2 = fromPosition + 1
-//                    Collections.swap(listBlocks, fromPosition, fromPosition2)
-//                    Collections.swap(listBlocks, fromPosition, toPosition)
-//                    blocksAdapter.notifyItemMoved(fromPosition, fromPosition2)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-//                }
-//                return false
-//            }
-//            else if(
-//                listBlocks[target.adapterPosition].getBlockType() == "ConditionIf" ||
-//                listBlocks[target.adapterPosition].getBlockType() == "ConditionIfElse" ||
-//                listBlocks[target.adapterPosition].getBlockType() == "Else" ||
-//                listBlocks[target.adapterPosition].getBlockType() == "CycleWhile"){
-//                val fromPosition = viewHolder.adapterPosition
-//                val toPosition = target.adapterPosition
-//                if (fromPosition < toPosition){
-//                    val toPosition2 = toPosition + 1
-//                    Collections.swap(listBlocks, fromPosition, toPosition2)
-//                    Collections.swap(listBlocks, fromPosition, toPosition)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition2)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-//                }
-//                else {
-//                    val toPosition2 = toPosition + 1
-//                    Collections.swap(listBlocks, fromPosition, toPosition)
-//                    Collections.swap(listBlocks, toPosition2, fromPosition)
-//                    blocksAdapter.notifyItemMoved(fromPosition, toPosition)
-//                    blocksAdapter.notifyItemMoved(toPosition2, fromPosition)
-//                }
-//                return false
-//            }
+            if (viewHolder.adapterPosition == 0 || target.adapterPosition == 0 ){
+                return true
+            }
             val fromPosition = viewHolder.adapterPosition
             val toPosition = target.adapterPosition
             Collections.swap(listBlocks, fromPosition, toPosition)
@@ -310,30 +251,27 @@ class ProjectActivity : AppCompatActivity() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position =  viewHolder.adapterPosition
-            if (viewHolder.adapterPosition == 0 ||
-                listBlocks[position].type == "Begin" ||
-                listBlocks[position].type == "End" ||
-                listBlocks[position].type == "Else"){
+            val type = listBlocks[position].type
+            if (viewHolder.adapterPosition == 0 || type == "Begin" || type == "End" || type == "Else"){
                 blocksAdapter.notifyItemRemoved(position)
                 return
             }
-            else if( listBlocks[position].type == "ConditionIf" ||
-                listBlocks[position].type == "ConditionIfElse" ||
-                listBlocks[position].type == "CycleWhile"){
-                    val type = listBlocks[position].type
+            else if( type == "ConditionIf" || type == "ConditionIfElse" || type == "CycleWhile"){
                 listBlocks.remove(listBlocks[position])
-                listBlocks.remove(listBlocks[position])
+                var positionBegin = findNearBegin(position)
+                listBlocks.remove(listBlocks[positionBegin])
                 blocksAdapter.notifyItemRemoved(position)
-                blocksAdapter.notifyItemRemoved(position)
+                blocksAdapter.notifyItemRemoved(positionBegin)
                 var positionEnd = findNearEnd(position)
                 listBlocks.remove(listBlocks[positionEnd])
                 blocksAdapter.notifyItemRemoved(positionEnd)
                 if(type == "ConditionIfElse"){
                     val positionElse = findNearElse(position)
                     listBlocks.remove(listBlocks[positionElse])
-                    listBlocks.remove(listBlocks[positionElse])
+                    positionBegin = findNearBegin(positionElse)
+                    listBlocks.remove(listBlocks[positionBegin])
                     blocksAdapter.notifyItemRemoved(positionElse)
-                    blocksAdapter.notifyItemRemoved(positionElse)
+                    blocksAdapter.notifyItemRemoved(positionBegin)
                     positionEnd = findNearEnd(positionElse)
                     listBlocks.remove(listBlocks[positionEnd])
                     blocksAdapter.notifyItemRemoved(positionEnd)
@@ -345,8 +283,20 @@ class ProjectActivity : AppCompatActivity() {
             blocksAdapter.notifyItemRemoved(position)
         }
     }
+    private fun findNearBegin(start : Int) : Int{
+        for (i in start until listBlocks.size)
+            if (listBlocks[i].type == "Begin")
+                return i
+        for (i in 0 until start)
+            if (listBlocks[i].type == "Begin")
+                return i
+        return -1
+    }
     private fun findNearEnd(start : Int) : Int{
         for (i in start until listBlocks.size)
+            if (listBlocks[i].type == "End")
+                return i
+        for (i in 0 until start)
             if (listBlocks[i].type == "End")
                 return i
         return -1
@@ -355,8 +305,12 @@ class ProjectActivity : AppCompatActivity() {
         for (i in start until listBlocks.size)
             if (listBlocks[i].type == "Else")
                 return i
+        for (i in 0 until start)
+            if (listBlocks[i].type == "Else")
+                return i
         return -1
     }
+
     private fun createBlocksView(){
         val blocksView : RecyclerView = findViewById(R.id.blocksRV)
         blocksView.layoutManager = LinearLayoutManager(this)
@@ -383,7 +337,7 @@ class ProjectActivity : AppCompatActivity() {
         return ArrayList()
     }
 
-    private fun check(index : Int) : Pair<Int, Int>{
+    private fun connectionInBlock(index : Int) : Pair<Int, Int>{
         var i = index
         while (listBlocks[i+1].type != "End"){
             if (i+1 == listBlocks.size) {
@@ -394,9 +348,9 @@ class ProjectActivity : AppCompatActivity() {
                 listBlocks[i].type == "ConditionIfElse" ||
                 listBlocks[i].type == "CycleWhile"){
                 val temp = if (listBlocks[i].type == "ConditionIfElse")
-                    checkIfElse(i)
+                    connectionIfElse(i)
                 else
-                    checkIf(i)
+                    connectionIfOrWhile(i)
 
                 if(temp == 0)
                     return Pair(0, 0)
@@ -424,13 +378,13 @@ class ProjectActivity : AppCompatActivity() {
         return Pair(i, 0)
     }
 
-    private fun checkIfElse(index : Int): Int{
+    private fun connectionIfElse (index : Int): Int{
         var i = index + 1
         if (listBlocks[i].type == "Begin"){
             i += 1
             if (listBlocks[i].type != "End"){
                 connectBlocks(listBlocks[index].begin, listBlocks[i])
-                val (j, temp) = check(i)
+                val (j, temp) = connectionInBlock(i)
                 if (j == 0)
                     return 0
                 else if (listBlocks[temp].type == "End") {
@@ -452,7 +406,7 @@ class ProjectActivity : AppCompatActivity() {
                     i += 1
                     if (listBlocks[i].type != "End"){
                         connectBlocks(listBlocks[index].beginElse, listBlocks[i])
-                        val (i, temp) = check(i)
+                        val (i, temp) = connectionInBlock(i)
                         if (i == 0)
                             return 0
                         else if (listBlocks[temp].type == "End") {
@@ -482,7 +436,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkIf(index : Int): Int{
+    private fun connectionIfOrWhile(index : Int): Int{
         var i = index + 1
         if (listBlocks[i].type == "Begin"){
             i += 1
@@ -491,7 +445,7 @@ class ProjectActivity : AppCompatActivity() {
                 return i + 1
             }
             connectBlocks(listBlocks[index].begin, listBlocks[i])
-            val (i, temp) = check(i)
+            val (i, temp) = connectionInBlock(i)
             if (i == 0)
                 return 0
             else if (listBlocks[temp].type == "End") {
@@ -527,9 +481,9 @@ class ProjectActivity : AppCompatActivity() {
                 listBlocks[i].type == "CycleWhile") {
 
                 val temp = if (listBlocks[i].type == "ConditionIfElse")
-                    checkIfElse(i)
+                    connectionIfElse(i)
                 else
-                    checkIf(i)
+                    connectionIfOrWhile(i)
 
                 if (temp == 0) return false
                 else {
@@ -555,7 +509,7 @@ class ProjectActivity : AppCompatActivity() {
         blocksAdapter.saveAllData()
         for (i in 0 until listBlocks.size){
             listBlocks[i].indexListBlocks = i
-            listBlocks[i].crutch = true
+            listBlocks[i].flagInit = true
             if (listBlocks[i].status != ok()){
                 listBlocks[i].status = ok()
                 blocksAdapter.notifyItemChanged(i)
@@ -567,11 +521,8 @@ class ProjectActivity : AppCompatActivity() {
             consoleAdapter.addMessage(programFinish("Fail"))
             return
         }
-        //printAllConnections()
         Block.isProgramRunning = true
         listBlocks[0].run()
-        //printAllConnections()
-        //disconnectAllBlocks()
     }
 
     private fun printAllConnections(){

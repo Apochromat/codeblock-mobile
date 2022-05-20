@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Codeblock</string>
+    <string name="main_label">CODEBLOCK</string>
+    <string name="imageDescription">main_image</string>
 
     <string name="mainMenu_newProject">Начать проект</string>
     <string name="mainMenu_about">Авторы</string>
@@ -43,6 +45,7 @@
     <string name="blockMenu_cycle_while">while</string>
     <string name="blockMenu_console_output">output</string>
     <string name="blockMenu_console_input_one">input</string>
+
 
     <string-array name="thins">
         <item>>=</item>

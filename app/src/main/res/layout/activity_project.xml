@@ -50,7 +50,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_defined_var"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonUndefinedVar"
@@ -62,7 +63,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_undefined_var"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonAssignment"
@@ -74,7 +76,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_assignment"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonDefinedArray"
@@ -86,7 +89,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_defined_array"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonUndefinedArray"
@@ -98,7 +102,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_undefined_array"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonConditionIf"
@@ -110,7 +115,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_condition_if"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonConditionIfElse"
@@ -122,7 +128,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_condition_if_else"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonCycleWhile"
@@ -134,7 +141,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_cycle_while"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonConsoleOutput"
@@ -146,7 +154,8 @@
                     android:insetRight="2.5dp"
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_console_output"
-                    android:textColor="@color/dark_grey" />
+                    android:textColor="@color/dark_grey"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/buttonConsoleInputOne"
@@ -159,7 +168,8 @@
                     android:insetBottom="8dp"
                     android:text="@string/blockMenu_console_input_one"
                     android:textColor="@color/dark_grey"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    style="?android:attr/buttonBarButtonStyle" />
 
             </LinearLayout>
         </HorizontalScrollView>

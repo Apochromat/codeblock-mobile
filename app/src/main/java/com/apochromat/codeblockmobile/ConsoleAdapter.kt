@@ -30,9 +30,9 @@ class ConsoleAdapter (private val listOutputMessage:ArrayList<String>) : Recycle
     fun clearListMessages() {
         val size = listOutputMessage.size
         if (size > 0) {
-            for (i in 0 until size) {
+            for (i in 0 until size)
                 listOutputMessage.removeAt(0)
-            }
+
             notifyItemRangeRemoved(0, size)
         }
     }

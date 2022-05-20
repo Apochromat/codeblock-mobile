@@ -14,9 +14,9 @@ class ConditionIf : Block() {
     }
    private fun initVar() {
      
-       expressionLeft = inputLeftEdit
-       expressionRight = inputRightEdit
-       expressionComparator = inputComparator
+        expressionLeft = inputLeftEdit
+        expressionRight = inputRightEdit
+        expressionComparator = inputComparator
 
         begin.adapterConsole = adapterConsole
         end.adapterConsole = adapterConsole
@@ -25,7 +25,7 @@ class ConditionIf : Block() {
         begin.adapterBlocks = this.adapterBlocks
         end.adapterBlocks = this.adapterBlocks
         exit.adapterBlocks = this.adapterBlocks
-       crutch = false
+        flagInit = false
    }
 
     fun setBlockInput(
@@ -40,7 +40,7 @@ class ConditionIf : Block() {
 
     override fun executeBlock() {
         super.executeBlock()
-        if (crutch) initVar()
+        if (flagInit) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         nextBlock?.let {
             if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)

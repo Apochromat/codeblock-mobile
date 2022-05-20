@@ -35,12 +35,12 @@ class CycleWhile : Block() {
         begin.adapterBlocks = this.adapterBlocks
         end.adapterBlocks = this.adapterBlocks
         exit.adapterBlocks = this.adapterBlocks
-        crutch = false
+        flagInit = false
     }
 
     override fun executeBlock() {
         super.executeBlock()
-        if (crutch) initVar()
+        if (flagInit) initVar()
         connectBlocks(end, this, strong = false, clear = false)
         nextBlock?.let {
             if (nextBlock != begin && nextBlock != exit && nextBlock != end && nextBlock != null)

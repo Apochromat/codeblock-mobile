@@ -39,7 +39,7 @@ open class Block {
     lateinit var holder : BlocksAdapter.ViewHolder
     var activity: ProjectActivity? = null
 
-    var crutch = true
+    var flagInit = true
 
     //  Ссылки на следующий и предыдущий блоки
     var nextBlock: Block? = null

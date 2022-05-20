@@ -29,10 +29,12 @@ class ConditionIfElse : Block() {
         exit.adapterBlocks = this.adapterBlocks
         beginElse.adapterBlocks = this.adapterBlocks
         endElse.adapterBlocks = this.adapterBlocks
+        flagInit = false
 
     }
 
     fun setBlockInput(
+
         _expressionLeft: String,
         _expressionRight: String,
         _expressionComparator: String = ">="
@@ -44,7 +46,7 @@ class ConditionIfElse : Block() {
 
     override fun executeBlock() {
         super.executeBlock()
-        if (crutch) initVar()
+        if (flagInit) initVar()
         connectBlocks(end, exit, strong = true, clear = false)
         connectBlocks(endElse, exit, strong = true, clear = false)
 
