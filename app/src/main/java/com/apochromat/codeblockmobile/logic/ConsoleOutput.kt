@@ -28,6 +28,10 @@ class ConsoleOutput : Block() {
             adapterConsole.addMessage(message)
             return
         }
+        if (heap.isArrayExist(expression)) {
+            adapterConsole.addMessage("$message[${heap.getArray(expression)?.joinToString()}]")
+            return
+        }
         val calculated = arithmetics(heap, expression)
         status = calculated.first
         if (calculated.first != ok()) return

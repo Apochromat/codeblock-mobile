@@ -84,6 +84,13 @@ class Heap {
     }
 
     /**
+     * Получить значение массив.
+     **/
+    fun getArray(arrayName: String): Array<Int>? {
+        return heapArray[arrayName]
+    }
+
+    /**
      * Существует ли массив.
      **/
     fun isArrayExist(arrayName: String): Boolean {

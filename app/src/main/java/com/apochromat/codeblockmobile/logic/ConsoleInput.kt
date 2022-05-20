@@ -63,11 +63,12 @@ class ConsoleInput : Block() {
                 status = variableAssignSequence()
                 return
             }
-            if (obj.first != tagArray()) {
+            // костыль
+            if (obj.first != tagArray() && !heap.isArrayExist(name)) {
                 status = obj.first
                 return
             }
-            if (stringList.size != heap.getArraySize(obj.second)) {
+            if (stringList.size != heap.getArraySize(name)) {
                 status = sizesMismatch()
                 return
             }
